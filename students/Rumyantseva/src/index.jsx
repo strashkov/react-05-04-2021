@@ -1,4 +1,3 @@
-console.log('hello world');
 import React from 'react';
 import ReactDom from 'react-dom';
 
@@ -15,16 +14,31 @@ const Msg = ({ message }) => {
 };
 
 const MsgList = (props) => {
-    return props.messagesList.map((message) => {
-        return <Msg message={message} />
+    return props.messagesList.map((message, index) => {
+        return <Msg key={index} message={message} />
     })
 };
 
 const Button = (props) => {
-    return (
-        <button className="btn">{props.children}</button>
-    )
-}
+    const HandleClick = (event) => {
+        //console.log(messagesListArray);
+        //console.log(event);
+        messagesListArray.push("Нормально");
+        ReactDom.render(
+            <>
+                <MsgList messagesList={messagesListArray} />
+                <Button>Отправить</Button>
+            </>,
+            document.getElementById("app")
+
+        );
+        //console.log(messagesListArray);
+
+
+    };
+    return <button className="btn" onClick={HandleClick}>{props.children}</button>
+
+};
 
 ReactDom.render(
     <>
