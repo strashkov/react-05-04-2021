@@ -106,10 +106,6 @@ dist
 # TernJS port file
 .tern-port
 
-students/Topilin Andrey/.DS_Store
-
-students/Topilin Andrey/package-lock.json
-
-students/.DS_Store
+**/.DS_Store
 
 .DS_Store
