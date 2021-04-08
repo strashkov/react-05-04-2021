@@ -1,5 +1,6 @@
 import Button from './Button/Button';
 import Input from './Input/Inputs';
+import PropTypes from 'prop-types';
 
 const SendingForm = ({
   inputValue,
@@ -9,7 +10,7 @@ const SendingForm = ({
 }) => {
   const submitHandler = e => {
     e.preventDefault();
-    updateMessagesData();
+    updateMessagesData('me');
   };
 
   return (
@@ -22,6 +23,10 @@ const SendingForm = ({
       <Button>send msg</Button>
     </form>
   );
+};
+
+SendingForm.propTypes = {
+  inputValue: PropTypes.string,
 };
 
 export default SendingForm;
