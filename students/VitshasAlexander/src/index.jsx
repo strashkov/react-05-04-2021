@@ -9,7 +9,7 @@ class MessageField extends React.Component {
     super(props);
   }
   render() {
-    return <div className="message">{this.props.message}</div>;
+    return <li className="text-purple-700 text-xl">{this.props.message}</li>;
   }
 }
 
@@ -20,10 +20,11 @@ class MessageList extends React.Component {
   }
 
   render() {
-    return this.props.messages.map((message, index) => {
-      return <MessageField key={index} message={message} />;
-    });
-    
+    return (
+        <ul className="list-disc mx-10 my-10">
+            { this.props.messages.map((message, index) => { return <MessageField key={index} message={message} />;}) }
+        </ul>
+    );
   }
 }
 
@@ -36,9 +37,17 @@ class Button extends React.Component {
     const handleClick = (event) => {
       messages.push("More");
       console.log(messages);
+
+      ReactDom.render(
+        <>
+          <MessageList messages={messages} />
+          <Button>Нажми меня</Button>
+        </>,
+        document.getElementById("app")
+      );
     };
     return (
-      <button className = "px-4 py-2 bg-blue-600 text-white rounded" onClick={handleClick}>
+      <button className = "mx-4 my-4 px-4 py-2 bg-blue-600 text-white rounded" onClick={handleClick}>
         {this.props.children}
       </button>
     );
