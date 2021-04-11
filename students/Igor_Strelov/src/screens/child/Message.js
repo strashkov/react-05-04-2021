@@ -3,13 +3,14 @@ import React from 'react';
 export const Message = ({ message }) => {
   return (
       <div style={{...styles.msgWrapper,
-        justifyContent: message.autor !== 'bot' ? 'flex-end' : 'flex-start'
+        justifyContent: message.autor !== 'Bot' ? 'flex-end' : 'flex-start'
       }}>
-        {message.autor !== 'bot' && <div style={styles.borderLeftView}></div>}
-        <div style={{...styles.msgBox, backgroundColor: message.autor !== 'bot' ? '#68c6fe' : '#ff9ae9'} }>
+        {message.autor !== 'Bot' && <div style={styles.borderLeftView}></div>}
+        <div style={{...styles.msgBox, backgroundColor: message.autor !== 'Bot' ? '#68c6fe' : '#ff9ae9'} }>
           {message.msg}
+          <p style={styles.autor}>Написал: {message.autor}</p>
         </div>
-        {message.autor === 'bot' && <div style={styles.borderRightView}></div>}
+        {message.autor === 'Bot' && <div style={styles.borderRightView}></div>}
       </div>
   )
 }
@@ -45,5 +46,9 @@ const styles = {
     backgroundColor: '#fff',
     borderBottomRightRadius: 10,
     zIndex: 1
+  },
+  autor: {
+    fontSize: 14,
+    textAlign: 'right'
   }
 }
