@@ -13,15 +13,13 @@ export default class MessageField extends React.Component {
     }
 
     componentDidUpdate(/*prevProps, prevState*/) {
-        const messageElements = this.state.messages.map((el) => {
-            if (el.author !== 'bot') {
-                setTimeout(() =>
-                    this.setState((state) => ({
-                        messages: [...state.messages, { text: 'Не приставай ко мне, я робот', author: 'bot' }]
-                    })
-                    ), 1000);
-            }
-        });
+        if (this.state.messages[this.state.messages.length - 1].author !== 'bot') {
+            setTimeout(() =>
+                this.setState((state) => ({
+                    messages: [...state.messages, { text: 'Не приставай ко мне, я робот', author: 'bot' }]
+                })
+            ), 1000);
+        }
     }
 
     handleClick = () => {
@@ -33,13 +31,13 @@ export default class MessageField extends React.Component {
     render() {
         const messageElements = this.state.messages.map((el, index) => (
             <Message key={index} text={el.text} author={el.author} />
-        ));
+        ))
 
         return (
             <>
                 { messageElements}
                 <button onClick={this.handleClick}>Отправить сообщение</button>
             </>
-        );
+        )
     }
 }
