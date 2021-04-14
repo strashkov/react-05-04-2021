@@ -1,0 +1,8 @@
+node_modules/
+lessons/
+/src/components/index.js 
+/src/indexold.jsx 
+/src/components/App example.jsx 
+/src/components/App.jsx
+/src/components/Child.jsx
+/build/bundle.js.LICENSE.txt
