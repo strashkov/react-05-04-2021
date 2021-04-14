@@ -1,4 +1,4 @@
-const path = require('path');
+const path  = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -15,10 +15,22 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/preset-env', '@babel/preset-react']
+                        presets: ['@babel/preset-env', '@babel/preset-react'],
+                        plugins: [
+                            [
+                                "@babel/plugin-proposal-class-properties",
+                                {
+                                    "loose": true
+                                }
+                            ]
+                        ]
                     }
                 }
-            }
+            },
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
+            },
         ]
     },
     plugins: [
