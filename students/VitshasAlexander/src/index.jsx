@@ -1,11 +1,10 @@
 import React from "react";
 import ReactDom from "react-dom";
-import "./tailwind.css";
-import App from './components/MessageFields.jsx';
+import Layout from "./components/Layout.jsx";
 
 ReactDom.render(
   <>
-    <App />
+    <Layout />
   </>,
   document.getElementById("app")
 );
