@@ -1,0 +1,16 @@
+.container {
+  max-width: 1140px;
+  margin: 100px auto;
+  display: grid;
+  grid-template-columns: 3fr 9fr;
+  background-color: lightgray;
+  border-radius: 5px;
+}
+
+.header {
+  grid-column: -1 / 1;
+}
+
+.MessageFieldWrapper {
+  background-color: whitesmoke;
+}
