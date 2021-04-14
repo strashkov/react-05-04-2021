@@ -1,43 +1,8 @@
-import React from "react";
-import ReactDom from "react-dom";
+import React from 'react';
+import ReactDom from 'react-dom';
+import App from './components/MessageField.jsx';
 
-/*const element = React.createElement('div', {
-    className: 'my-class',
-    id: 'my-id'
-}, 'React JS');*/
-
-const messages = ["Geekbrains", "React", "Привет"];
-
-const MessageField = ({ message }) => {
-  return <div className="message">{message}</div>;
-};
-
-const MessageList = (props) => {
-  return props.messages.map((message, index) => {
-    return <MessageField key={index} message={message} />;
-  });
-};
-
-const Button = (props) => {
-  const handleClick = (event) => {
-    messages.push("Нормально");
-    render();
-  };
-
-  return (
-    <button style={{ color: "#f00" }} onClick={handleClick}>
-      {props.children}
-    </button>
-  );
-};
-
-let render = () => {
-  ReactDom.render(
-    <>
-      <MessageList messages={messages} />
-      <Button>My button</Button>
-    </>,
-    document.getElementById("app")
-  );
-};
-render();
+ReactDom.render(
+    <App />,
+    document.getElementById('app')
+);
