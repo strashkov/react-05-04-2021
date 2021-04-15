@@ -15,10 +15,22 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/preset-env', '@babel/preset-react']
+                        presets: ['@babel/preset-env', '@babel/preset-react'],
+                        plugins: [
+                            [
+                                "@babel/plugin-proposal-class-properties",
+                                {
+                                    "loose": true
+                                }
+                            ]
+                        ]
                     }
                 }
-            }
+            },
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
         ]
     },
     plugins: [
@@ -26,5 +38,9 @@ module.exports = {
             template: path.join(__dirname, 'src', 'index.html'),
             filename: "index.html"
         })
-    ]
+    ],
+    resolve: {
+        modules: [`${__dirname}/src`, 'node_modules'],
+        extensions: ['.js', '.jsx'],
+    },
 };
