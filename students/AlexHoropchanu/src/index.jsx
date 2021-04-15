@@ -1,8 +1,5 @@
-import React from 'react';
-import ReactDom from 'react-dom';
-import App from './components/MessageField.jsx';
+import React from "react";
+import ReactDom from "react-dom";
+import App from "./components/App/Layout.jsx";
 
-ReactDom.render(
-    <App />,
-    document.getElementById('app')
-);
+ReactDom.render(<App />, document.getElementById("app"));
