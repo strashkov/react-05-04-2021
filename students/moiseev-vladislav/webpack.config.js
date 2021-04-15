@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
   entry: path.resolve(__dirname, "src", "index.jsx"),
   output: {
-    path: path.resolve(__dirname, "static", "build"),
+    path: path.resolve(__dirname, "build"),
     filename: "bundle.js",
   },
   module: {
@@ -16,6 +16,14 @@ module.exports = {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env", "@babel/preset-react"],
+            plugins: [
+              [
+                "@babel/plugin-proposal-class-properties",
+                {
+                  loose: true,
+                },
+              ],
+            ],
           },
         },
       },
