@@ -12,6 +12,7 @@ export default class MessageField extends React.Component {
             { author: 'bot', text: 'Как дела?' },
         ],
         input: '',
+
     };
 
     constructor(props) {
@@ -19,17 +20,20 @@ export default class MessageField extends React.Component {
         this.messageFieldRef = React.createRef();
     }
 
-    componentDidUpdate() {
-        if (this.state.messages[this.state.messages.length - 1].author !== 'bot') {
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.messages.length !== this.state.messages.length &&
+            this.state.messages[this.state.messages.length - 1].author !== 'bot') {
+
             setTimeout(() =>
                 this.setState((state) => ({
                     messages: [
                         ...state.messages, {
                             author: 'bot',
-                            text: 'Не приставай ко мне, я робот!'
+                            text: 'Не приставай ко мне, я робот!',
                         }
-                    ]
-                })), 1000);
+                    ],
+
+                })), 3000);
         }
         this.messageFieldRef.current.scrollTop = this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
     }
@@ -40,7 +44,7 @@ export default class MessageField extends React.Component {
                 ...state.messages, {
                     author: 'me',
                     text: state.input
-                }
+                },
             ],
             input: '',
         }));
@@ -66,7 +70,7 @@ export default class MessageField extends React.Component {
         const messageElements = this.state.messages.map(({ text, author }, index) => (
             <Message key={index} text={text} author={author} />)
         );
-        console.log(this.state.messages);
+        console.log(this.state);
 
 
         return (
