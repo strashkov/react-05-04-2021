@@ -1,14 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classes from "./MessageField.module.css";
+
 
 export default class Message extends React.Component {
     static propTypes = {
-        author: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
+        author: PropTypes.string.isRequired
     };
 
     render() {
-        return <div className={classes.message}> { this.props.author +": " + this.props.text }</div>
+        return (
+            <div
+                className="message"
+                style={ { alignSelf: this.props.author === 'bot' ?
+                        'flex-start' : 'flex-end' } }
+            >
+                <div>{ this.props.text }</div>
+                <div className="message-author">{ this.props.author }</div>
+            </div>
+
+        )
     }
 }
