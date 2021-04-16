@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import App from './components/App.jsx';
+import Layout from './components/Layout.jsx';
 import MessageField from './components/MessageField.jsx';
 
 const messages = [
@@ -39,11 +40,11 @@ const Button = (props) => {
 };
 
 ReactDom.render (
-    <>
-        <App />
-        <MessageField />
+    <div>
+        <Layout />
+        {/* <App /> */}
         {/* <MessageList messages={messages} />
         <Button>My button</Button> */}
-    </>,
+    </div>,
     document.getElementById('app')
 );
