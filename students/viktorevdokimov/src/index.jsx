@@ -1,16 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-
-let messages = ['Привет', 'Как дела?'];
-
-const MessageComponent = (props) => <div>{props.text}</div>;
-
-const MessageField = (props) => {
-   return props.messages.map(item => <MessageComponent text={ item } />);
-};
+import App from './components/messageField';
 
 ReactDOM.render(
-   <MessageField messages={ messages } />,
+   <App />,
    document.getElementById('root'),
 );

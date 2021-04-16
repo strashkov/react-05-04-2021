@@ -1,0 +1,71 @@
+html, body, #app {
+  margin: 0;
+  height: 100%;
+}
+
+.container {
+  display: grid;
+  background-color: rgba(232, 250, 248, 0.98);
+  width: 1200px;
+  margin: 0 auto;
+  grid-template-areas:
+    "h h h"
+    "c m r";
+
+  grid-template-rows: 100px 1fr;
+  grid-template-columns: 1fr 5fr 1fr;
+
+
+}
+.header {
+  grid-area: h;
+  background-color: #dcf0fa;
+}
+.header img {
+  width: 40px;
+  padding: 10px;
+}
+.chatList {
+  grid-area: c;
+}
+.message-field-box {
+  grid-area: m;
+  height: 500px;
+  width: 70%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.message-field {
+  display: flex;
+  flex-direction: column;
+  background-color: #efe4f6;
+  height: 85%;
+  width: 100%;
+  padding: 10px;
+  overflow-y: scroll;
+  box-sizing: border-box;
+}
+.message {
+  background-color: lightblue;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 18px;
+  margin: 5px;
+}
+
+.message-author {
+  color: gray;
+  font-size: 14px;
+}
+
+.actions {
+  width: 100%;
+  display: flex;
+  margin-top: 12px;
+}
+.rightList {
+  grid-area: r;
+}
