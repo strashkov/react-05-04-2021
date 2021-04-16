@@ -79,7 +79,7 @@ export default class MessageField extends React.Component {
         );
 
         return (
-            <div className="layout">
+            <>
                 <div ref={this.messageFieldRef} className="message-field">
                     { messageElements }
                 </div>
@@ -98,7 +98,7 @@ export default class MessageField extends React.Component {
                         <SendIcon />
                     </Fab>
                 </div>
-            </div>
+            </>
         )
     }
 }
