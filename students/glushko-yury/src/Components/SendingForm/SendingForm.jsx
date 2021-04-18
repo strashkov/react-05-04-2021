@@ -1,6 +1,7 @@
-import Button from './Button/Button';
-import Input from './Input/Inputs';
 import PropTypes from 'prop-types';
+import style from './SendingForm.module.scss';
+import Button from './Button/Button';
+import Input from './Input/Input';
 
 const SendingForm = ({
   inputValue,
@@ -14,13 +15,14 @@ const SendingForm = ({
   };
 
   return (
-    <form action='#' onSubmit={submitHandler}>
+    <form action='#' className={style.sendingForm} onSubmit={submitHandler}>
       <Input
+        autoFocus
         inputValue={inputValue}
         updateInputValue={updateInputValue}
         inputFocus={inputFocus}
       />
-      <Button>send msg</Button>
+      <Button inputValue={inputValue}>send msg</Button>
     </form>
   );
 };
