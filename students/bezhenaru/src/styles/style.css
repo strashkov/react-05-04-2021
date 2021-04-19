@@ -1,0 +1,73 @@
+html, body, #app {
+    margin: 0;
+    height: 100%;
+}
+
+.message-field {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(240, 240, 240);
+    height: 50%;
+    width: 100%;
+    padding: 20px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+}
+
+.layout {
+    height: 100%;
+    width: 70%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.message {
+    background-color: lightblue;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 18px;
+    margin: 5px;
+}
+
+.message-author {
+    color: gray;
+    font-size: 14px;
+}
+
+.actions {
+    width: 100%;
+    display: flex;
+    margin-top: 12px;
+}
+ 
+.chat-list {
+  height: 100%;
+  width: 30%;
+  display: flex;
+
+}
+.messages {
+  width: 70%;
+}
+.content {
+  display: flex;
+  width: 100%;
+  display: flex;
+  height: calc(100% - 140px);
+}
+.header {
+  width: 100%;
+  height: 100px;
+  background-color: aliceblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  color: blue;
+}
+.message-content {
+  width: 100%;
+}
