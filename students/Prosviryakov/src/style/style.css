@@ -1,0 +1,126 @@
+* {
+    outline: none !important;
+  }
+  
+  html,
+  body,
+  #app {
+    margin: 0;
+    height: 100%;
+  }
+
+  .empty-chat {
+    font-size: 20px;
+    color: blue;
+    padding: 60px 0 0 0;
+  }
+
+  a {
+    text-decoration: none;
+  }
+  
+  .message-field {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    background-color: #00BFFF;
+    height: 50%;
+    width: auto;
+    padding: 20px;
+    overflow-y: scroll;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+  
+  .message-field::-webkit-scrollbar {
+    width: 0;
+  }
+  
+  .layout {
+    height: 100%;
+    width: 100%;
+    margin: auto;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  
+  .message {
+    background-color: #008cc4 !important;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 20px;
+    margin: 5px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    max-width: 500px;
+    color: #fff !important;
+    word-wrap: break-word;
+  }
+  
+  .message > span {
+    font-size: 14px;
+    border-top: 1px solid #05cee9;
+    margin-top: 5px;
+    color: #02e2ff;
+  }
+  
+  .actions {
+    max-width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 12px;
+    background: #00d9ff;
+  }
+  
+  .header {
+    width: 100%;
+  }
+  
+  .content {
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  
+  .chat-board {
+    width: 70%;
+  }
+  
+  .chat-list {
+    width: 30%;
+  }
+  
+  .login {
+    margin: 0 0 0 auto !important;
+  }
+
+  .icon {
+    margin-right: 15px;
+  }
