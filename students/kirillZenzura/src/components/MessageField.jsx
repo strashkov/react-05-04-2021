@@ -1,40 +1,104 @@
 import React from 'react';
 import Message from './Message.jsx';
+import TextField from '@material-ui/core/TextField';
+import SendIcon from '@material-ui/icons/Send';
+import Fab from '@material-ui/core/Fab';
+import '../styles/style.css';
 
 export default class MessageField extends React.Component {
     state = {
-        messages: [{ message: "Привет!", author: "Джон Коннор" }, { message: "Как дела?", author: "Джон Коннор" }]
+        messages: [
+            {
+                text: 'Привет!',
+                sender: 'bot'
+            },
+            {
+                text: 'Как дела?',
+                sender: 'bot'
+            },
+        ],
+        input: ''
     };
 
-    componentDidUpdate() {
-        if (this.state.messages[this.state.messages.length - 1].message !== 'Мне нужна твоя одежда и мотоцикл!') {
+    constructor(props) {
+        super(props);
+
+        this.messageFieldRef = React.createRef();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.messages.length < this.state.messages.length &&
+            this.state.messages[this.state.messages.length - 1].sender !== 'bot') {
             setTimeout(() =>
                 this.setState((state) => ({
                     messages: [
                         ...state.messages,
-                        { message: 'Мне нужна твоя одежда и мотоцикл!', author: "Терминатор T1000" }
+                        {
+                            text: 'Не приставай ко мне, я робот!',
+                            sender: 'bot'
+                        }
                     ]
                 })), 1000);
         }
+
+        this.messageFieldRef.current.scrollTop =
+            this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
     }
 
-    handleClick = () => {
+    sendMessage = () => {
         this.setState((state) => ({
-            messages: state.messages.concat({ message: 'Нормально', author: "Джон Коннор" })/*[
+            messages: [
                 ...state.messages,
-                'Нормально'
-            ]*/
+                {
+                    text: state.input,
+                    sender: 'me'
+                }
+            ],
+            input: ''
         }));
     };
 
+    handleChangeInput = ({ target: { value } }) => {
+        this.setState({
+            input: value /*event.target.value*/
+        })
+    };
+
+    handleInputKeyUp = (event) => {
+        if (event.keyCode === 13) {
+            this.sendMessage();
+        }
+    };
+
     render() {
-        const messageElements = this.state.messages.map((text, index) => (
-            <Message key={index} text={text.message} author={text.author} />)
+        const messageElements = this.state.messages.map(({ text, sender }, index) => (
+            <Message
+                key={index}
+                text={text}
+                sender={sender} />)
         );
 
-        return <div>
-            {messageElements}
-            <button onClick={this.handleClick}>Отправить сообщение</button>
-        </div>
+        return (
+            <>
+                <div ref={this.messageFieldRef} className="message-field">
+                    {messageElements}
+                </div>
+                <div className='actions'>
+                    <TextField
+                        placeholder='Введите сообщение'
+                        fullWidth
+                        value={this.state.input}
+                        type="text"
+                        autoFocus
+                        onKeyUp={this.handleInputKeyUp}
+                        onChange={this.handleChangeInput} />
+                    <Fab
+                        disabled={this.state.input === ''}
+                        onClick={this.sendMessage}>
+                        <SendIcon />
+                    </Fab>
+                </div>
+            </>
+        )
     }
 }
