@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -9,32 +11,21 @@ import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import FaceIcon from "@material-ui/icons/Face";
 
 export default class ChatList extends React.Component {
+    static propTypes = {
+        chatId: PropTypes.string
+    };
   render() {
     return (
       <List>
-        {[
-          "Страна багровых туч",
-          "Полдень, XXII век",
-          "Попытка к бегству",
-          "Трудно быть богом",
-          "Понедельник начинается в субботу",
-          "Хищные вещи века",
-          "Улитка на склоне",
-          "Второе нашествие марсиан",
-          "Сказка о Тройке",
-          "Обитаемый остров",
-          "Отель „У Погибшего Альпиниста",
-          "Малыш",
-          "Пикник на обочине",
-          "Парень из преисподней",
-          "За миллиард лет до конца света",
-        ].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              { index % 2 ? <FaceIcon /> : <InsertEmoticonIcon /> }
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+        {listOfChats.map(({ id, text }) => (
+          <Link key={id} to={`/chat/${id}`}>
+            <ListItem button selected={ id === this.props.chatId }>
+              <ListItemIcon>
+                { id % 2 ? <FaceIcon /> : <InsertEmoticonIcon /> }
+              </ListItemIcon>
+              <ListItemText primary={text} />
+              </ListItem>
+          </Link>
         ))}
       </List>
     );

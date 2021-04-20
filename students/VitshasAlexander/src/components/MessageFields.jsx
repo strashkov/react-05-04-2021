@@ -1,23 +1,13 @@
 import React from "react";
+import PropTypes from 'prop-types';
+
 import Fab from "@material-ui/core/Fab";
 import TextField from "@material-ui/core/TextField";
 import SendIcon from "@material-ui/icons/Send";
 
 import Message from "./Message.jsx";
 
-export default class MessageFields extends React.Component {
-  state = {
-    messages: [
-      { text: "Geekbrains", sender: "robot" },
-      { text: "React", sender: "robot" },
-      { text: "Привет", sender: "robot" },
-    ],
-    humanInput: "",
-    answerInProgress: false,
-  };
-
-  componentDidUpdate() {
-    const answers = [
+const answers = [
       "Не приставай ко мне, я робот!",
       "Сириус — ярчайшая звезда ночного неба",
       "Какие люди!!! Как дела, бро?",
@@ -27,15 +17,26 @@ export default class MessageFields extends React.Component {
       "Извините, я — робот",
       "Нет смысла в чувствах... это лишь та боль и те страдания, которые есть внутри некоторых нас",
     ];
-    if (
-      this.state.messages[this.state.messages.length - 1].sender != "robot" &&
-      !this.state.answerInProgress
-    ) {
-      this.setState(() => ({
-        answerInProgress: true,
-      }));
 
-      setTimeout(
+export default class MessageFields extends React.Component {
+  static propTypes = {
+    chatArray: PropTypes.array
+  };
+  state = {
+    messages: [],
+    humanInput: "",
+  };
+  constructor(props) {
+    this.state.messages = [...chatArray];
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+     if (
+      this.state.messages[this.state.messages.length - 1].sender != "robot" &&
+      this.state.messages.length > prevState.messages.length
+    ) {
+
+       setTimeout(
         () =>
           this.setState((state) => ({
             messages: [
@@ -73,8 +74,7 @@ export default class MessageFields extends React.Component {
 
   handleKeyUp = (event) => {
     if (event.keyCode === 13) {
-      event.target.value = "";
-      return this.handleClick();
+      return this.sendMessage();
     }
   };
 
@@ -86,8 +86,7 @@ export default class MessageFields extends React.Component {
     return (
       <div style={{ display: "flex", flexDirection: "column", width: "80%" }}>
         <div style={{ display: "flex", flexDirection: "column", width: "85%" }}>
-          {" "}
-          {messageElements}{" "}
+          {messageElements}
         </div>
         <div
           style={{
