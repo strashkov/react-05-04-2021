@@ -3,12 +3,7 @@ import style from './SendingForm.module.scss';
 import Button from './Button/Button';
 import Input from './Input/Input';
 
-const SendingForm = ({
-  inputValue,
-  updateInputValue,
-  updateMessagesData,
-  inputFocus,
-}) => {
+const SendingForm = ({ inputValue, updateInputValue, updateMessagesData }) => {
   const submitHandler = e => {
     e.preventDefault();
     updateMessagesData('me');
@@ -16,12 +11,7 @@ const SendingForm = ({
 
   return (
     <form action='#' className={style.sendingForm} onSubmit={submitHandler}>
-      <Input
-        autoFocus
-        inputValue={inputValue}
-        updateInputValue={updateInputValue}
-        inputFocus={inputFocus}
-      />
+      <Input inputValue={inputValue} updateInputValue={updateInputValue} />
       <Button inputValue={inputValue}>send msg</Button>
     </form>
   );

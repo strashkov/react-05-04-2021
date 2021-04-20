@@ -9,10 +9,10 @@ const Input = ({ inputValue, updateInputValue }) => {
   return (
     <TextField
       style={{ width: '70%' }}
-      autoFocus
       variant='outlined'
       label='add message'
       type='text'
+      autoFocus
       value={inputValue}
       onChange={updateValue}
     />
