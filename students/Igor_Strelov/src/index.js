@@ -1,5 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MessList from './screens/MessList';
-
-  ReactDOM.render(<MessList />, document.getElementById('app'));
+import {ChatApp} from './screens/ChatApp';
+import './assets/index.css';
+  ReactDOM.render(<ChatApp />, document.getElementById('app'));
