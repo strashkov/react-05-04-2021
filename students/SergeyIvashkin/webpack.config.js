@@ -6,7 +6,12 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "bundle.js",
+    publicPath: '/'
   },
+  devServer: {
+    historyApiFallback: true
+ },
+ devtool: 'eval-source-map',
   module: {
     rules: [
       {
@@ -16,8 +21,21 @@ module.exports = {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env", "@babel/preset-react"],
+            plugins: [
+              [
+                "@babel/plugin-proposal-class-properties",
+                {
+                  "loose": true
+                }
+              ]
+            ]
           },
         },
+
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
