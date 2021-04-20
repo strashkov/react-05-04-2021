@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import App from './components/MessageField.jsx';
+import { BrowserRouter } from 'react-router-dom';
+import Router from './components/Router.jsx';
+import './style/style.css';
 
 ReactDom.render(
-    <App />,
+    <BrowserRouter>
+        <Router />
+    </BrowserRouter>,
     document.getElementById('app')
 );
