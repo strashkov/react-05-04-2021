@@ -2,19 +2,20 @@
     display: flex;
     flex-direction: column;
     background-color: #e2e2e2;
-    height: 50%;
+    height: 100%;
     width: 100%;
     padding: 20px;
     overflow-y: scroll;
+    box-sizing: border-box;
  }
  
  .layout {
-    height: 100%;
+    height: 90vh;
     width: 50%;
     margin: auto;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
     flex-direction: column;
     background-color: rgb(217, 243, 243);
  }
@@ -43,10 +44,12 @@
  .chatWrap {
     display: flex;
     width: 100%;
+    height: 100%;
  }
 
  .messageFieldWrap {
     width: 70%;
+    height: 100%;
  }
 
  .chatList {

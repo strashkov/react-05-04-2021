@@ -51,6 +51,16 @@ module.exports = {
                 ]
             },
         ],
+
+        // export: {
+        //     devServer: {
+        //         port: 8080,
+        //         historyApiFallback: {
+        //             index: 'index.html'
+        //         }
+        //      },
+          
+        // }
     },
  
  
