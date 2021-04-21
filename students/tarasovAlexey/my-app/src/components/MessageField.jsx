@@ -4,19 +4,18 @@ import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
 import Fab from '@material-ui/core/Fab';
 import './styles/style.css';
+import PropTypes from 'prop-types';
 
 export default class MessageField extends React.Component {
+    static propTypes = {
+        messages: PropTypes.arrayOf(PropTypes.shape({
+            sender: PropTypes.string.isRequired,
+            text: PropTypes.string.isRequired,
+        })),
+        onAddMessage: PropTypes.func.isRequired,
+    };
+
     state = {
-        messages: [
-            {
-                text: 'Hi',
-                author: 'bot'
-            },
-            {
-                text: 'How is it going?',
-                author: 'bot'
-            },
-        ],
         input: ''
     };
 
@@ -26,35 +25,15 @@ export default class MessageField extends React.Component {
         this.messageFieldRef = React.createRef();
     }
 
-        componentDidUpdate(prevProps, prevState) {
-            if (prevState.messages.length < this.state.messages.length &&
-                this.state.messages[this.state.messages.length - 1].author !== 'bot') {
-                setTimeout(() =>
-                    this.setState((state) => ({
-                        messages: [
-                            ...state.messages,
-                            {
-                                text: 'Don\'t touch me, i\'m bot!',
-                                author: 'bot'
-                            }
-                        ]
-                    })), 1000);
-            }
+    componentDidUpdate() {
         this.messageFieldRef.current.scrollTop =
             this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
     }
-
-    sendMessage = () => {
-        this.setState((state) => ({
-            messages: [
-                ...state.messages,
-                {
-                    text: state.input,
-                    author: 'me'
-                }
-            ],
+    addMessage = () => {
+        this.props.onAddMessage(this.state.input)
+        this.setState({
             input: ''
-        }));
+        });
     };
 
     handleChangeInput = ({ target: { value } }) => {
@@ -65,26 +44,30 @@ export default class MessageField extends React.Component {
 
     handleInputKeyUp = (event) => {
         if (event.keyCode === 13) {
-            this.sendMessage();
+            this.addMessage();
         }
     };
 
     render() {
-        const messageElements = this.state.messages.map(({text, author}, index) => (
+        // if (!chatId) {
+        //     return <div className='empty-chat'>Выберите чат</div>;
+        // }
+        const messageElements = this.props.messages.map(({text, sender}, index) => (
             <Message
                 key={index}
                 text={text}
-                author={author}/>)
+                sender={sender}/>)
         );
 
         return (
-            <div className="message-field-box">
+            <div className="message-field-wrapper">
                 <div ref={this.messageFieldRef} className="message-field">
                     { messageElements }
                 </div>
                 <div className='actions'>
-                    <TextField id="outlined-basic" label="add message" variant="outlined"
-                        placeholder='add message'
+                    <TextField
+                        style={{ marginRight: '12px' }}
+                        placeholder='Введите сообщение'
                         fullWidth
                         value={this.state.input}
                         type="text"
@@ -92,8 +75,9 @@ export default class MessageField extends React.Component {
                         onKeyUp={this.handleInputKeyUp}
                         onChange={this.handleChangeInput} />
                     <Fab
+                        color='primary'
                         disabled={this.state.input === ''}
-                        onClick={this.sendMessage}>
+                        onClick={this.addMessage}>
                         <SendIcon />
                     </Fab>
                 </div>
