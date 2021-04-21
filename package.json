@@ -1,9 +1,0 @@
-{
-  "devDependencies": {
-    "css-loader": "^5.2.1",
-    "style-loader": "^2.0.0"
-  },
-  "dependencies": {
-    "@material-ui/core": "^4.11.3"
-  }
-}
