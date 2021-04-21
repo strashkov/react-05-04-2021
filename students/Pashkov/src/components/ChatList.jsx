@@ -1,57 +1,40 @@
 import React from 'react';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import SendIcon from '@material-ui/icons/Send';
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+
 
 
 
 export default class ChatList extends React.Component {
 
+    static propTypes = {
+        chats: PropTypes.array.isRequired
+    };
+
+    
     render() {
+        const { chats } = this.props;
         return (
-            <MenuList className="chat-list">
-                
-                <MenuItem>
-                    <ListItemIcon>
-                        <SendIcon fontSize="small" />
-                    </ListItemIcon>
-                    <Typography variant="inherit">Чат 1</Typography>
-                </MenuItem>
-                <MenuItem>
-                    <ListItemIcon>
-                        <SendIcon fontSize="small" />
-                    </ListItemIcon>
-                    <Typography variant="inherit" noWrap>
-                        Чат 2
-                    </Typography>
-                </MenuItem>
-                <MenuItem>
-                    <ListItemIcon>
-                        <SendIcon fontSize="small" />
-                    </ListItemIcon>
-                    <Typography variant="inherit" noWrap>
-                        Чат 3
-                    </Typography>
-                </MenuItem>
-                <MenuItem>
-                    <ListItemIcon>
-                        <SendIcon fontSize="small" />
-                    </ListItemIcon>
-                    <Typography variant="inherit" noWrap>
-                        Чат 4
-                    </Typography>
-                </MenuItem>
-                <MenuItem>
-                    <ListItemIcon>
-                        <SendIcon fontSize="small" />
-                    </ListItemIcon>
-                    <Typography variant="inherit" noWrap>
-                        Чат 5
-                    </Typography>
-                </MenuItem>
-            </MenuList>
+            <List className="chat-list">
+                {chats.map(({ id, text }) => (
+                    <Link to={`/chat/${id}`} key={id} className="chat-link">
+                        <ListItem button selected={id === this.props.chatId}>
+                            <ListItemIcon>
+                                <SendIcon fontSize="small" />
+                            </ListItemIcon>
+                            <Typography variant="inherit" noWrap>
+                                {text}
+                            </Typography>
+                        </ListItem>
+                    </Link>
+                ))}
+
+            </List>
         );
     }
 }

@@ -12,7 +12,7 @@ body,
     display: flex;
     flex-direction: column;
     background-color: #00fcef;
-    height: 50%;
+    height: 50vh;
     width: auto;
     padding: 20px;
     overflow-y: scroll;
@@ -60,6 +60,11 @@ body,
 }
 .header {
     width: 100%;
+    &-profile {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
 }
 .contant {
     max-width: 100%;
@@ -75,7 +80,37 @@ body,
     &-list {
         width: 30%;
     }
+    &-link {
+        text-decoration: none;
+        color: #000;
+    }
 }
 .login {
     margin: 0 0 0 auto !important;
+    text-decoration: none;
+    color: #fff;
+    
+}
+
+.home {
+    text-decoration: none;
+    color: inherit;
+    font-size: 20px;
+}
+
+.profile {
+    height: 100%;
+}
+
+.place {
+    margin: 0 auto;
+    display: block;
+}
+
+.empty-chat {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
