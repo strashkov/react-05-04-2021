@@ -60,8 +60,6 @@ export default class Layout extends React.Component {
     render() {
         const { chatId } = this.props;
         const { chats } = this.state;
-        console.log(this.state.chats);
-
         return (
             <>
                 <Header chatId={chatId} />
