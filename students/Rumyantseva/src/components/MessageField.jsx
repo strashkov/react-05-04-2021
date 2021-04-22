@@ -1,18 +1,22 @@
 import React from 'react';
 import Message from './Message.jsx';
+import PropTypes from 'prop-types';
 import "../style/style.css";
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
 export default class MessageField extends React.Component {
-    state = {
-        messages: [
-            { author: 'bot', text: 'Привет!' },
-            { author: 'bot', text: 'Как дела?' },
-        ],
-        input: '',
+    static propTypes = {
+        // chatId: PropTypes.string,
+        messages: PropTypes.arrayOf(PropTypes.shape({
+            author: PropTypes.string.isRequired,
+            text: PropTypes.string.isRequired
+        })),
+    };
 
+    state = {
+        input: '',
     };
 
     constructor(props) {
@@ -20,32 +24,43 @@ export default class MessageField extends React.Component {
         this.messageFieldRef = React.createRef();
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.messages.length !== this.state.messages.length &&
-            this.state.messages[this.state.messages.length - 1].author !== 'bot') {
+    componentDidUpdate() {
+        // const { chatId } = this.props;
 
-            setTimeout(() =>
-                this.setState((state) => ({
-                    messages: [
-                        ...state.messages, {
-                            author: 'bot',
-                            text: 'Не приставай ко мне, я робот!',
-                        }
-                    ],
+        // if (prevState.messages[chatId].length !== this.state.messages[chatId].length &&
+        //     this.state.messages[chatId][this.state.messages[chatId].length - 1].author !== `bot from chat ${chatId}`) {
 
-                })), 3000);
-        }
-        this.messageFieldRef.current.scrollTop = this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
+        //     setTimeout(() =>
+        //         this.setState((state) => ({
+        //             messages: {
+        //                 ...state.messages,
+        //                 [chatId]: [
+        //                     ...state.messages[chatId],
+        //                     {
+        //                         author: `bot from chat ${chatId}`,
+        //                         text: 'Не приставай ко мне!'
+        //                     }
+        //                 ]
+        //             }
+        //         })), 1000);
+        // }
+        this.messageFieldRef.current.scrollTop =
+            this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
     }
 
     sendMessage = () => {
+        const { chatId } = this.props;
         this.setState((state) => ({
-            messages: [
-                ...state.messages, {
-                    author: 'me',
-                    text: state.input
-                },
-            ],
+            messages: {
+                ...state.messages,
+                [chatId]: [
+                    ...state.messages[chatId],
+                    {
+                        author: 'me',
+                        text: state.input
+                    }
+                ]
+            },
             input: '',
         }));
     };
@@ -67,10 +82,18 @@ export default class MessageField extends React.Component {
     };
 
     render() {
-        const messageElements = this.state.messages.map(({ text, author }, index) => (
+        const { chatId } = this.props;
+
+        if (!this.props.chatId) {
+            return (
+                <div className="emptyChat">Выберите чат</div>
+            )
+        }
+
+        const messageElements = this.props.messages.map(({ text, author }, index) => (
             <Message key={index} text={text} author={author} />)
         );
-        console.log(this.state);
+        //console.log(this.state);
 
 
         return (
