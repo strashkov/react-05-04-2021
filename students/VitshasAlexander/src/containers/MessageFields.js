@@ -6,8 +6,8 @@ import MessageFields from "../components/MessageFields.jsx";
 
 const mapStateToProps = (store) => {
   return {
-    messages: store.chatReducer.messages,
     chats: store.chatReducer.chats,
+    messages: store.chatReducer.messages,
   };
 };
 

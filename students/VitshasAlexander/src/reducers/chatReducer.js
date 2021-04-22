@@ -57,6 +57,9 @@ export default function chatReducer(store = initialStore, action) {
             sender: sender,
           },
         },
+        user: {
+          ...store.user,
+        },
       };
     }
     case ADD_CHAT: {
@@ -69,6 +72,12 @@ export default function chatReducer(store = initialStore, action) {
             title: title,
             messageList: [],
           },
+        },
+        messages: {
+          ...store.messages,
+        },
+        user: {
+          ...store.user,
         },
       };
     }
