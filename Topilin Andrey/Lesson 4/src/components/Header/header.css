@@ -1,0 +1,14 @@
+.header {
+    width: 100%;
+    height: 70px;
+    background-color: #b3e5fc;
+    font-size: 22px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-link:hover {
+    opacity: .6;
+}
