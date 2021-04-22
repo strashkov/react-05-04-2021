@@ -9,9 +9,8 @@ export default class Header extends React.Component {
 
     render() {
         return (
-            
             <div className="header">
-                Название чата
+                Чат {this.props.chatId || 'не выбран'}
             </div>
         );
     }

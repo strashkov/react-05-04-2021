@@ -8,16 +8,7 @@ export default class Message extends React.Component {
     };
 
     render() {
-        // in-line  стилизация
-        // const style = {
-        //     backgroundColor: 'red',
-        //     fontSize: '24px'
-        // };
-        // return <div style={style}> {this.props.author + ": " + this.props.text}</div>
-        
-
-         
-        return (
+         return (
          <div className="message"
                 style={ { alignSelf: this.props.author === 'Robocop' ?
                         'flex-start' : 'flex-end' } }>
