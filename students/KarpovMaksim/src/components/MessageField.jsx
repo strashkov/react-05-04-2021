@@ -3,37 +3,59 @@ import Message from './Message.jsx';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
+import PropTypes from 'prop-types';
 
 
 
 export default class MessageField extends React.Component {
-  
+  static propTypes = {
+    chatId: PropTypes.string,
+    them: PropTypes.string
+  }
   constructor(props) {
     super(props)
     this.messageFieldRef = React.createRef();
   }
   
   state = {
-    messages: [
-      {
-        text: 'Hello!',
-        userName: 'Робот'
-      }
-    ],
+    messages: {
+      '1': [
+        {
+          text: 'Hello!kffkefe',
+          userName: 'Робот'
+        }
+      ],
+      '2': [
+        {
+          text: 'Hello!efefe',
+          userName: 'Робот'
+        }
+      ],
+      '3': [
+        {
+          text: 'Hello!efefef',
+          userName: 'Робот'
+        }
+      ]
+    },
     input: ''
   };
 
   componentDidUpdate() {
-    if(this.state.messages[this.state.messages.length - 1].userName !== 'Робот' && this.state.input.length === 0 ) {
+    const { chatId, them } = this.props;
+    if(this.state.messages[chatId][this.state.messages[chatId].length - 1].userName !== 'Робот' && this.state.input.length === 0 ) {
       setTimeout(() => {
         this.setState((state)=>({
-          messages: [
+          messages: {
             ...state.messages,
-            {
-              text: 'Не приста вай ко мне я робот',
-              userName: 'Робот'
-            } 
-          ]
+            [chatId]: [
+              ...state.messages[chatId],
+              {
+                text: `Не приста вай ко мне я робот из чата ${chatId} о ${them}`,
+                userName: 'Робот'
+              } 
+            ]
+          }
         }))
       }, 1000)
     }
@@ -53,31 +75,40 @@ export default class MessageField extends React.Component {
     })
   }
   sendMessage = () => {
+    const { chatId } = this.props;
     this.setState((state) => ({
-        messages: [
-          ...state.messages,
+      messages: {
+        ...state.messages,
+        [chatId]: [
+          ...state.messages[chatId],
           {
             text: state.input,
             userName: 'Вася'
-          }
-        ],
-        input: '' 
-      }))
+          } 
+        ]
+      },
+      input: '' 
+    }))
   }
   render() {
-    const messageElements = this.state.messages.map(({text, userName}, index) => (
+    const { chatId } = this.props;
+    if (!chatId) {
+      return <div className='empty-chat'>Выберете чат</div>
+    }
+    const messageElements = this.state.messages[chatId].map(({text, userName}, index) => (
       <Message 
         key={index} 
         userName = {userName} 
         text={text} 
       />));
-
+      
     return <div>
       <div ref={this.messageFieldRef} className='message-field'>
         { messageElements }
       </div>
       <div className="actions">
         <TextField
+          style={{ marginRight: '12px', marginLeft: '12px' }}
           fullWidth
           placeholder="введите сообщение"
           type="text"
