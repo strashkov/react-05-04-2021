@@ -1,0 +1,22 @@
+.sideBarWrapper {
+    height: 60vh;
+    width: 200px;
+    background-color: #f5f5f5;
+    color: black;
+    font-family: sans-serif;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 50px;
+    border-right: 1px solid lightgrey;
+}
+
+.sideBarWrapper p {
+    margin-top: 15px;
+}
+
+.links {
+    text-decoration: none;
+    color: black;
+    margin-bottom: 20px;
+}
