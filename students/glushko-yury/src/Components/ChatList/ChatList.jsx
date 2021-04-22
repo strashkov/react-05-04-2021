@@ -31,10 +31,14 @@ const ChatList = ({
       </IconButton>
     </div>
   ));
+  const addChatHandler = event => {
+    event.preventDefault();
+    addChat();
+  };
   return (
     <div className={style.chatListWrapper}>
       <div className={style.chatList}>{listEl}</div>
-      <form onSubmit={event => addChat(event)} className={style.form}>
+      <form onSubmit={addChatHandler} className={style.form}>
         <TextField
           id='standard-basic'
           label='add new chat'
