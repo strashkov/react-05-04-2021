@@ -15,27 +15,27 @@ export default class Layout extends React.Component {
         chats: {
             1: {
                 title: 'Чат 1',
-                messageList: [1, 3],
+                //messageList: [1, 3]
             },
             2: {
                 title: 'Чат 2',
-                messageList: [2, 3],
+                //messageList: [2]
             },
         },
-        messages: {
-            1: {
-                author: 'bot',
-                text: 'Привет!'
-            },
-            2: {
-                author: 'bot',
-                text: 'Hello!'
-            },
-            3: {
-                author: 'bot',
-                text: 'Как дела?'
-            },
-        },
+        // messages: {
+        //     1: {
+        //         author: 'bot',
+        //         text: 'Привет!'
+        //     },
+        //     2: {
+        //         author: 'bot',
+        //         text: 'Hello!'
+        //     },
+        //     3: {
+        //         author: 'bot',
+        //         text: 'Как дела?'
+        //     },
+        // },
     }
 
 
@@ -59,11 +59,7 @@ export default class Layout extends React.Component {
 
     render() {
         const { chatId } = this.props;
-        const { chats, messages } = this.state;
-        const activeMessages = chats[chatId].messageList.map((messageId) => {
-            return messages[messageId];
-        });
-
+        const { chats } = this.state;
         console.log(this.state.chats);
 
         return (
@@ -75,9 +71,7 @@ export default class Layout extends React.Component {
                         chats={chats}
                         onAddChat={this.handleAddChat}
                     />
-                    <MessageField
-                        messages={activeMessages}
-                    />
+                    {/* <MessageField chatId={chatId} /> */}
                 </div>
             </>
         )
