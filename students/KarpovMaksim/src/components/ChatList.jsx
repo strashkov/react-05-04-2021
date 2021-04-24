@@ -1,18 +1,51 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import PropTypes from 'prop-types';
+
+
 
 export default class ChatList extends React.Component {
-  chatTheme = ['Chat_1_about_other_them',' Chat_2',' Chat_3_test']
-  render() {
-    return <List >
-    {(this.chatTheme.map((theme,index) => (
-      <ListItem key={index}>
-        {theme}
-      </ListItem>
-      )))
+  static propTypes = {
+    chatId: PropTypes.string,
+    them: PropTypes.string
+  };
+  state = {
+    chatThemes: [
+    {
+      id: '1',
+      chat: 'Chat_1',
+      them: 'other_them'
+    },
+    {
+      id: '2',
+      chat: 'Chat_2',
+      them: 'природе'
+    },
+    {
+      id: '3',
+      chat: 'Chat_3',
+      them:'рыбалке'
     }
-  </List>
-    
+  ]}
+  
+  render() {
+    return (
+      <div className="chat-list-field">
+        <List>
+        {this.state.chatThemes.map(({id, them, chat}) => (
+          <Link key={id} to={`/chat/${id}/${them}`}>
+            <ListItem button selected={id === this.props.chatId}>
+              <div className='chat-list-icon'></div>
+              <ListItemText primary={chat}/>
+            </ListItem>
+          </Link>
+          ))}
+        </List>
+     
+      </div>
+    )
   }
 }

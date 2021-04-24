@@ -6,9 +6,13 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'bundel.js'
+    filename: 'bundel.js',
+    publicPath: '/'
   },
   devtool: 'eval-source-map',
+  devServer: {
+  historyApiFallback: true
+  },
   module: {
     rules: [
       {
