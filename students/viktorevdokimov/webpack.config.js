@@ -39,7 +39,28 @@ module.exports = {
 
                 }
             },
+            {
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
+                        loader: 'css-loader'
+                    }
+                ]
+            },
         ],
+
+        // export: {
+        //     devServer: {
+        //         port: 8080,
+        //         historyApiFallback: {
+        //             index: 'index.html'
+        //         }
+        //      },
+          
+        // }
     },
  
  
