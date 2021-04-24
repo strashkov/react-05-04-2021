@@ -16,31 +16,12 @@ const initialStore = {
       messageList: [3],
     },
   },
-  messages: {
-    1: {
-      sender: "robot",
-      text: "Привет!",
-    },
-    2: {
-      sender: "robot",
-      text: "Geekbrains",
-    },
-    3: {
-      sender: "robot",
-      text: "React",
-    },
-  },
-  user: {
-    name: "Filipp Romanovski",
-    bio: "My Route to Santiago de Compostela",
-    photo: "filipp-romanovski-eejet4GDlzc-unsplash.jpg",
-  },
 };
 
 export default function chatReducer(store = initialStore, action) {
   switch (action.type) {
     case SEND_MESSAGE: {
-      const { message, sender, messageId, chatId } = action;
+      const { messageId, chatId } = action;
 
       return {
         chats: {
@@ -49,16 +30,6 @@ export default function chatReducer(store = initialStore, action) {
             ...store.chats[chatId],
             messageList: [...store.chats[chatId].messageList, messageId],
           },
-        },
-        messages: {
-          ...store.messages,
-          [messageId]: {
-            text: message,
-            sender: sender,
-          },
-        },
-        user: {
-          ...store.user,
         },
       };
     }
@@ -72,12 +43,6 @@ export default function chatReducer(store = initialStore, action) {
             title: title,
             messageList: [],
           },
-        },
-        messages: {
-          ...store.messages,
-        },
-        user: {
-          ...store.user,
         },
       };
     }

@@ -4,7 +4,7 @@ import Header from "../components/Header.jsx";
 
 const mapStateToProps = (store) => {
   return {
-    user: store.chatReducer.user,
+    user: store.profileReducer.user,
   };
 };
 
