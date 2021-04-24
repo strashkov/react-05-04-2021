@@ -1,4 +1,4 @@
-const path = require('path');
+const path  = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -9,13 +9,17 @@ module.exports = {
         publicPath: '/'
     },
     devServer: {
-        historyApiFallback: true,
+        historyApiFallback: true
     },
+    devtool: 'eval-source-map',
     module: {
         rules: [
             {
                 test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components)/,
+                exclude: /node_modules/,
+                resolve: {
+                    extensions: ['.js', '.jsx']
+                },
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -33,7 +37,7 @@ module.exports = {
             },
             {
                 test: /\.css$/i,
-                use: ["style-loader", "css-loader"],
+                use: ['style-loader', 'css-loader'],
             },
         ]
     },
@@ -42,9 +46,5 @@ module.exports = {
             template: path.join(__dirname, 'src', 'index.html'),
             filename: "index.html"
         })
-    ],
-    resolve: {
-        modules: [`${__dirname}/src`, 'node_modules'],
-        extensions: ['.js', '.jsx'],
-    },
+    ]
 };

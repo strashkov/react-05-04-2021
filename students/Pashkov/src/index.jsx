@@ -1,15 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Router from './components/router/Router';
-import './style/style.css';
-import { BrowserRouter } from "react-router-dom";
-ReactDOM.render(
-    <BrowserRouter>
-        <Router />
-    </BrowserRouter>,
-    document.getElementById('app'),
+import ReactDom from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import initStore from './utils/store';
+import Router from './components/Router/Router';
+
+ReactDom.render(
+    <Provider store={initStore()}>
+        <BrowserRouter>
+            <Router />
+        </BrowserRouter>
+    </Provider>,
+    document.getElementById('app')
 );
-
-
-
-
