@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Message from './Message.jsx';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
@@ -6,17 +7,14 @@ import SendIcon from '@material-ui/icons/Send';
 import '../styles/style.css';
 
 export default class MessageField extends React.Component {
+    static propTypes = {
+        messages: PropTypes.arrayOf(PropTypes.shape({
+            sender: PropTypes.string.isRequired,
+            text: PropTypes.string.isRequired
+        })),
+        onSendMessage: PropTypes.func.isRequired
+    };
     state = {
-        messages: [
-            {
-                text: 'Привет',
-                sender: 'bot'
-            },
-            {
-                text: 'Как дела?',
-                sender: 'bot'
-            },
-        ],
         input: ''
     };
 
@@ -26,35 +24,15 @@ export default class MessageField extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (
-            prevState.messages.length < this.state.messages.length &&
-            this.state.messages[this.state.messages.length - 1].sender !== 'bot'
-        ) {
-            setTimeout(() =>
-                this.setState((state) => ({
-                    messages: [
-                        ...state.messages,
-                        {
-                            text: 'Не приставай ко мне, я робот!',
-                            sender: 'bot'
-                        }
-                    ]
-                })), 1000);
-        }
         this.MessageFieldRef.current.scrollTop = this.MessageFieldRef.current.scrollHeight - this.MessageFieldRef.current.clientHeight;
     }
 
     sendMessage = () => {
-        this.setState((state) => ({
-            messages: [
-                ...state.messages,
-                {
-                    text: state.input,
-                    sender: 'me'
-                }
-            ],
+        this.props.onSendMessage(this.state.input);
+
+        this.setState({
             input: ''
-        }));
+        });
     };
 
     handleClick = () => {
@@ -75,9 +53,10 @@ export default class MessageField extends React.Component {
     }
 
     render() {
-        const messageElements = this.state.messages.map(({ text, sender }, index) => (
+        const messageElements = this.props.messages.map(({ text, sender }, index) => (
             <Message key={index} text={text} sender={sender} />)
         );
+
 
         return (
             <div className="message-field-wrapper">
