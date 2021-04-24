@@ -1,0 +1,18 @@
+body, #app, root {
+  height: 100vh;
+}
+.center_wrapper {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  color: #fff;
+}
+.button_header {
+  cursor: pointer;
+  padding: 0 15px 0 15px;
+}

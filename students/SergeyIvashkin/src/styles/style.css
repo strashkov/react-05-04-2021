@@ -1,0 +1,72 @@
+html,
+body,
+#app {
+    margin: 0;
+    height: 100%;
+}
+
+.message-field {
+    display: flex;
+    flex-direction: column;
+    background-color: aliceblue;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+}
+
+.chat {
+    height: 100%;
+    width: 70%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.message {
+    background-color: lightblue;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 18px;
+    margin: 5px;
+}
+
+.message-sender {
+    color: gray;
+    font-size: 14px;
+}
+
+.actions {
+    width: 100%;
+    display: flex;
+    margin-top: 12px;
+}
+
+.header {
+    width: 100%;
+    background-color: lightblue;
+    height: 100px;
+    font-size: 35px;
+    display: flex;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.content {
+    display: flex;
+    height: 100%;
+}
+.chat-list {
+    width: 30%;
+    background-color: aliceblue;
+    margin-right: 3px;
+}
+.empty-chat{
+    margin: auto;
+    font-size: 40px;
+    color: crimson;
+}

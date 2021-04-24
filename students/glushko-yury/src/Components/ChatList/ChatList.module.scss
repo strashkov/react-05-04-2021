@@ -1,0 +1,25 @@
+.chatListWrapper {
+  height: 606px;
+  border-right: 1px solid #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.chatList {
+  overflow-x: auto;
+}
+.linkWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 13px;
+}
+.link {
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+}
+.form {
+  padding: 10px;
+}
