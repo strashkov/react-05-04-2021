@@ -1,0 +1,76 @@
+html, body, #app {
+    margin: 0;
+    height: 100%;
+}
+
+.message-field {
+    display: flex;
+    flex-direction: column;
+    background-color: #e2e2e2;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+}
+
+.layout {
+    height: 80%;
+    width: 70%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.chatlist {
+    height: 80%;
+    width: 30%;
+    margin: auto;
+}
+
+.message {
+    background-color: lightblue;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 18px;
+    margin: 5px;
+}
+
+.message-sender {
+    color: gray;
+    font-size: 14px;
+}
+
+.actions {
+    width: 100%;
+    display: flex;
+    margin-top: 12px;
+}
+.header {
+    width: 70%;
+    height: 20%;
+    background-color: rgb(48, 108, 128);
+    text-align: center;
+    color:lightblue;
+    font-size: 24px;
+}
+
+.layout-main {  
+    height: 100%;  
+    width: 70%;
+    margin: auto;
+    display: flex;
+    align-items: center;    
+    flex-direction: column;
+    justify-content: center;
+}
+
+.chatarea {
+    height: 100%;  
+    width: 70%;
+    margin: auto;
+    display: flex;
+    
+}

@@ -18,7 +18,7 @@ body,
       -ms-flex-direction: column;
           flex-direction: column;
   background-color: #00fcef;
-  height: 50%;
+  height: 50vh;
   width: auto;
   padding: 20px;
   overflow-y: scroll;
@@ -90,6 +90,16 @@ body,
   width: 100%;
 }
 
+.header-profile {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
 .contant {
   max-width: 100%;
   width: 100%;
@@ -107,7 +117,43 @@ body,
   width: 30%;
 }
 
+.chat-link {
+  text-decoration: none;
+  color: #000;
+}
+
 .login {
   margin: 0 0 0 auto !important;
+  text-decoration: none;
+  color: #fff;
+}
+
+.home {
+  text-decoration: none;
+  color: inherit;
+  font-size: 20px;
+}
+
+.profile {
+  height: 100%;
+}
+
+.place {
+  margin: 0 auto;
+  display: block;
+}
+
+.empty-chat {
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 /*# sourceMappingURL=style.css.map */

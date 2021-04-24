@@ -3,12 +3,6 @@ import PropTypes from "prop-types";
 import Chip from "@material-ui/core/Chip";
 import AndroidIcon from "@material-ui/icons/Android";
 import FaceIcon from "@material-ui/icons/Face";
-// import Box from '@material-ui/core/Box';
-// import sizing from '@material-ui/system/sizing';
-
-// import ListItem from '@material-ui/core/ListItem';
-// import ListItemIcon from '@material-ui/core/ListItemIcon';
-// import ListItemText from '@material-ui/core/ListItemText';
 
 export default class Message extends React.Component {
   static propTypes = {
@@ -16,13 +10,16 @@ export default class Message extends React.Component {
     sender: PropTypes.string.isRequired,
   };
   render() {
+    const commonStyle = {
+      marginTop: "10px",
+    }
     return (
       <div
         width="50%"
         style={
           this.props.sender === "robot"
-            ? { alignSelf: "flex-start", marginTop: "10px" }
-            : { alignSelf: "flex-end", marginTop: "10px" }
+            ? { ...commonStyle, alignSelf: "flex-start" }
+            : { ...commonStyle, alignSelf: "flex-end" }
         }
       >
         <Chip
