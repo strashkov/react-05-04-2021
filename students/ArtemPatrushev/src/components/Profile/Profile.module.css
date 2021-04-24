@@ -1,0 +1,43 @@
+.profileUser {
+    display: flex;
+    margin-top: 50px;
+    height: 300px;
+    width: 500px;
+    padding: 15px;
+    margin-left: 50px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+}
+
+.profileUser img {
+    border-radius: 50%;
+    height: 170px;
+    width: 170px;
+    object-fit: cover;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    color: black;
+    font-family: sans-serif;
+    font-size: 18px;
+    margin-left: 50px;
+}
+
+.userInfo p {
+    margin-top: 15px;
+}
+
+.profileWrapper {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    height: auto;
+
+}
+
+.profileBack {
+    background-color: #f5f5f5;
+}

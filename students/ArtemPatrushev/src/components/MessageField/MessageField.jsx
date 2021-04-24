@@ -1,23 +1,23 @@
 import React from 'react';
-import Message from './Message.jsx';
-import '../styles/styles.css';
-import TextField from '@material-ui/core/TextField'; // подключили библиотеку material UI
+import Message from '../Message/Message.jsx';
+import PropTypes from 'prop-types';
+import s from './MessageField.module.css';
+import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 
 
 export default class MessageField extends React.Component {
+    static propTypes = {
+        messages: PropTypes.arrayOf(PropTypes.shape({   // Приходит массив объектов с описанием свойств объекта
+            author: PropTypes.string.isRequired,
+            text: PropTypes.string.isRequired
+        })),
+        onSendNewMessage: PropTypes.func.isRequired
+
+    };
+
     state = {
-        messages: [
-            {
-                text: 'Привет!',
-                author: 'bot'
-            },
-            {
-                text: 'Как дела?',
-                author: 'bot'
-            }
-        ],
         input: '' // определяем input для компонента
     };
 
@@ -27,32 +27,16 @@ export default class MessageField extends React.Component {
         this.messageFieldRef = React.createRef();
     };
 
-    componentDidUpdate(prevProps, prevState) {
-        if (this.state.messages.length !== prevState.messages.length) {       // условие поставлено, чтобы постоянные изменения стейта (через input) не выдавали баг, из-за которого ответ приходит на каждый введенный символ в input за 1 сек
-            if (this.state.messages[this.state.messages.length - 1].author !== 'bot') {
-                setTimeout(() =>
-                    this.setState((state) => ({
-                        messages: [...state.messages, { text: 'Не приставай ко мне, я робот', author: 'bot' }]
-                    })
-                    ), 1000);
-            };
-        };
-
+    componentDidUpdate() {
         this.messageFieldRef.current.scrollTop = this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
     };
 
     // данная функция по отпровки сообщения обчно делается отдельно, а функции-hadle (которые прописаны ниже), вызывают эту функцию + могут ставить условия
     sendMessage = () => {
-        this.setState((state) => ({
-            messages: [
-                ...state.messages,
-                {
-                    text: state.input, // помещаем измененный state.input класса компонента в сообщение
-                    author: 'Вова'
-                }
-            ],
+        this.props.onSendNewMessage(this.state.input);
+        this.setState({
             input: '' // после отправки очищаем поле ввода у input
-        }));
+        });
     };
 
     handleClick = () => {
@@ -65,7 +49,7 @@ export default class MessageField extends React.Component {
         }
     };
 
-    handleChangeInput = (/*event*/ { target: {value} }) => {
+    handleChangeInput = (/*event*/ { target: { value } }) => {
         console.log(value);
         this.setState({
             input: /*event.target.value*/ value // меянем state класса компонента, через прослушивание input 
@@ -73,25 +57,32 @@ export default class MessageField extends React.Component {
     };
 
     render() {
-        const messageElements = this.state.messages.map(({ text, author }, index) => (
+
+        // const { chatId } = this.props;     // или так: const chatId = this.props.chatId;
+
+        // if (!chatId) {
+        //     return <div className={s.emptyChat}>Check a chat</div>;  // если данное условие подходит, то рендерится эта разметка
+        // }
+
+        const messageElements = this.props.messages.map(({ text, author }, index) => (
             <Message key={index} text={text} author={author} />
         ));
 
         return (
-            <div className='layout'>
-                <div /*ref={this.messageFieldRef}*/ ref={this.messageFieldRef} className='message-field'>
+            <div className={s.messageFieldWrapper}>
+                <div /*ref={this.messageFieldRef}*/ ref={this.messageFieldRef} className={s.messageField}>
                     {messageElements}
                 </div>
-                <div className='action'>
-                    <TextField                              // это специальный тег от библиотеки material UI
-                        style={{paddingRight: '12px'}}
+                <div className={s.actionInputBlock}>
+                    <TextField                            // это специальный тег от библиотеки material UI
+                        className={s.textField}
                         value={this.state.input}
                         autoFocus
                         fullWidth
                         placeholder='Введите сообщение'
                         onKeyUp={this.handleInputKeyUp}
                         onChange={this.handleChangeInput} />
-                        {/* <input 
+                    {/* <input 
                             type="text" 
                             value={this.state.input} // считываем значение инпута в state класса компонента
                             onChange={this.handleChangeInput}
@@ -102,7 +93,7 @@ export default class MessageField extends React.Component {
                         // color='primary'
                         disabled={this.state.input === ''} // если в инпуте ничего не прописано, то кнопка не активна
                         onClick={this.handleClick}
-                        >
+                    >
                         <SendIcon />
                     </Fab>
                     {/* </div> */}
