@@ -5,9 +5,16 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 
+import "./style.css";
+
 export default class Profile extends React.Component {
   static propTypes = {
-    user: PropTypes.object,
+    user: PropTypes.shape({
+      firstName: PropTypes.string.isRequired,
+      lastName: PropTypes.string.isRequired,
+      bio: PropTypes.string,
+      photo: PropTypes.string,
+    }),
   };
   render() {
     const { user } = this.props;
@@ -19,7 +26,7 @@ export default class Profile extends React.Component {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            {user.name}
+            {user.firstName}{user.lastName}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             {user.bio}

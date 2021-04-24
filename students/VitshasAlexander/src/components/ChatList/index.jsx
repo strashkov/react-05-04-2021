@@ -8,6 +8,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import TextField from "@material-ui/core/TextField";
 import SendIcon from "@material-ui/icons/Send";
 import Fab from "@material-ui/core/Fab";
+import Avatar from "@material-ui/core/Avatar";
+
+import './style.css';
 
 export default class ChatList extends React.Component {
   static propTypes = {
@@ -32,7 +35,6 @@ export default class ChatList extends React.Component {
 
   OnAddChat = () => {
     this.props.addChat(this.state.chatName);
-    //debugger;
     this.setState({
       chatName: "",
     });
@@ -48,16 +50,15 @@ export default class ChatList extends React.Component {
     const { chats, chatId } = this.props;
     const { chatName } = this.state;
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-        }}
+      <div className="chat-list"
       >
         <List>
           {Object.entries(chats).map(([id, value]) => (
             <Link key={id} to={`/chat/${id}`}>
               <ListItem button selected={id === chatId}>
+                <Avatar className="chat-list-avatar">
+                    {value.title.split(' ').map(w => w.charAt(0))}
+                </Avatar>
                 <ListItemText primary={value.title} />
               </ListItem>
             </Link>
@@ -72,7 +73,7 @@ export default class ChatList extends React.Component {
           >
             <TextField
               type="text"
-              autoFocus={true}
+              autoFocus
               placeholder="Добавить новый чат"
               value={chatName}
               onChange={this.handleChatNameChange}

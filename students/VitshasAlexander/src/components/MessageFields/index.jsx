@@ -5,7 +5,8 @@ import Fab from "@material-ui/core/Fab";
 import TextField from "@material-ui/core/TextField";
 import SendIcon from "@material-ui/icons/Send";
 
-import Message from "./Message";
+import Message from "../Message";
+import "./style.css";
 
 const answers = [
   "Не приставай ко мне, я робот!",
@@ -23,7 +24,7 @@ export default class MessageFields extends React.Component {
     chats: PropTypes.object.isRequired,
     messages: PropTypes.object.isRequired,
     sendMessage: PropTypes.func.isRequired,
-    chatId: PropTypes.string,
+    chatId: PropTypes.string.isRequired,
   };
 
   state = {
@@ -42,38 +43,38 @@ export default class MessageFields extends React.Component {
       this.messageFieldRef.current.clientHeight;
   }
 
-  handleSendMessage = (
-    message,
-    sender = "human",
-    chatId = this.props.chatId
-  ) => {
-    const messageId = Object.keys(this.props.messages).length + 1;
-    //    const { chatId } = this.props;
-    //debugger;
-    this.props.sendMessage(message, sender, messageId, chatId);
+  sendMessage = () => {
+    const { humanInput } = this.state;
 
-    if (sender !== "robot")
-      setTimeout(
-        () =>
-          this.handleSendMessage(
-            answers[Math.floor(Math.random() * answers.length)],
-            "robot",
-            chatId
-          ),
-        1000
-      );
+    if (!input) return;
+
+    const { chatId, message } = this.props;
+    const messageId = Object.keys(this.props.messages).length + 1;
+    this.props.sendMessage({
+      message: input,
+      sender: "robot",
+      messageId,
+      chatId,
+    });
+
+    this.setState({
+      humanInput: "",
+    });
+
+    setTimeout(() => {
+      const { messages } = this.props;
+      const messageId = Object.keys(messages).length + 1;
+      this.props.sendMessage({
+        message: answers[Math.floor(Math.random() * answers.length)],
+        sender: "robot",
+        chatId,
+        messageId,
+      });
+    }, 1000);
   };
 
   handleClick = () => {
     this.sendMessage();
-  };
-
-  sendMessage = () => {
-    //  debugger;
-    this.handleSendMessage(this.state.humanInput);
-    this.setState({
-      humanInput: "",
-    });
   };
 
   handleChange = (event) => {
@@ -90,43 +91,37 @@ export default class MessageFields extends React.Component {
 
   render() {
     const { chats, chatId, messages } = this.props;
-    //    debugger;
-    const activeMessages = chats[chatId].messageList.map((messageId) => {
-      return messages[messageId];
+    const messageElements = chats[chatId].messageList.map((messageId) => {
+      const { text, sender } = messages[messageId];
+      return <Message key={messageId} text={text} sender={sender} />;
     });
-    //debugger;
-    const messageElements = activeMessages.map(({ text, sender }, index) => (
-      <Message key={index} text={text} sender={sender} />
-    ));
+
     return (
-      <div style={{ display: "flex", flexDirection: "column", width: "80%" }}>
-        <div
-          ref={this.messageFieldRef}
-          style={{ display: "flex", flexDirection: "column", width: "85%" }}
-        >
+      <>
+        <div ref={this.messageFieldRef} className="message-field">
           {messageElements}
         </div>
-        <div
-          style={{
-            marginTop: "50px",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
+        <div className="actions">
           <TextField
+            style={{ marginRight: "12px" }}
+            fullWidth
             type="text"
-            autoFocus={true}
+            autoFocus
             placeholder="Введите что-нибудь"
             value={this.state.humanInput}
             onChange={this.handleChange}
             onKeyUp={this.handleKeyUp}
             style={{ width: "85%" }}
           />
-          <Fab disabled={!this.state.humanInput} onClick={this.handleClick}>
+          <Fab
+            color="primary"
+            disabled={!this.state.humanInput}
+            onClick={this.handleClick}
+          >
             <SendIcon />
           </Fab>
         </div>
-      </div>
+      </>
     );
   }
 }

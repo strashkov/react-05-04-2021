@@ -1,6 +1,7 @@
 const initialStore = {
   user: {
-    name: "Filipp Romanovski",
+    firstName: "Filipp",
+    lastName: "Romanovski",
     bio: "My Route to Santiago de Compostela",
     photo: "filipp-romanovski-eejet4GDlzc-unsplash.jpg",
   },

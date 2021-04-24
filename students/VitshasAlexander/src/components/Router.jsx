@@ -1,24 +1,40 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
-import Layout from "../components/Layout.jsx";
+import PropTypes from 'prop-types';
+import { Switch, Route, Redirect } from "react-router-dom";
+
+import Layout from "../components/Layout";
+import MessageField from '../containers/MessageFields';
+import Profile from '../containers/Profile';
 
 export default class Router extends React.Component {
+  static propTypes = {
+        chats: PropTypes.object.isRequired
+    };
   render() {
     return (
       <Switch>
-        <Route exact path="/" component={Layout} />
+        <Route exact path="/" render={() => <Redirect to="/profile" />} />
         <Route
           path="/chat/:id"
           render={(props) => {
-            return <Layout chatId={props.match.params.id} />;
+            const chatId = props.match.params.id;
+            return (
+              <Layout
+                title={`Messages: ${this.props.chats[chatId].title}`}
+                chatId={ChatId}
+              >
+                <MessageField chatId={chatId} />
+              </Layout>
+            );
           }}
         />
         <Route
-          exact
           path="/profile"
-          render={(props) => {
-            return <Layout chatId={props.match.params.id} showProfile={true} />;
-          }}
+          render={() => (
+            <Layout title="Profile page">
+              <Profile />
+            </Layout>
+          )}
         />
       </Switch>
     );
