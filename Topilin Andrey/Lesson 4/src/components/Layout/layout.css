@@ -1,0 +1,55 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.MuiFab-root {
+    background-color: #b3e5fc !important;
+}
+
+#app {
+    height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.layout {
+    height: 100%;
+    display: flex !important;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.main {
+    display: flex;
+    width: 100%;
+}
+
+.actions {
+    width: 100%;
+    display: flex;
+    margin-top: 12px;
+}
+
+/* layout input */
+.MuiInput-underline:after {
+    border-bottom: 2px solid #b3e5fc !important;
+}
+
+.empty-chat {
+    height: 100%;
+    background-color: #e2e2e2;
+    padding-top: 50px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 24px;
+}
