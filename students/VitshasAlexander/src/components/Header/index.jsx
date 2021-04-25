@@ -34,8 +34,8 @@ export default class Header extends React.Component {
           <Typography variant="h6">{title}</Typography>
           <Link to={`/profile`}>
             <Avatar className="header-profile-avatar">
-              {profile.firstName.charAt(0)}
-              {profile.lastName.charAt(0)}
+              {user.firstName.charAt(0)}
+              {user.lastName.charAt(0)}
             </Avatar>
           </Link>
         </Toolbar>

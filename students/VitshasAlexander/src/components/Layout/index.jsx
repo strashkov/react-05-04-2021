@@ -11,7 +11,7 @@ import "./style.css";
 export default class Layout extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    chatId: PropTypes.string.isRequired,
+    chatId: PropTypes.string,
     children: PropTypes.node.isRequired,
   };
 
@@ -19,10 +19,10 @@ export default class Layout extends React.Component {
     const { chatId, children, title } = this.props;
 
     return (
-      <Container maxWidth="md" className="layout">
+      <Container className="layout">
         <Header title={title} />
         <div className="layout-content">
-          <div layout-content-left>
+          <div className="layout-content-left">
             <ChatList chatId={chatId} />
           </div>
           <div className="layout-content-right">{children}</div>

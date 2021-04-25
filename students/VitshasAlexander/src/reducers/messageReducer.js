@@ -1,4 +1,4 @@
-import { SEND_MESSAGE } from "../actions/messageActions";
+import { SEND_MESSAGE, DELETE_MESSAGE } from "../actions/messageActions";
 
 const initialStore = {
   messages: {
@@ -20,14 +20,24 @@ const initialStore = {
 export default function messageReducer(store = initialStore, action) {
   switch (action.type) {
     case SEND_MESSAGE: {
-      const { message, sender, messageId } = action;
+      const { messageId, text, sender } = action;
       return {
         messages: {
           ...store.messages,
           [messageId]: {
-            text: message,
-            sender: sender,
+            text,
+            sender,
           },
+        },
+      };
+    }
+    case DELETE_MESSAGE: {
+      const { messageId } = action;
+      console.log(`Надо бы удалить сообщение ${messageId}`);
+      //      if (messageId in store.messages) delete messages[messageId];
+      return {
+        messages: {
+          ...store.messages,
         },
       };
     }

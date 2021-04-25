@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -10,13 +9,19 @@ import SendIcon from "@material-ui/icons/Send";
 import Fab from "@material-ui/core/Fab";
 import Avatar from "@material-ui/core/Avatar";
 
-import './style.css';
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+
+import "./style.css";
 
 export default class ChatList extends React.Component {
   static propTypes = {
     chatId: PropTypes.string,
     chats: PropTypes.object.isRequired,
     addChat: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
+    goForward: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
   };
 
   state = {
@@ -24,7 +29,7 @@ export default class ChatList extends React.Component {
   };
 
   handleAddChatClick = () => {
-    this.OnAddChat();
+    this.onAddChat();
   };
 
   handleChatNameChange = (event) => {
@@ -33,7 +38,7 @@ export default class ChatList extends React.Component {
     }));
   };
 
-  OnAddChat = () => {
+  onAddChat = () => {
     this.props.addChat(this.state.chatName);
     this.setState({
       chatName: "",
@@ -42,27 +47,47 @@ export default class ChatList extends React.Component {
 
   handleChatNameKeyUp = (event) => {
     if (event.keyCode === 13) {
-      this.OnAddChat();
+      this.onAddChat();
     }
+  };
+
+  handleLinkClick = (link) => {
+    this.props.push(link);
+  };
+
+  handleBackClick = () => {
+    this.props.goBack();
+  };
+
+  handleForwardClick = () => {
+    this.props.goForward();
   };
 
   render() {
     const { chats, chatId } = this.props;
     const { chatName } = this.state;
     return (
-      <div className="chat-list"
-      >
+      <div className="chat-list">
         <List>
           {Object.entries(chats).map(([id, value]) => (
-            <Link key={id} to={`/chat/${id}`}>
-              <ListItem button selected={id === chatId}>
-                <Avatar className="chat-list-avatar">
-                    {value.title.split(' ').map(w => w.charAt(0))}
-                </Avatar>
-                <ListItemText primary={value.title} />
-              </ListItem>
-            </Link>
+            <ListItem
+              key={id}
+              button
+              selected={id === chatId}
+              onClick={() => {
+                this.handleLinkClick(`/chat/${id}`);
+              }}
+            >
+              <Avatar className="chat-list-avatar">
+                {value.title.split(" ").map((w) => w.charAt(0))}
+              </Avatar>
+              <ListItemText primary={value.title} />
+            </ListItem>
           ))}
+          {/* <ListItem>
+            <ArrowBackIcon onClick={this.handleBackClick()} />
+            <ArrowForwardIcon onClick={this.handleForwardClick()} />
+          </ListItem> */}
           <ListItem
             button
             style={{
