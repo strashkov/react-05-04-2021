@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import SendingFormContainer from './SendingForm/SendingFormContainer';
 
 const MessageField = ({
+  deleteMsg,
   chats,
   setCurrentChat,
   messageFieldRef,
@@ -36,7 +37,7 @@ const MessageField = ({
     return currentMessages ? (
       <div className={style.messageFieldWrapper}>
         <div className={style.messageField} ref={messageFieldRef}>
-          <Message messages={currentMessages} />
+          <Message messages={currentMessages} deleteMsg={deleteMsg} />
         </div>
         <SendingFormContainer />
       </div>

@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import ListItem from '@material-ui/core/ListItem';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,14 +13,24 @@ const ChatList = ({
   addChat,
   deleteChat,
   currentChat,
+  isActiveChat,
+  blinkChat,
+  push,
 }) => {
   const listEl = chats.map(({ chatId, chatName }) => (
     <div key={chatId} className={style.linkWrapper}>
-      <Link to={`/chat/${chatId}`} className={style.link}>
-        <ListItem button selected={currentChat === chatId}>
-          {chatName}
-        </ListItem>
-      </Link>
+      <ListItem
+        onClick={() => push(`/chat/${chatId}`)}
+        button
+        selected={currentChat === chatId}
+        style={
+          chatId === blinkChat && isActiveChat
+            ? { backgroundColor: 'rgba(255, 255, 255, 0.5)' }
+            : null
+        }
+      >
+        {chatName}
+      </ListItem>
       <IconButton
         edge='end'
         aria-label='delete'

@@ -1,8 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { updateMessagesData } from '../../redux/chats-reducer';
-import { setCurrentChat } from '../../redux/chats-reducer';
+import {
+  setCurrentChat,
+  updateMessagesData,
+  deleteMsg,
+} from '../../redux/chats-reducer';
 import MessageField from './MessageField';
 
 class MessageFieldContainer extends React.Component {
@@ -13,14 +16,6 @@ class MessageFieldContainer extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const idx = this.props.match.params?.chatId - 1;
-    if (
-      prevProps.chats[idx]?.messages.length <
-        this.props.chats[idx]?.messages.length &&
-      this.props.chats[idx]?.messages[this.props.chats[idx].messages.length - 1]
-        .author === 'me'
-    ) {
-      setTimeout(() => this.props.updateMessagesData('bot'), 1000);
-    }
     if (
       prevProps.chats[idx]?.messages.length <
       this.props.chats[idx]?.messages.length
@@ -44,6 +39,8 @@ const mapStateToProps = state => ({
   chats: state.messenger.chats,
 });
 
-export default connect(mapStateToProps, { setCurrentChat, updateMessagesData })(
-  WithChatIdMessageFieldContainer
-);
+export default connect(mapStateToProps, {
+  setCurrentChat,
+  updateMessagesData,
+  deleteMsg,
+})(WithChatIdMessageFieldContainer);

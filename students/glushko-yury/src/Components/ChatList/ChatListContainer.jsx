@@ -1,3 +1,4 @@
+import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import {
   updateAddChatInputValue,
@@ -10,10 +11,13 @@ const mapStateToProps = state => ({
   chats: state.messenger.chats,
   addChatInputValue: state.messenger.addChatInputValue,
   currentChat: state.messenger.currentChat,
+  isActiveChat: state.messenger.isActiveChat,
+  blinkChat: state.messenger.blinkChat,
 });
 
 export default connect(mapStateToProps, {
   updateAddChatInputValue,
   deleteChat,
   addChat,
+  push,
 })(ChatList);

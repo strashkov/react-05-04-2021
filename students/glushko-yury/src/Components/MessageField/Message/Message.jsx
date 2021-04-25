@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import style from './Message.module.scss';
 
-const Message = ({ messages }) => {
+const Message = ({ messages, deleteMsg }) => {
   const msgEl = messages.map(msg => (
     <div
       key={msg.id}
@@ -14,6 +14,9 @@ const Message = ({ messages }) => {
     >
       <span className={style.author}>{msg.author}: </span>
       {msg.text}
+      <span className={style.del} onClick={() => deleteMsg(msg.id)}>
+        <i className='fas fa-times-circle'></i>
+      </span>
     </div>
   ));
 

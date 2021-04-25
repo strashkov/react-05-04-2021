@@ -9,3 +9,11 @@
 .author {
   font-weight: bold;
 }
+.del {
+  cursor: pointer;
+  margin-left: 5px;
+
+  &:hover {
+    color: #fff;
+  }
+}

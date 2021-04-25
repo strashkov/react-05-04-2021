@@ -3,10 +3,15 @@ import style from './SendingForm.module.scss';
 import Button from './Button/Button';
 import Input from './Input/Input';
 
-const SendingForm = ({ inputValue, updateInputValue, updateMessagesData }) => {
+const SendingForm = ({
+  inputValue,
+  updateInputValue,
+  updateMessagesData,
+  msgAnswer,
+}) => {
   const submitHandler = e => {
     e.preventDefault();
-    updateMessagesData('me');
+    msgAnswer('me');
   };
 
   return (
