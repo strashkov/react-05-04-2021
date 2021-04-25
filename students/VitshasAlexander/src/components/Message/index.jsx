@@ -16,8 +16,7 @@ export default class Message extends React.Component {
   };
   handleDeleteMessage = () => {
     const { chatId, messageId } = this.props;
-    // this.props.deleteMessage({ messageId, chatId });
-    console.log(`Попытка удалить сообщение ${messageId} из чата ${chatId}`);
+    this.props.deleteMessage({ messageId, chatId });
   };
   render() {
     return (
@@ -30,12 +29,9 @@ export default class Message extends React.Component {
         <div> {this.props.text} </div>
         <div className="message-sender">
           {this.props.messageId}:{this.props.sender}
-          <IconButton aria-label="delete" onClick={this.handleDeleteMessage()}>
+          <IconButton aria-label="delete" onClick={() => { this.handleDeleteMessage() }} disableRipple>
             <DeleteIcon fontSize="small" />
           </IconButton>
-          {/* <Button onClick={this.handleDeleteMessage()}>
-            <DeleteIcon />
-          </Button> */}
         </div>
       </div>
     );

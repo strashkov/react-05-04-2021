@@ -2,7 +2,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { push, goBack, goForward } from "connected-react-router";
 
-import { addChat } from "../actions/chatActions";
+import { addChat, deleteChat } from "../actions/chatActions";
 import ChatList from "../components/ChatList";
 
 const mapStateToProps = (store) => {
@@ -15,6 +15,7 @@ const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       addChat,
+      deleteChat,
       push,
       goBack,
       goForward,

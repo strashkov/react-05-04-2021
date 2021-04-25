@@ -1,4 +1,5 @@
 import { SEND_MESSAGE, DELETE_MESSAGE } from "../actions/messageActions";
+import { DELETE_CHAT } from "../actions/chatActions";
 
 const initialStore = {
   messages: {
@@ -33,11 +34,23 @@ export default function messageReducer(store = initialStore, action) {
     }
     case DELETE_MESSAGE: {
       const { messageId } = action;
-      console.log(`Надо бы удалить сообщение ${messageId}`);
-      //      if (messageId in store.messages) delete messages[messageId];
+      const { messages } = store;
+      if (messageId in messages) delete messages[messageId];
       return {
         messages: {
-          ...store.messages,
+          ...messages,
+        },
+      };
+    }
+    case DELETE_CHAT: {
+      const { chatId, messageList } = action;
+      const { messages } = store;
+      messageList.forEach((messageId) => {
+        delete messages[messageId];
+      });
+      return {
+        messages: {
+          ...messages,
         },
       };
     }

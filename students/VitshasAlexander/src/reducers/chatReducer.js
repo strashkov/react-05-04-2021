@@ -1,6 +1,5 @@
 import { SEND_MESSAGE, DELETE_MESSAGE } from "../actions/messageActions";
-import { ADD_CHAT } from "../actions/chatActions";
-import { Filter } from "@material-ui/icons";
+import { ADD_CHAT, DELETE_CHAT } from "../actions/chatActions";
 
 const initialStore = {
   chats: {
@@ -35,23 +34,17 @@ export default function chatReducer(store = initialStore, action) {
     }
     case DELETE_MESSAGE: {
       const { messageId, chatId } = action;
-      console.log(
-        `Надо бы удалить сообщение ${messageId} из списка в ${chatId}`
-      );
-      // const { chats } = store;
-      // return {
-      //   chats: {
-      //     ...chats,
-      //     [chatId]: {
-      //       ...chats[chatId],
-      //       messageList: [
-      //         ...chats[chatId].messageList.filter((item) => item != messageId),
-      //       ],
-      //     },
-      //   },
-      // };
+      const { chats } = store;
       return {
-        chats: { ...store.chats },
+        chats: {
+          ...chats,
+          [chatId]: {
+            ...chats[chatId],
+            messageList: [
+              ...chats[chatId].messageList.filter((item) => item != messageId),
+            ],
+          },
+        },
       };
     }
     case ADD_CHAT: {
@@ -63,6 +56,17 @@ export default function chatReducer(store = initialStore, action) {
             title: action.title,
             messageList: [],
           },
+        },
+      };
+    }
+    case DELETE_CHAT: {
+      const { chatId } = action;
+      const { chats } = store;
+      console.log(`Надо бы удалить чат ${chatId}`);
+      if (chatId in chats) delete chats[chatId];
+      return {
+        chats: {
+          ...chats,
         },
       };
     }
