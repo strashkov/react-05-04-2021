@@ -3,32 +3,49 @@ import { Link } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import { Avatar } from '@material-ui/core';
 import '../styles/style.css';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { userInfo } from '../actions/profileAction';
 
-export default class Profile extends React.Component {
+class Profile extends React.Component {
     static propTypes = {
+        name: PropTypes.string,
+        lastName: PropTypes.string,
+        middleName: PropTypes.string,
+        country: PropTypes.string,
+        city: PropTypes.string,
+        years: PropTypes.string,
 
     };
     state = {
-        name: '',
-        lastName: '',
-        middleName: '',
-        country: '',
-        city: '',
-        years: '',
-        forSubmitDisable: 'true'
+        // name: '',
+        // lastName: '',
+        // middleName: '',
+        // country: '',
+        // city: '',
+        // years: '',
+        forSubmitDisable: true
     };
 
     handleInputChange = (event) => {
-        this.setState((state) => {
-            return {
-                name: event.target.parentNode.children[0].value,
-                lastName: event.target.parentNode.children[1].value,
-                middleName: event.target.parentNode.children[2].value,
-                country: event.target.parentNode.children[3].value,
-                city: event.target.parentNode.children[4].value,
-                years: event.target.parentNode.children[5].value
-            }
-        });
+        this.props.userInfo(
+            event.target.parentNode.children[0].value,
+            event.target.parentNode.children[1].value,
+            event.target.parentNode.children[2].value,
+            event.target.parentNode.children[3].value,
+            event.target.parentNode.children[4].value,
+            event.target.parentNode.children[5].value,
+        );
+        // this.setState((state) => {
+        //     return {
+        //         name: event.target.parentNode.children[0].value,
+        //         lastName: event.target.parentNode.children[1].value,
+        //         middleName: event.target.parentNode.children[2].value,
+        //         country: event.target.parentNode.children[3].value,
+        //         city: event.target.parentNode.children[4].value,
+        //         years: event.target.parentNode.children[5].value
+        //     }
+        // });
     };
 
     handleClickSubmit = (event) => {
@@ -41,13 +58,7 @@ export default class Profile extends React.Component {
 
     render() {
 
-        const { name } = this.state;
-        const { lastName } = this.state;
-        const { middleName } = this.state;
-        const { country } = this.state;
-        const { city } = this.state;
-        const { years } = this.state;
-        const { forSubmitDisable } = this.state;
+        const { name, lastName, middleName, country, city, years, forSubmitDisable } = this.state;
 
         return <Container className='layout'>
             <div className='header header-flex'>
@@ -109,7 +120,6 @@ export default class Profile extends React.Component {
                             onClick={this.handleClickSubmit}
                             className='' value='Изменить' />
                     </form>
-                    {/* <input type="file" /> */}
                 </div>
             </div>
 
@@ -119,3 +129,15 @@ export default class Profile extends React.Component {
     }
 
 }
+
+const mapStateToProps = (store) => { /*Получаем State и передаем его в пропсы*/
+    return {
+        userInfo: store.chatReducer.userInfo,
+    };
+};
+
+const mapDispatchToProps = dispatch => bindActionCreators(
+    { userInfo },
+    dispatch); //Передаем экшен , который хотим вызвать
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

@@ -5,6 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import '../styles/style.css';
+import { sendMessage } from '../actions/messageActions';
+import { connect } from 'react-redux';
 
 export default class MessageField extends React.Component {
     static propTypes = {
@@ -20,11 +22,11 @@ export default class MessageField extends React.Component {
 
     constructor(props) {
         super(props);
-        this.MessageFieldRef = React.createRef();
+        this.messageFieldRef = React.createRef();
     }
 
     componentDidUpdate(prevProps, prevState) {
-        this.MessageFieldRef.current.scrollTop = this.MessageFieldRef.current.scrollHeight - this.MessageFieldRef.current.clientHeight;
+        this.messageFieldRef.current.scrollTop = this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
     }
 
     sendMessage = () => {
@@ -60,7 +62,7 @@ export default class MessageField extends React.Component {
 
         return (
             <div className="message-field-wrapper">
-                <div ref={this.MessageFieldRef} className="message-field">
+                <div ref={this.messageFieldRef} className="message-field">
                     {messageElements}
                 </div>
                 <div className='actions'>

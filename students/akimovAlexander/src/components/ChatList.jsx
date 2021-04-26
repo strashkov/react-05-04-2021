@@ -8,14 +8,17 @@ import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
 import '../styles/style.css';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { addChat } from '../actions/chatActions';
 
 
 
-export default class ChatList extends React.Component {
+class ChatList extends React.Component {
     static propTypes = {
         chatId: PropTypes.string,
         chats: PropTypes.object.isRequired,
-        onAddChat: PropTypes.func.isRequired
+        addChat: PropTypes.func.isRequired
     };
 
     state = {
@@ -29,7 +32,7 @@ export default class ChatList extends React.Component {
     };
 
     handleAddChatClick = () => {
-        this.props.onAddChat(this.state.chatName);
+        this.props.addChat(this.state.chatName);
         this.setState({
             chatName: ''
         });
@@ -64,3 +67,28 @@ export default class ChatList extends React.Component {
         );
     }
 }
+
+// const mapStateToProps = ({ chatReducer }) => ({
+//     chats: chatReducer.chats,
+// });
+
+const mapStateToProps = (store) => { /*Получаем State и передаем его в пропсы*/
+    return {
+        chats: store.chatReducer.chats,
+    };
+};
+
+const mapDispatchToProps = dispatch => bindActionCreators(
+    { addChat },
+    dispatch); //Передаем экшен , который хотим вызвать
+
+// const mapDispatchToProps = dispatch => () => {
+//     return {
+//         onAddChat: (title) => {
+//             const action = addChat(title);
+//             dispatch(action);
+//         }
+//     };
+// };
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
