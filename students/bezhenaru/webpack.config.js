@@ -6,8 +6,12 @@ module.exports = {
     output: {
         path: path.resolve (__dirname, 'build'),
         filename: 'bundle.js', 
+        publicPath: '/'
     },
-
+    devServer: {
+        historyApiFallback: true
+    },
+    devtool: 'eval-source-map',
     plugins: [
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'src', 'index.html'),

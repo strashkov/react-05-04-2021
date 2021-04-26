@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {
     Switch,
     Route,
-    Redirect
+    // Redirect
 } from "react-router-dom";
 import PropTypes from 'prop-types'
 import Layout from './layout.jsx';
@@ -13,13 +13,14 @@ export default class Router extends Component {
         chatId: PropTypes.string,
         chatText: PropTypes.string,
     }
-    render() {
-        
+    render() {        
         return (
-
             <Switch>
-                <Route exact path="/" component={Layout} />
-                <Route exact path="/chat/:id" render={(props) => {
+                <Route exact path='/' component={Layout} />
+                <Route exact path='/chat/:id' render={(props) => {
+                    // if (props.match.params.id === '5') {
+                    //     return <Redirect to='/chat/2' />
+                    // }
                     return <Layout chatId={props.match.params.id} />
                 }} />
 

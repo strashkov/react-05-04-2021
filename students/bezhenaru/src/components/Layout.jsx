@@ -1,15 +1,18 @@
 import React from 'react';
-import MessageField from './MessageField.jsx';
-import Header from './Header.jsx';
-import '../styles/style.css';
-import ChatList from './ChatList.jsx';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
+import '../styles/style.css';
+import MessageField from './MessageField.jsx';
+import Header from './Header.jsx';
+import ChatList from './ChatList.jsx';
 
 export default class Layout extends React.Component {
     static propTypes = {
         chatId: PropTypes.string
     };
+    // static defaultProps = {
+    //     chatId: '2'
+    // };
     render() {
         const { chatId } = this.props;
 
