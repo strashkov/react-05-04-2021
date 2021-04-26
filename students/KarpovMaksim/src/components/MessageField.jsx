@@ -9,8 +9,12 @@ import PropTypes from 'prop-types';
 
 export default class MessageField extends React.Component {
   static propTypes = {
-    chatId: PropTypes.string,
-    them: PropTypes.string
+    them: PropTypes.string,
+    messages: PropTypes.arrayOf(PropTypes.shape({
+      userName: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired
+    })),
+    onSendMessage: PropTypes.func.isRequired
   }
   constructor(props) {
     super(props)
@@ -18,47 +22,10 @@ export default class MessageField extends React.Component {
   }
   
   state = {
-    messages: {
-      '1': [
-        {
-          text: 'Hello!kffkefe',
-          userName: 'Робот'
-        }
-      ],
-      '2': [
-        {
-          text: 'Hello!efefe',
-          userName: 'Робот'
-        }
-      ],
-      '3': [
-        {
-          text: 'Hello!efefef',
-          userName: 'Робот'
-        }
-      ]
-    },
     input: ''
   };
 
   componentDidUpdate() {
-    const { chatId, them } = this.props;
-    if(this.state.messages[chatId][this.state.messages[chatId].length - 1].userName !== 'Робот' && this.state.input.length === 0 ) {
-      setTimeout(() => {
-        this.setState((state)=>({
-          messages: {
-            ...state.messages,
-            [chatId]: [
-              ...state.messages[chatId],
-              {
-                text: `Не приста вай ко мне я робот из чата ${chatId} о ${them}`,
-                userName: 'Робот'
-              } 
-            ]
-          }
-        }))
-      }, 1000)
-    }
     this.messageFieldRef.current.scrollTop = 
     this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
    }
@@ -75,27 +42,16 @@ export default class MessageField extends React.Component {
     })
   }
   sendMessage = () => {
-    const { chatId } = this.props;
-    this.setState((state) => ({
-      messages: {
-        ...state.messages,
-        [chatId]: [
-          ...state.messages[chatId],
-          {
-            text: state.input,
-            userName: 'Вася'
-          } 
-        ]
-      },
+    this.props.onSendMessage(this.state.input);
+    this.setState({
       input: '' 
-    }))
+    })
   }
+
   render() {
-    const { chatId } = this.props;
-    if (!chatId) {
-      return <div className='empty-chat'>Выберете чат</div>
-    }
-    const messageElements = this.state.messages[chatId].map(({text, userName}, index) => (
+
+   
+    const messageElements = this.props.messages.map(({text, userName}, index) => (
       <Message 
         key={index} 
         userName = {userName} 
