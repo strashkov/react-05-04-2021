@@ -9,7 +9,7 @@ export default class Header extends React.Component {
         profile: PropTypes.shape({
             firstName: PropTypes.string.isRequired,
             lastName: PropTypes.string.isRequired,
-            url: PropTypes.string,
+            url: PropTypes.string.isRequired,
         }).isRequired
     };
 

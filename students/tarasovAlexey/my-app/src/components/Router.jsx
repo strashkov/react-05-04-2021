@@ -18,6 +18,7 @@ export default class Router extends React.Component {
                 )} />
                 <Route path='/chat/:id' render={(props) => {
                     const chatId = props.match.params.id;
+
                     return (
                         <Layout
                             title={`Messages: ${this.props.chats[chatId].title}`}
@@ -27,7 +28,7 @@ export default class Router extends React.Component {
                     );
                 }}/>
                 <Route path='/profile' render={() => (
-                    <Layout title='main page'>
+                    <Layout title='Profile Page'>
                         <Profile />
                     </Layout>
                 )} />

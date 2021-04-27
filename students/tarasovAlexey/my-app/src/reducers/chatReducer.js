@@ -43,6 +43,7 @@ export default function chatReducer(store = initialStore, action) {
                     [chatId]: {
                         title: action.title,
                         messageList: [],
+                        url: action.url
                     }
                 },
             };

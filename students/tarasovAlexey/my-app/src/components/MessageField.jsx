@@ -30,13 +30,13 @@ export default class MessageField extends React.Component {
     }
 
     sendMessage = () => {
-        const { input } = this.state;
+        const {input} = this.state;
 
         if (!input) {
             return;
         }
 
-        const { chatId, messages } = this.props;
+        const {chatId, messages} = this.props;
         const messageId = Object.keys(messages).length + 1;
 
         this.props.sendMessage({
@@ -50,20 +50,9 @@ export default class MessageField extends React.Component {
             input: ''
         });
 
-        setTimeout(() => {
-            const { messages } = this.props;
-            const messageId = Object.keys(messages).length + 1;
-
-            this.props.sendMessage({
-                messageId,
-                chatId,
-                text: 'Я робот!',
-                sender: 'bot'
-            });
-        }, 1000);
     };
 
-    handleChangeInput = ({ target: { value } }) => {
+    handleChangeInput = ({target: {value}}) => {
         this.setState({
             input: value
         })
@@ -76,39 +65,39 @@ export default class MessageField extends React.Component {
     };
 
     render() {
-        const { chats, messages, chatId } = this.props;
+        const {chats, messages, chatId} = this.props;
 
         const messageElements = chats[chatId].messageList.map((messageId) => {
-            const { text, sender } = messages[messageId];
+            const {text, sender} = messages[messageId];
 
             return (
                 <Message
                     key={messageId}
                     text={text}
-                    sender={sender} />
+                    sender={sender}/>
             )
         });
 
         return (
             <>
                 <div ref={this.messageFieldRef} className="message-field">
-                    { messageElements }
+                    {messageElements}
                 </div>
                 <div className='actions'>
                     <TextField
-                        style={{ marginRight: '12px' }}
+                        style={{marginRight: '12px'}}
                         placeholder='Введите сообщение'
                         fullWidth
                         value={this.state.input}
                         type="text"
                         autoFocus
                         onKeyUp={this.handleInputKeyUp}
-                        onChange={this.handleChangeInput} />
+                        onChange={this.handleChangeInput}/>
                     <Fab
                         color='primary'
                         disabled={this.state.input === ''}
                         onClick={this.sendMessage}>
-                        <SendIcon />
+                        <SendIcon/>
                     </Fab>
                 </div>
             </>
