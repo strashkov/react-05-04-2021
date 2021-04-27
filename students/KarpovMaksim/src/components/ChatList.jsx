@@ -7,14 +7,17 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
+import { connect } from 'react-redux';
+import { addChat } from '../actions/chatActions';
+import { bindActionCreators } from 'redux';
 
 
 
-export default class ChatList extends React.Component {
+class ChatList extends React.Component {
   static propTypes = {
     chatId: PropTypes.string,
     chats: PropTypes.object.isRequired,
-    onAddChat: PropTypes.func.isRequired
+    addChat: PropTypes.func.isRequired
   };
 
   state = {
@@ -28,7 +31,7 @@ export default class ChatList extends React.Component {
   };
 
   hadlerAddChatClick = () => {
-    this.props.onAddChat(this.state.chatName);
+    this.props.addChat(this.state.chatName);
     this.setState( {
         chatName: ''
       }
@@ -41,10 +44,10 @@ export default class ChatList extends React.Component {
       <div className="chat-list-field">
         <List>
         {Object.entries(chats).map(([id, value]) => (
-          <Link key={id} to={`/chat/${id}/${value.them}`}>
+          <Link key={id} to={`/chat/${id}`}>
             <ListItem button selected={id === this.props.chatId}>
               <div className='chat-list-icon'></div>
-              <ListItemText primary={value.chat}/>
+              <ListItemText primary={value.title}/>
             </ListItem>
           </Link>
           ))}
@@ -65,3 +68,18 @@ export default class ChatList extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (store) => ({
+  chats: store.chatReducer.chats,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat }, dispatch);
+// const mapDispatchToProps = dispatch => () => { 
+//   return {
+//     onAddChat: (title) => {
+//       const action = addChat(title)
+//       dispatch(action);
+//     }
+//   }
+//  };
+export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
