@@ -38,7 +38,18 @@ export default function chatReducer(store = initialStore, action) {
       };
     }
     case GLOW_CHAT: {
+      const {chatId} = action;
 
+      return {
+        ...store,
+        chats: {
+          ...store.chats,
+          [chatId]: {
+            ...store.chats[chatId],
+            glowing: true,
+          },
+        },
+      };
     }
     default:
       return store;

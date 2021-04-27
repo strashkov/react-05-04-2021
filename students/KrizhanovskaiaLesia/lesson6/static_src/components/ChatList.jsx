@@ -13,7 +13,7 @@ export default class ChatList extends React.Component {
     chats: PropTypes.object.isRequired,
     addChat: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
-    glowChat: PropTypes.func.isRequired,
+    glowing: PropTypes.bool,
   };
 
   state = {
@@ -41,6 +41,7 @@ export default class ChatList extends React.Component {
   render() {
     const { chatName } = this.state;
     const { chats } = this.props;
+    const { glowing } = this.props;
 
     return (
       <div className="chat-list">
@@ -48,7 +49,7 @@ export default class ChatList extends React.Component {
           {Object.entries(chats).map(([id, value]) => (
             <Link key={id} to={`/chat/${id}`}>
               <ListItem button selected={id === this.props.chatId} onClick={ () => this.handleNavigate(`/chat/${chatId}`) }>
-                <ListItemText className='' primary={value.title} />
+                <ListItemText {glowing ? className='glow' : null} primary={value.title} />
               </ListItem>
             </Link>
           ))}

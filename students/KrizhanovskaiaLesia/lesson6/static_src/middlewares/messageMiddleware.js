@@ -1,5 +1,5 @@
 import { SEND_MESSAGE, sendMessage } from "../actions/messageActions";
-// import { GLOW_CHAT } from "../actions/chatActions";
+import { GLOW_CHAT, glowChat  } from "../actions/chatActions";
 
 
 export default store => next => (action) => {
@@ -25,10 +25,9 @@ export default store => next => (action) => {
                     store.dispatch(botAction);
                 }, 1000);
             }
-
-ч
-            // case GLOW_CHAT:
-
+            if (action.sender === 'bot') {
+                store.dispatch(glowChat(chatId));
+            }
     }
     return next(action);
 }
