@@ -1,21 +1,21 @@
 // import update from 'react-addons-update';
 import { SEND_MESSAGE } from '../actions/messageActions';
 import { ADD_CHAT } from '../actions/chatActions';
-import { USER_INFO } from '../actions/profileAction';
 
 const initialStore = {
     chats: {
-        1: { title: 'Чат 1', messageList: [1] },
-        2: { title: 'Чат 2', messageList: [2] },
-        3: { title: 'Чат 3', messageList: [1] },
-    },
-    userInfo: {
-        name: 'a',
-        lastName: '',
-        middleName: '',
-        country: '',
-        city: '',
-        years: '',
+        1: {
+            title: 'Чат 1',
+            messageList: [1]
+        },
+        2: {
+            title: 'Чат 2',
+            messageList: [2]
+        },
+        3: {
+            title: 'Чат 3',
+            messageList: [1]
+        },
     }
 };
 
@@ -47,12 +47,6 @@ export default function chatReducer(store = initialStore, action) {
                     }
                 },
             };
-        }
-        case USER_INFO: {
-            const { name, lastName, middleName, country, city, years, } = action;
-            return {
-
-            }
         }
         default:
             return store;

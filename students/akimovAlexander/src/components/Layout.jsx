@@ -13,24 +13,24 @@ class Layout extends React.Component {
     static propTypes = {
         chatId: PropTypes.string,
         chats: PropTypes.object.isRequired,
-        sendMessage: PropTypes.func.isRequired
+        sendMessage: PropTypes.func.isRequired,
+        messages: PropTypes.object.isRequired,
     };
 
     state = {
-
-        messages: {
-            1: {
-                sender: 'bot',
-                text: 'Привет'
-            },
-            2: {
-                sender: 'bot',
-                text: 'Как дела?'
-            }
-        }
+        // messages: {
+        //     1: {
+        //         sender: 'bot',
+        //         text: 'Привет'
+        //     },
+        //     2: {
+        //         sender: 'bot',
+        //         text: 'Как дела?'
+        //     }
+        // }
     };
     static defaultProps = {
-        chatId: 1
+        chatId: '1'
     };
 
     // handleAddChat = (title) => {
@@ -50,42 +50,41 @@ class Layout extends React.Component {
     // };
 
     handleSendMessage = (text, sender = 'me', chatId = this.props.chatId) => {
-        const messageId = Object.keys(this.state.messages).length + 1;
+        const messageId = Object.keys(this.props.messages).length + 1;
 
-        this.setState((state) => {
+        // this.setState((state) => {
 
-            return {
-                messages: {
-                    ...state.messages,
-                    [messageId]: {
-                        text,
-                        sender
-                    }
-                },
-            };
-        });
+        //     return {
+        //         messages: {
+        //             ...state.messages,
+        //             [messageId]: {
+        //                 text,
+        //                 sender
+        //             }
+        //         },
+        //     };
+        // });
 
-        this.props.sendMessage(messageId, chatId);
+        this.props.sendMessage(messageId, text, sender, chatId);
 
         if (sender !== 'bot') {
             setTimeout(() => {
                 this.handleSendMessage('Я робот', 'bot', chatId)
             }, 1000);
         }
-
     };
 
     render() {
         const { chatId, chats } = this.props;
-        const { messages } = this.state;
+        const { messages } = this.props;
 
-        const activeMessages = (chatId == undefined) ? [{ sender: 'bot', text: 'Чат не выбран' }] : chats[chatId].messageList.map((messageId) => {
-            return messages[messageId];
-        });
-
-        // const activeMessages = chats[chatId].messageList.map((messageId) => {
+        // const activeMessages = (chatId == undefined) ? [{ sender: 'bot', text: 'Чат не выбран' }] : chats[chatId].messageList.map((messageId) => {
         //     return messages[messageId];
         // });
+
+        const activeMessages = chats[chatId].messageList.map((messageId) => {
+            return messages[messageId];
+        });
 
         return (
             <Container className='layout'>
@@ -95,6 +94,7 @@ class Layout extends React.Component {
                         chatId={chatId}
                     />
                     <MessageField
+                        chatId={chatId}
                         messages={activeMessages}
                         onSendMessage={this.handleSendMessage} />
                 </div>
@@ -106,6 +106,7 @@ class Layout extends React.Component {
 const mapStateToProps = (store) => { /*Получаем State и передаем его в пропсы*/
     return {
         chats: store.chatReducer.chats,
+        messages: store.messageReducer.messages,
     };
 };
 

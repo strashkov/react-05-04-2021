@@ -8,8 +8,12 @@ import '../styles/style.css';
 import { sendMessage } from '../actions/messageActions';
 import { connect } from 'react-redux';
 
-export default class MessageField extends React.Component {
+class MessageField extends React.Component {
     static propTypes = {
+        chatId: PropTypes.string.isRequired,
+        chats: PropTypes.object.isRequired,
+        // messages: PropTypes.object.isRequired,
+        // sendMessage: PropTypes.func.isRequired,
         messages: PropTypes.arrayOf(PropTypes.shape({
             sender: PropTypes.string.isRequired,
             text: PropTypes.string.isRequired
@@ -42,7 +46,6 @@ export default class MessageField extends React.Component {
     };
 
     handleChangeInput = ({ target: { value } }) => {
-        console.log(value);
         this.setState({
             input: /*event.target.value*/value
         })
@@ -55,7 +58,7 @@ export default class MessageField extends React.Component {
     }
 
     render() {
-        const messageElements = this.props.messages.map(({ text, sender }, index) => (
+        const messageElements = this.props.messages.map(({ sender, text }, index) => (
             <Message key={index} text={text} sender={sender} />)
         );
 
@@ -84,3 +87,17 @@ export default class MessageField extends React.Component {
         )
     }
 }
+
+const mapStateToProps = (store) => { /*Получаем State и передаем его в пропсы*/
+    return {
+        chats: store.chatReducer.chats,
+        // messages: store.messageReducer.messages,
+    };
+};
+
+// const mapDispatchToProps = dispatch => bindActionCreators(
+//     { sendMessage },
+//     dispatch); //Передаем экшен , который хотим вызвать
+
+
+export default connect(mapStateToProps/*, mapDispatchToProps*/)(MessageField);
