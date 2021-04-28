@@ -3,19 +3,16 @@ import Message from "./Message.jsx";
 import TextField from "@material-ui/core/TextField";
 import Fab from "@material-ui/core/Fab";
 import SendIcon from "@material-ui/icons/Send";
+import PropTypes from "prop-types";
 
 export default class MessageField extends React.Component {
+  static propTypes = {
+    chatId: PropTypes.string,
+    messages: PropTypes.array,
+    sendMessage: PropTypes.func,
+  };
+
   state = {
-    messages: [
-      {
-        text: "Привет",
-        sender: "bot",
-      },
-      {
-        text: "Как дела?",
-        sender: "bot",
-      },
-    ],
     input: "",
   };
 
@@ -24,22 +21,10 @@ export default class MessageField extends React.Component {
     this.messageFieldRef = React.createRef();
   }
 
-  sendMessage = () => {
-    this.setState((state) => ({
-      messages: [
-        ...state.messages,
-        {
-          text: this.state.input,
-          sender: "me",
-        },
-      ],
-      input: "",
-    }));
-  };
-
   handleButtonKeyUp = ({ keyCode }) => {
-    if (keyCode === 13 && this.state.input !== "") {
-      this.sendMessage();
+    const { input } = this.state;
+    if (keyCode === 13 && input !== "") {
+      this.handleSendMessage(input, "me");
     }
   };
 
@@ -49,49 +34,51 @@ export default class MessageField extends React.Component {
     });
   };
 
+  handleSendMessage = (text, sender) => {
+    const { chatId, sendMessage } = this.props;
+    sendMessage(chatId, text, sender);
+    this.setState({
+      input: "",
+    });
+  };
+
   componentDidUpdate() {
-    setTimeout(() => {
-      const { messages } = this.state;
-      if (messages[messages.length - 1].sender !== "bot") {
-        this.setState((state) => ({
-          messages: [
-            ...state.messages,
-            {
-              text: "Круто!",
-              sender: "bot",
-            },
-          ],
-        }));
-      }
-    }, 1000);
     const { scrollHeight, clientHeight } = this.messageFieldRef.current;
     this.messageFieldRef.current.scrollTop = scrollHeight - clientHeight;
   }
 
-  render = () => {
-    const messages = this.state.messages.map(({ text, sender }, index) => (
-      <Message key={index} sender={sender} text={text} />
+  render() {
+    const { messages } = this.props;
+    const { input } = this.state;
+
+    const messageElements = messages.map(({ sender, text }, index) => (
+      <Message key={index} key={index} sender={sender} text={text} />
     ));
+
     return (
-      <div className="message-field">
-        <div ref={this.messageFieldRef} className="message-list">
-          {messages}
+      <div className="field-wrapper">
+        <div ref={this.messageFieldRef} className="message-field">
+          {messageElements}
         </div>
         <div className="actions">
           <TextField
             placeholder="Введите сообщение"
-            value={this.state.input}
+            value={input}
             type="text"
             onChange={this.handleChangeInput}
             onKeyUp={this.handleButtonKeyUp}
             autoFocus
             fullWidth
           />
-          <Fab disabled={!this.state.input} onClick={this.sendMessage}>
+          <Fab
+            color="primary"
+            disabled={input === ""}
+            onClick={() => this.handleSendMessage(input, "me")}
+          >
             <SendIcon />
           </Fab>
         </div>
       </div>
     );
-  };
+  }
 }

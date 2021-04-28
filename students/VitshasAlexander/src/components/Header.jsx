@@ -12,6 +12,7 @@ export default class Header extends React.Component {
   static propTypes = {
     chatId: PropTypes.string,
     showProfile: PropTypes.bool,
+    user: PropTypes.object,
   };
   render() {
     return (
@@ -26,7 +27,7 @@ export default class Header extends React.Component {
           <Typography variant="h6">
             Geekbrains messenger.{" "}
             {this.props.showProfile
-              ? "Профиль пользователя"
+              ? "Профиль пользователя " + this.props.user.name
               : "Чат " + (this.props.chatId || "не выбран")}
           </Typography>
           <Link to={`/profile`}>

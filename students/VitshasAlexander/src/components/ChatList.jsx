@@ -4,51 +4,49 @@ import { Link } from "react-router-dom";
 
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import TextField from "@material-ui/core/TextField";
 import SendIcon from "@material-ui/icons/Send";
 import Fab from "@material-ui/core/Fab";
 
-import FaceIcon from "@material-ui/icons/Face";
-
 export default class ChatList extends React.Component {
   static propTypes = {
-    chats: PropTypes.arrayOf(
-      PropTypes.shape({ id: PropTypes.string, text: PropTypes.string })
-    ),
     chatId: PropTypes.string,
+    chats: PropTypes.object.isRequired,
+    addChat: PropTypes.func.isRequired,
   };
+
   state = {
-    humanInput: "",
-  };
-  handleClick = () => {
-    this.addChat();
+    chatName: "",
   };
 
-  addChat = () => {
-    //  debugger;
-    this.props.OnAddChat(this.state.humanInput);
-    this.setState({
-      humanInput: "",
-    });
+  handleAddChatClick = () => {
+    this.OnAddChat();
   };
 
-  handleChange = (event) => {
+  handleChatNameChange = (event) => {
     this.setState(() => ({
-      humanInput: event.target.value,
+      chatName: event.target.value,
     }));
   };
 
-  handleKeyUp = (event) => {
+  OnAddChat = () => {
+    this.props.addChat(this.state.chatName);
+    //debugger;
+    this.setState({
+      chatName: "",
+    });
+  };
+
+  handleChatNameKeyUp = (event) => {
     if (event.keyCode === 13) {
-      return this.addChat();
+      this.OnAddChat();
     }
   };
 
   render() {
     const { chats, chatId } = this.props;
+    const { chatName } = this.state;
     return (
       <div
         style={{
@@ -57,37 +55,35 @@ export default class ChatList extends React.Component {
         }}
       >
         <List>
-          {chats.map(({ id, title }) => (
+          {Object.entries(chats).map(([id, value]) => (
             <Link key={id} to={`/chat/${id}`}>
               <ListItem button selected={id === chatId}>
-                <ListItemIcon>
-                  {id % 2 ? <FaceIcon /> : <InsertEmoticonIcon />}
-                </ListItemIcon>
-                <ListItemText primary={title} />
+                <ListItemText primary={value.title} />
               </ListItem>
             </Link>
           ))}
+          <ListItem
+            button
+            style={{
+              marginTop: "50px",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <TextField
+              type="text"
+              autoFocus={true}
+              placeholder="Добавить новый чат"
+              value={chatName}
+              onChange={this.handleChatNameChange}
+              onKeyUp={this.handleChatNameKeyUp}
+              style={{ width: "85%" }}
+            />
+            <Fab disabled={!chatName} onClick={this.handleAddChatClick}>
+              <SendIcon />
+            </Fab>
+          </ListItem>
         </List>
-        <div
-          style={{
-            marginTop: "50px",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <TextField
-            type="text"
-            autoFocus={true}
-            placeholder="Добавить новый чат"
-            value={this.state.humanInput}
-            onChange={this.handleChange}
-            onKeyUp={this.handleKeyUp}
-            style={{ width: "85%" }}
-          />
-          <Fab disabled={!this.state.humanInput} onClick={this.handleClick}>
-            <SendIcon />
-          </Fab>
-        </div>
       </div>
     );
   }

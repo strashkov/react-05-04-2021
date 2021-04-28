@@ -1,18 +1,36 @@
 import React from 'react';
 import Message from './Message.jsx';
+import PropTypes from 'prop-types';
 import "../style/style.css";
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
 export default class MessageField extends React.Component {
-    state = {
-        messages: [
-            { author: 'bot', text: 'Привет!' },
-            { author: 'bot', text: 'Как дела?' },
-        ],
-        input: '',
+    static propTypes = {
+        chatId: PropTypes.string
+    };
 
+    state = {
+        messages: {
+            '1': [
+                { author: 'bot from chat 1', text: 'Привет!' },
+                { author: 'bot from chat 1', text: 'Как дела?' },
+            ],
+            '2': [
+                { author: 'bot from chat 2', text: 'Hello!' },
+                { author: 'bot from chat 2', text: 'How are you?' },
+            ],
+            '3': [
+                { author: 'bot from  chat 3', text: 'Bonjour!' },
+                { author: 'bot from  chat 3', text: 'Comment vas-tu?' },
+            ],
+            '4': [
+                { author: 'bot from  chat 4', text: 'Guten Tag!' },
+                { author: 'bot from  chat 4', text: 'Wie geht es Ihnen?' },
+            ],
+        },
+        input: '',
     };
 
     constructor(props) {
@@ -21,31 +39,41 @@ export default class MessageField extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevState.messages.length !== this.state.messages.length &&
-            this.state.messages[this.state.messages.length - 1].author !== 'bot') {
+        const { chatId } = this.props;
+
+        if (prevState.messages[chatId].length !== this.state.messages[chatId].length &&
+            this.state.messages[chatId][this.state.messages[chatId].length - 1].author !== `bot from chat ${chatId}`) {
 
             setTimeout(() =>
                 this.setState((state) => ({
-                    messages: [
-                        ...state.messages, {
-                            author: 'bot',
-                            text: 'Не приставай ко мне, я робот!',
-                        }
-                    ],
-
-                })), 3000);
+                    messages: {
+                        ...state.messages,
+                        [chatId]: [
+                            ...state.messages[chatId],
+                            {
+                                author: `bot from chat ${chatId}`,
+                                text: 'Не приставай ко мне!'
+                            }
+                        ]
+                    }
+                })), 1000);
         }
         this.messageFieldRef.current.scrollTop = this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
     }
 
     sendMessage = () => {
+        const { chatId } = this.props;
         this.setState((state) => ({
-            messages: [
-                ...state.messages, {
-                    author: 'me',
-                    text: state.input
-                },
-            ],
+            messages: {
+                ...state.messages,
+                [chatId]: [
+                    ...state.messages[chatId],
+                    {
+                        author: 'me',
+                        text: state.input
+                    }
+                ]
+            },
             input: '',
         }));
     };
@@ -67,10 +95,18 @@ export default class MessageField extends React.Component {
     };
 
     render() {
-        const messageElements = this.state.messages.map(({ text, author }, index) => (
+        const { chatId } = this.props;
+
+        if (!this.props.chatId) {
+            return (
+                <div className="emptyChat">Выберите чат</div>
+            )
+        }
+
+        const messageElements = this.state.messages[chatId].map(({ text, author }, index) => (
             <Message key={index} text={text} author={author} />)
         );
-        console.log(this.state);
+        //console.log(this.state);
 
 
         return (
