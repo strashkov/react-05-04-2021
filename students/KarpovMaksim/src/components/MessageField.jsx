@@ -4,17 +4,21 @@ import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { sendMessage } from '../actions/messageActions';
+import { bindActionCreators } from 'redux';
 
 
 
-export default class MessageField extends React.Component {
+
+class MessageField extends React.Component {
   static propTypes = {
-    them: PropTypes.string,
-    messages: PropTypes.arrayOf(PropTypes.shape({
-      userName: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired
-    })),
-    onSendMessage: PropTypes.func.isRequired
+    chatId: PropTypes.string,
+    chats: PropTypes.object.isRequired,
+    messages: PropTypes.array.isRequired,
+    sendMessage: PropTypes.func.isRequired,
+    messagesListLenght: PropTypes.number.isRequired,
+    lastUserName: PropTypes.string.isRequired
   }
   constructor(props) {
     super(props)
@@ -24,6 +28,13 @@ export default class MessageField extends React.Component {
   state = {
     input: ''
   };
+  
+  static defaultProps = {
+    chatId: '1',
+    lastUserName: 'Вася'
+  }
+
+  
 
   componentDidUpdate() {
     this.messageFieldRef.current.scrollTop = 
@@ -32,7 +43,7 @@ export default class MessageField extends React.Component {
   handleInputKeyUp = (event) => {
     if(this.state.input) {
       if(event.keyCode === 13) {
-        this.sendMessage();
+        this.sendMessage;
       }
     }
   }
@@ -42,22 +53,39 @@ export default class MessageField extends React.Component {
     })
   }
   sendMessage = () => {
-    this.props.onSendMessage(this.state.input);
+    const { chatId, messagesListLenght, lastUserName  } = this.props;
+    console.log(chatId)
+    const messageId = messagesListLenght + 1;
+    this.props.sendMessage(
+      messageId, 
+      this.state.input, 
+      'Вася', 
+      chatId);
     this.setState({
       input: '' 
     })
+    if(lastUserName !== 'Робот') {
+      setTimeout(() => {
+        this.props.sendMessage(
+          messageId + 1,
+          'Не приставай', 
+          'Робот',
+          chatId)
+      },1000)
+    }
   }
 
   render() {
+    const { messages } = this.props;
 
-   
-    const messageElements = this.props.messages.map(({text, userName}, index) => (
+    const messageElements = messages.map(({text, userName}, id) => (
       <Message 
-        key={index} 
+        key={id} 
         userName = {userName} 
         text={text} 
       />));
-      
+
+     console.log(messageElements) 
     return <div>
       <div ref={this.messageFieldRef} className='message-field'>
         { messageElements }
@@ -84,3 +112,11 @@ export default class MessageField extends React.Component {
    }
 } 
 
+const mapStateToProps = (store) => ({
+  //messages: store.chatReducer.messages,
+  chats: store.chatReducer.chats,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessageField);

@@ -72,14 +72,6 @@ class ChatList extends React.Component {
 const mapStateToProps = (store) => ({
   chats: store.chatReducer.chats,
 });
-
 const mapDispatchToProps = dispatch => bindActionCreators({ addChat }, dispatch);
-// const mapDispatchToProps = dispatch => () => { 
-//   return {
-//     onAddChat: (title) => {
-//       const action = addChat(title)
-//       dispatch(action);
-//     }
-//   }
-//  };
+
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
