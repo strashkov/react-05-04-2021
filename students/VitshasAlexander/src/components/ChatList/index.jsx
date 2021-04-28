@@ -10,19 +10,24 @@ import Fab from "@material-ui/core/Fab";
 import Avatar from "@material-ui/core/Avatar";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
-
-
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import "./style.css";
 
 export default class ChatList extends React.Component {
   static propTypes = {
+    isLoading: PropTypes.bool,
     chatId: PropTypes.string,
-    chats: PropTypes.object.isRequired,
+    chats: PropTypes.objectOf(
+      PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        unread: PropTypes.bool,
+      })
+    ).isRequired,
     addChat: PropTypes.func.isRequired,
     deleteChat: PropTypes.func.isRequired,
+    markChatRead: PropTypes.func.isRequired,
+    loadChats: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
     goForward: PropTypes.func.isRequired,
     goBack: PropTypes.func.isRequired,
@@ -59,23 +64,31 @@ export default class ChatList extends React.Component {
     this.props.push(link);
   };
 
-  handleBackClick = () => {
-    this.props.goBack();
-  };
-
-  handleForwardClick = () => {
-    this.props.goForward();
-  };
-
   handleDeleteChat = (chatId) => {
     const { chats } = this.props;
     this.props.deleteChat(chatId, chats[chatId].messageList);
-    
+  };
+
+  componentDidMount() {
+    this.props.loadChats();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { chatId, markChatRead } = this.props;
+
+    if (chatId && prevProps.chatId !== chatId) {
+      markChatRead(chatId);
+    }
   }
 
   render() {
-    const { chats, chatId } = this.props;
+    const { chats, chatId, isLoading } = this.props;
     const { chatName } = this.state;
+
+    if (isLoading) {
+      return <CircularProgress />;
+    }
+
     return (
       <div className="chat-list">
         <List>
@@ -92,13 +105,9 @@ export default class ChatList extends React.Component {
                 {value.title.split(" ").map((w) => w.charAt(0))}
               </Avatar>
               <ListItemText primary={value.title} />
-
+              { value.unread && <div className='chat-list-unread' /> }
             </ListItem>
           ))}
-          {/* <ListItem>
-            <ArrowBackIcon onClick={this.handleBackClick()} />
-            <ArrowForwardIcon onClick={this.handleForwardClick()} />
-          </ListItem> */}
           <ListItem
             button
             style={{
@@ -122,8 +131,13 @@ export default class ChatList extends React.Component {
           </ListItem>
           <ListItem>
             <ListItemText primary={`Удалить текущий чат`} />
-            <IconButton aria-label="delete" onClick={() => { this.handleDeleteChat(chatId) }}>
-                  <DeleteIcon fontSize="small" />
+            <IconButton
+              aria-label="delete"
+              onClick={() => {
+                this.handleDeleteChat(chatId);
+              }}
+            >
+              <DeleteIcon fontSize="small" />
             </IconButton>
           </ListItem>
         </List>

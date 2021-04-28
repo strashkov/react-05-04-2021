@@ -1,9 +1,5 @@
+import { createMiddleware } from "redux-api-middleware";
 import messageMiddleware from "./messageMiddleware";
-import blinkMiddleware from "./blinkMiddleware";
-//import routerMiddleware from './routerMiddleware';
+import routerMiddleware from "./routerMiddleware";
 
-export default [
-  messageMiddleware,
-  blinkMiddleware,
-  //    routerMiddleware
-];
+export default [createMiddleware(), messageMiddleware, routerMiddleware];

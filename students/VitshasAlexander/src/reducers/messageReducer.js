@@ -1,30 +1,19 @@
 import { SEND_MESSAGE, DELETE_MESSAGE } from "../actions/messageActions";
-import { DELETE_CHAT } from "../actions/chatActions";
+import { DELETE_CHAT, LOAD_CHATS_SUCCESS } from "../actions/chatActions";
 
 const initialStore = {
-  messages: {
-    1: {
-      sender: "robot",
-      text: "Привет!",
-    },
-    2: {
-      sender: "robot",
-      text: "Geekbrains",
-    },
-    3: {
-      sender: "robot",
-      text: "React",
-    },
-  },
+  messages: {},
 };
 
 export default function messageReducer(store = initialStore, action) {
   switch (action.type) {
     case SEND_MESSAGE: {
       const { messageId, text, sender } = action;
+      const { messages } = store;
       return {
+        ...store,
         messages: {
-          ...store.messages,
+          ...messages,
           [messageId]: {
             text,
             sender,
@@ -35,23 +24,36 @@ export default function messageReducer(store = initialStore, action) {
     case DELETE_MESSAGE: {
       const { messageId } = action;
       const { messages } = store;
-      if (messageId in messages) delete messages[messageId];
+      const newMessages = { ...messages };
+
+      if (messageId in newMessages) delete newMessages[messageId];
       return {
+        ...store,
         messages: {
-          ...messages,
+          ...newMessages,
         },
       };
     }
     case DELETE_CHAT: {
-      const { chatId, messageList } = action;
+      const { messageList } = action;
       const { messages } = store;
+      const newMessages = { ...messages };
       messageList.forEach((messageId) => {
-        delete messages[messageId];
+        delete newMessages[messageId];
       });
       return {
+        ...store,
         messages: {
-          ...messages,
+          ...newMessages,
         },
+      };
+    }
+    case LOAD_CHATS_SUCCESS: {
+      const { messages } = action.payload.entities;
+
+      return {
+        ...store,
+        messages,
       };
     }
     default:

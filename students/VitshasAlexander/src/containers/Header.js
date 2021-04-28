@@ -1,11 +1,25 @@
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { push } from "connected-react-router";
+
+import { loadProfile } from "../actions/profileActions";
 
 import Header from "../components/Header";
 
 const mapStateToProps = (store) => {
   return {
     user: store.profileReducer.user,
+    isLoading: store.profileReducer.isLoading,
   };
 };
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      loadProfile,
+      push,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

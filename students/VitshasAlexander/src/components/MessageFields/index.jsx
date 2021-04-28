@@ -38,8 +38,10 @@ export default class MessageFields extends React.Component {
     if (!humanInput) return;
 
     const { chatId, messages } = this.props;
-    //debugger;
-    const messageId = Object.keys(messages).length + 1;
+
+    const lastMessageId = Number(Object.keys(messages).pop());
+    const messageId = lastMessageId + 1;
+
     this.props.sendMessage({
       messageId,
       chatId,
@@ -66,7 +68,7 @@ export default class MessageFields extends React.Component {
 
   render() {
     const { chats, chatId, messages } = this.props;
-    const messageElements = chats[chatId].messageList.map((messageId) => {
+    const messageElements = chats[chatId]?.messageList.map((messageId) => {
       const { text, sender } = messages[messageId];
       return (
         <Message

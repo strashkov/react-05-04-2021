@@ -19,17 +19,26 @@ export default class Message extends React.Component {
     this.props.deleteMessage({ messageId, chatId });
   };
   render() {
+    const { text, sender } = this.props;
+    const isBot = sender === "robot";
+
     return (
       <div
         className="message"
         style={{
-          alignSelf: this.props.sender === "bot" ? "flex-start" : "flex-end",
+          alignSelf: isBot ? "flex-start" : "flex-end",
         }}
       >
-        <div> {this.props.text} </div>
+        <div> {text} </div>
         <div className="message-sender">
-          {this.props.messageId}:{this.props.sender}
-          <IconButton aria-label="delete" onClick={() => { this.handleDeleteMessage() }} disableRipple>
+          {this.props.messageId}:{sender}
+          <IconButton
+            aria-label="delete"
+            onClick={() => {
+              this.handleDeleteMessage();
+            }}
+            disableRipple
+          >
             <DeleteIcon fontSize="small" />
           </IconButton>
         </div>

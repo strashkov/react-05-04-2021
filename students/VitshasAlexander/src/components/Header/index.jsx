@@ -1,27 +1,45 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import "./style.css";
 
 export default class Header extends React.Component {
   static propTypes = {
+    isLoading: PropTypes.bool,
     title: PropTypes.string.isRequired,
-    user: PropTypes.shape({
-      firstName: PropTypes.string.isRequired,
-      lastName: PropTypes.string.isRequired,
-      bio: PropTypes.string,
-      photo: PropTypes.string,
-    }),
+    user: PropTypes.objectOf(
+      PropTypes.shape({
+        firstName: PropTypes.string.isRequired,
+        lastName: PropTypes.string.isRequired,
+        bio: PropTypes.string,
+        photo: PropTypes.string,
+      })
+    ).isRequired,
+    loadProfile: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
   };
+  componentDidMount() {
+    this.props.loadProfile();
+  }
+  handleLinkClick = (link) => {
+    this.props.push(link);
+  };
+
   render() {
-    const { user, title } = this.props;
+    const { user, title, isLoading } = this.props;
+    const userId = Number(Object.keys(user).pop());
+    if (isLoading) {
+      return <CircularProgress />;
+    }
+
     return (
       <AppBar position="static">
         <Toolbar
@@ -32,12 +50,14 @@ export default class Header extends React.Component {
           }}
         >
           <Typography variant="h6">{title}</Typography>
-          <Link to={`/profile`}>
-            <Avatar className="header-profile-avatar">
-              {user.firstName.charAt(0)}
-              {user.lastName.charAt(0)}
+          <Avatar
+            onClick={() => {
+                this.handleLinkClick(`/profile`);
+              }}
+            className="header-profile-avatar">
+              {user[userId]?.firstName?.charAt(0)}
+              {user[userId]?.lastName?.charAt(0)}
             </Avatar>
-          </Link>
         </Toolbar>
       </AppBar>
     );

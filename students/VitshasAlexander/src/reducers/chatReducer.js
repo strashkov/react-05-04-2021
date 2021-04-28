@@ -1,33 +1,30 @@
 import { SEND_MESSAGE, DELETE_MESSAGE } from "../actions/messageActions";
-import { ADD_CHAT, DELETE_CHAT } from "../actions/chatActions";
+import {
+  ADD_CHAT,
+  DELETE_CHAT,
+  MARK_CHAT_UNREAD,
+  MARK_CHAT_READ,
+  LOAD_CHATS_REQUEST,
+  LOAD_CHATS_SUCCESS,
+  LOAD_CHATS_ERROR,
+} from "../actions/chatActions";
 
 const initialStore = {
-  chats: {
-    1: {
-      title: "Chat 1",
-      messageList: [1],
-    },
-    2: {
-      title: "Chat 2",
-      messageList: [1, 2],
-    },
-    3: {
-      title: "Chat 3",
-      messageList: [3],
-    },
-  },
+  chats: {},
+  isLoading: false,
 };
 
 export default function chatReducer(store = initialStore, action) {
   switch (action.type) {
     case SEND_MESSAGE: {
+      const { chats } = store;
       const { messageId, chatId } = action;
       return {
         chats: {
-          ...store.chats,
+          ...chats,
           [chatId]: {
-            ...store.chats[chatId],
-            messageList: [...store.chats[chatId].messageList, messageId],
+            ...chats[chatId],
+            messageList: [...chats[chatId].messageList, messageId],
           },
         },
       };
@@ -41,17 +38,20 @@ export default function chatReducer(store = initialStore, action) {
           [chatId]: {
             ...chats[chatId],
             messageList: [
-              ...chats[chatId].messageList.filter((item) => item != messageId),
+              ...chats[chatId].messageList.filter((item) => item !== messageId),
             ],
           },
         },
       };
     }
     case ADD_CHAT: {
-      const chatId = Object.keys(store.chats).length + 1;
+      const { chats } = store;
+      const lastChatId = Number(Object.keys(chats).pop());
+      const chatId = lastChatId + 1;
+
       return {
         chats: {
-          ...store.chats,
+          ...chats,
           [chatId]: {
             title: action.title,
             messageList: [],
@@ -70,6 +70,56 @@ export default function chatReducer(store = initialStore, action) {
         },
       };
     }
+    case MARK_CHAT_UNREAD: {
+      const { chatId } = action;
+
+      return {
+        ...store,
+        chats: {
+          ...store.chats,
+          [chatId]: {
+            ...store.chats[chatId],
+            unread: true,
+          },
+        },
+      };
+    }
+    case MARK_CHAT_READ: {
+      const { chatId } = action;
+
+      return {
+        ...store,
+        chats: {
+          ...store.chats,
+          [chatId]: {
+            ...store.chats[chatId],
+            unread: false,
+          },
+        },
+      };
+    }
+    case LOAD_CHATS_REQUEST: {
+      return {
+        ...store,
+        isLoading: true,
+      };
+    }
+    case LOAD_CHATS_ERROR: {
+      return {
+        ...store,
+        isLoading: false,
+      };
+    }
+    case LOAD_CHATS_SUCCESS: {
+      const { chats } = action.payload.entities;
+
+      return {
+        ...store,
+        chats,
+        isLoading: false,
+      };
+    }
+
     default:
       return store;
   }
