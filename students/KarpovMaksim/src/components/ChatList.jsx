@@ -10,14 +10,16 @@ import SendIcon from '@material-ui/icons/Send';
 import { connect } from 'react-redux';
 import { addChat } from '../actions/chatActions';
 import { bindActionCreators } from 'redux';
-
+import { sendMessage } from '../actions/messageActions';
 
 
 class ChatList extends React.Component {
   static propTypes = {
     chatId: PropTypes.string,
     chats: PropTypes.object.isRequired,
-    addChat: PropTypes.func.isRequired
+    addChat: PropTypes.func.isRequired,
+    sendMessage: PropTypes.func.isRequired,
+
   };
 
   state = {
@@ -31,7 +33,8 @@ class ChatList extends React.Component {
   };
 
   hadlerAddChatClick = () => {
-    this.props.addChat(this.state.chatName);
+    this.props.addChat(this.state.chatName, 1);
+    
     this.setState( {
         chatName: ''
       }
@@ -72,6 +75,6 @@ class ChatList extends React.Component {
 const mapStateToProps = (store) => ({
   chats: store.chatReducer.chats,
 });
-const mapDispatchToProps = dispatch => bindActionCreators({ addChat }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat, sendMessage }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

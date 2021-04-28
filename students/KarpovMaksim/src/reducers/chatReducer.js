@@ -51,15 +51,18 @@ export default function chatReducer(store = initialStore, action) {
         }
         case ADD_CHAT: {
             const chatId = Object.keys(store.chats).length + 1;
-
+            const {chatMessageListId} = action;
             return {
                 chats: {
                     ...store.chats,
                     [chatId]: {
                         title: action.title,
-                        messageList: [1]
+                        messageList: [chatMessageListId]
                     }
                 },
+                messages: {
+                    ...store.messages
+                }
             };
         }
         default:

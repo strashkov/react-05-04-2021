@@ -15,10 +15,11 @@ class MessageField extends React.Component {
   static propTypes = {
     chatId: PropTypes.string,
     chats: PropTypes.object.isRequired,
-    messages: PropTypes.array.isRequired,
+    messages: PropTypes.object,
     sendMessage: PropTypes.func.isRequired,
-    messagesListLenght: PropTypes.number.isRequired,
-    lastUserName: PropTypes.string.isRequired
+    messagesListLenght: PropTypes.number,
+    lastUserName: PropTypes.string,
+    messagesTemplate: PropTypes.array
   }
   constructor(props) {
     super(props)
@@ -31,7 +32,7 @@ class MessageField extends React.Component {
   
   static defaultProps = {
     chatId: '1',
-    lastUserName: 'Вася'
+    lastUserName: 'Вася',
   }
 
   
@@ -53,8 +54,8 @@ class MessageField extends React.Component {
     })
   }
   sendMessage = () => {
-    const { chatId, messagesListLenght, lastUserName  } = this.props;
-    console.log(chatId)
+    const { chatId, messagesListLenght, lastUserName } = this.props;
+    
     const messageId = messagesListLenght + 1;
     this.props.sendMessage(
       messageId, 
@@ -76,16 +77,18 @@ class MessageField extends React.Component {
   }
 
   render() {
-    const { messages } = this.props;
-
-    const messageElements = messages.map(({text, userName}, id) => (
+    const { chats, chatId } = this.props;
+    console.log(this.props.messages)
+  
+    const messageElements = chats[chatId].messageList.map((messageId) => (
       <Message 
-        key={id} 
-        userName = {userName} 
-        text={text} 
+        key={messageId} 
+        userName = {this.props.messages[messageId].userName} 
+        text={this.props.messages[messageId].text} 
       />));
+    
 
-     console.log(messageElements) 
+     
     return <div>
       <div ref={this.messageFieldRef} className='message-field'>
         { messageElements }
@@ -113,7 +116,7 @@ class MessageField extends React.Component {
 } 
 
 const mapStateToProps = (store) => ({
-  //messages: store.chatReducer.messages,
+  messages: store.chatReducer.messages,
   chats: store.chatReducer.chats,
 });
 
