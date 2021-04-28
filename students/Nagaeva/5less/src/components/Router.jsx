@@ -1,30 +1,37 @@
-import React, { Component } from 'react'
-import {
-    Switch,
-    Route,
-    Redirect
-} from "react-router-dom";
-import PropTypes from 'prop-types'
-import Layout from './Layout.jsx';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Switch, Route, Redirect } from 'react-router-dom'
+import Layout from '../components/Layout';
+import MessageField from '../containers/MessageField';
+import Profile from '../containers/Profile';
 
 
-export default class Router extends Component {
+export default class Router extends React.Component {
     static propTypes = {
-        chatId: PropTypes.string,
-        chatText: PropTypes.string,
-    }
+        chats: PropTypes.object.isRequired
+    };
     render() {
         return (
-
             <Switch>
-                <Route exact path="/" component={Layout} />
-                <Route exact path="/chat/:id" render={(props) => {
-                    return <Layout chatId={props.match.params.id} />
-                }} />
+                <Route exact path='/' render={() => (
+                    <Redirect to='/profile'/>
+                )} />
+                <Route path='/chat/:id' render={(props) => {
+                    const chatId = props.match.params.id;
 
-                <Route exact path="/profile" render={() => {
-                    return <Layout chatId={ "profile" }/>
-                }} />
+                    return (
+                        <Layout
+                            title={`Messages: ${this.props.chats[chatId].title}`}
+                            chatId={chatId}>
+                            <MessageField chatId={chatId} />
+                        </Layout>
+                    );
+                }}/>
+                <Route path='/profile' render={() => (
+                    <Layout title='Profile Page'>
+                        <Profile />
+                    </Layout>
+                )} />
             </Switch>
         )
     }

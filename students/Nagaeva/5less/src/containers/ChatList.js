@@ -7,7 +7,7 @@ import {
 import {
     addChat
 } from "../actions/chatActions";
-import ChatList from "../components/ChatList.jsx";
+import ChatList from "../components/ChatList";
 
 const mapStateToProps = (store) => {
     return {

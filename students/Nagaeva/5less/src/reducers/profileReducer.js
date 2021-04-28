@@ -1,8 +1,6 @@
 const initialStore = {
-    user: {
-        name: "Rick Sanchez",
-        bio: "Genius scientist"
-    },
+    firstName: 'Rick',
+    lastName: 'Sanchez'
 };
 
 export default function profileReducer(store = initialStore) {
