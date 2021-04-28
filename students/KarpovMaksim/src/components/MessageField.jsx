@@ -16,10 +16,8 @@ class MessageField extends React.Component {
     chatId: PropTypes.string,
     chats: PropTypes.object.isRequired,
     messages: PropTypes.object,
-    sendMessage: PropTypes.func.isRequired,
-    messagesListLenght: PropTypes.number,
-    lastUserName: PropTypes.string,
-    messagesTemplate: PropTypes.array
+    sendMessage: PropTypes.func.isRequired
+    
   }
   constructor(props) {
     super(props)
@@ -54,9 +52,16 @@ class MessageField extends React.Component {
     })
   }
   sendMessage = () => {
-    const { chatId, messagesListLenght, lastUserName } = this.props;
-    
+    const { chatId, messages, chats } = this.props;
+
+    const messagesListLenght = Object.entries(messages).length;
+    const lastMessage = chats[chatId].messageList.length;
+    const lastUserName = (chats[chatId].messageList.map((messageId) => {
+       return messages[messageId].userName;
+     }))[lastMessage];
+
     const messageId = messagesListLenght + 1;
+
     this.props.sendMessage(
       messageId, 
       this.state.input, 
@@ -78,7 +83,6 @@ class MessageField extends React.Component {
 
   render() {
     const { chats, chatId } = this.props;
-    console.log(this.props.messages)
   
     const messageElements = chats[chatId].messageList.map((messageId) => (
       <Message 

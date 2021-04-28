@@ -4,14 +4,10 @@ import MessageField from './MessageField.jsx';
 import Header from './Header.jsx';
 import '../styles/style.css';
 import ChatList from './ChatList.jsx';
-import { connect } from 'react-redux';
 
-
-class Layout extends React.Component {
+export default class Layout extends React.Component {
   static propTypes = {
     chatId: PropTypes.string,
-    chats: PropTypes.object.isRequired,
-    messages: PropTypes.object
   }
   static defaultProps = {
     chatId: '1',
@@ -21,13 +17,8 @@ class Layout extends React.Component {
   }
   
   render() {
-    const { chatId, chats, messages } = this.props;
-    const messagesListLenght = Object.entries(messages).length;
-    const lastMessage = chats[chatId].messageList.length;
-    const lastUserName = (chats[chatId].messageList.map((messageId) => {
-       return messages[messageId].userName;
-     }))[lastMessage];
-  
+    const { chatId} = this.props;
+    
     return <div className="layout">
       <Header chatId={ chatId }/>
       <div className="chat-content">
@@ -35,18 +26,9 @@ class Layout extends React.Component {
           chatId={ chatId }/>
         <div className="message-content">
           <MessageField 
-            messagesListLenght={messagesListLenght}
-            chatId={ chatId }
-            lastUserName={ lastUserName } />
+            chatId={ chatId } />
         </div>
       </div>
     </div>
     }
 }
-const mapStateToProps = (store) => ({
-  chats: store.chatReducer.chats,
-  messages: store.chatReducer.messages
-});
-
-
-export default connect(mapStateToProps)(Layout);
