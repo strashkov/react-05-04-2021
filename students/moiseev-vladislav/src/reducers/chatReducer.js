@@ -1,10 +1,15 @@
-import { ADD_CHAT, SEND_MESSAGE } from "../actions/chatActions";
+import {
+  ADD_CHAT,
+  DISABLE_CHAT_HIGHLIGHT,
+  ENABLE_CHAT_HIGHLIGHT,
+  SEND_MESSAGE,
+} from "../actions/chatActions";
 
 const initialStore = {
   chats: {
-    1: { title: "Чат 1", messageList: [1] },
-    2: { title: "Чат 2", messageList: [2] },
-    3: { title: "Chat 3", messageList: [] },
+    1: { title: "Чат 1", messageList: [1], highlight: false },
+    2: { title: "Чат 2", messageList: [2], highlight: false },
+    3: { title: "Chat 3", messageList: [], highlight: false },
   },
   messages: {
     1: { text: "Привет!", sender: "bot" },
@@ -26,6 +31,7 @@ export default function chatReducer(store = initialStore, action) {
           [chatId]: {
             ...chats[chatId],
             messageList: [...chats[chatId].messageList, messageId],
+            highlight: chats[chatId].highlight,
           },
         },
         messages: {
@@ -46,11 +52,24 @@ export default function chatReducer(store = initialStore, action) {
           [chatId]: {
             title: action.title,
             messageList: [],
+            highlight: false,
           },
         },
         messages: messages,
       };
     }
+    case ENABLE_CHAT_HIGHLIGHT:
+      chats[action.chatId].highlight = true;
+      return {
+        chats: { ...chats },
+        messages: messages,
+      };
+    case DISABLE_CHAT_HIGHLIGHT:
+      chats[action.chatId].highlight = false;
+      return {
+        chats: { ...chats },
+        messages: messages,
+      };
     default:
       return store;
   }

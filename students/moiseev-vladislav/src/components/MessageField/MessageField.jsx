@@ -45,20 +45,6 @@ export default class MessageField extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    const { chats, messages, chatId, sendMessage } = this.props;
-    const messageList = chats[chatId].messageList;
-    const messagesCount = messageList.length;
-    const prevMessagesCount = prevProps.chats[chatId].messageList.length;
-
-    if (messagesCount > 0 && messagesCount != prevMessagesCount) {
-      const lastMessage = messages[messageList[messagesCount - 1]];
-      if (lastMessage.sender === "me") {
-        setTimeout(() => {
-          sendMessage(chatId, "Круто", "bot");
-        }, 1000);
-      }
-    }
-
     const { scrollHeight, clientHeight } = this.messageFieldRef.current;
     this.messageFieldRef.current.scrollTop = scrollHeight - clientHeight;
   }

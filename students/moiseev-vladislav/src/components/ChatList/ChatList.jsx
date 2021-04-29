@@ -4,7 +4,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import TextField from "@material-ui/core/TextField";
 import SendIcon from "@material-ui/icons/Send";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { IconButton } from "@material-ui/core";
 import "./style.css";
@@ -14,6 +13,7 @@ export default class ChatList extends React.Component {
     chatId: PropTypes.string,
     chats: PropTypes.object.isRequired,
     addChat: PropTypes.func.isRequired,
+    push: PropTypes.func,
   };
 
   state = {
@@ -33,6 +33,10 @@ export default class ChatList extends React.Component {
     });
   };
 
+  handleNavigate = (link) => {
+    this.props.push(link);
+  };
+
   render() {
     const { chatName } = this.state;
     const { chatId, chats } = this.props;
@@ -40,12 +44,16 @@ export default class ChatList extends React.Component {
       <div className="chat-list">
         <List>
           {Object.entries(chats).map(([id, value]) => (
-            <Link to={`/chat/${id}`} key={id}>
-              <ListItem button selected={id === chatId}>
-                <div className="chat-list-icon" />
-                <ListItemText primary={value.title} />
-              </ListItem>
-            </Link>
+            <ListItem
+              key={id}
+              button
+              selected={id === chatId}
+              className={value.highlight === true ? "glow" : ""}
+              onClick={() => this.handleNavigate(`/chat/${id}`)}
+            >
+              <div className="chat-list-icon" />
+              <ListItemText primary={value.title} />
+            </ListItem>
           ))}
           <ListItem>
             <TextField value={chatName} onChange={this.handleChatNameChange} />
