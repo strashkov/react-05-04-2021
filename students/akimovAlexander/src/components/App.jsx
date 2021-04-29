@@ -36,7 +36,7 @@ export default class App extends React.Component {
             <>
                 <h1>{this.state.text}</h1>
                 <Child message={String(this.state.counter)} />
-                <button onClick={this.handleClick}>+1</button>
+                <button onClick={this.handleClick}>+ 1</button>
             </>
         )
     }
