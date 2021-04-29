@@ -11,10 +11,10 @@ import profileReducer from './profile-reducer';
 export const history = createBrowserHistory();
 
 const persistConfig = {
-  key: 'geekmessanger',
+  key: 'geekmessenger',
   storage,
   stateReconciler: autoMergeLevel2,
-  whitelist: ['messenger'],
+  whitelist: [],
 };
 
 const reducers = combineReducers({

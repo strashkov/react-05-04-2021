@@ -1,44 +1,25 @@
+import { matchPath } from 'react-router';
+import { chatsAPI } from '../api/api';
+
 const UPDATE_ADD_CHAT_INPUT_VALUE = 'chatList/UPDATE_ADD_CHAT_INPUT_VALUE';
 const DELETE_CHAT = 'chatList/DELETE_CHAT';
 const ADD_CHAT = 'chatList/ADD_CHAT';
 const UPDATE_INPUT_VALUE = 'sendingForm/UPDATE_INPUT_VALUE';
 const UPDATE_MESSAGES_DATA = 'sendingForm/UPDATE_MESSAGES_DATA';
 const SET_CURRENT_CHAT = 'messageField/SET_CURRENT_CHAT';
-const BLINK_ACTIVE_CHAT = 'chatList/BLINK_ACTIVE_CHAT';
+const MARK_CHAT_UNREAD = 'chatList/MARK_CHAT_UNREAD';
+const MARK_CHAT_READ = 'chatList/MARK_CHAT_READ';
 const DELETE_MSG = 'messageField/DELETE_MSG';
+const LOAD_CHATS = 'LOAD_CHATS';
+const TOGGLE_IS_LOADING = 'TOGGLE_IS_LOADING';
 
 const initalState = {
+  isLoading: false,
   addChatInputValue: '',
   inputValue: '',
   currentChat: '',
-  isActiveChat: false,
-  blinkChat: '',
-  chats: [
-    {
-      chatId: '1',
-      chatName: 'Chat 1',
-      messages: [
-        { id: 1, author: 'bot', text: 'Lorem' },
-        { id: 2, author: 'bot', text: 'Ipsum' },
-      ],
-    },
-    {
-      chatId: '2',
-      chatName: 'Chat 2',
-      messages: [
-        { id: 1, author: 'bot', text: 'Chat 2' },
-        { id: 2, author: 'bot', text: 'Ipsum' },
-      ],
-    },
-    {
-      chatId: '3',
-      chatName: 'Chat 3',
-      messages: [
-        { id: 1, author: 'bot', text: 'Chat 3' },
-        { id: 2, author: 'bot', text: 'Ipsum' },
-      ],
-    },
-  ],
+  isMarkChat: [],
+  chats: [],
 };
 
 const chatsReducer = (state = initalState, action) => {
@@ -107,11 +88,16 @@ const chatsReducer = (state = initalState, action) => {
         currentChat: action.routerChatId,
       };
 
-    case BLINK_ACTIVE_CHAT:
+    case MARK_CHAT_UNREAD:
       return {
         ...state,
-        isActiveChat: !state.isActiveChat,
-        blinkChat: action.blinkChat,
+        isMarkChat: [...state.isMarkChat, ...action.chatId],
+      };
+
+    case MARK_CHAT_READ:
+      return {
+        ...state,
+        isMarkChat: state.isMarkChat.filter(id => id !== action.chatId),
       };
 
     case DELETE_MSG:
@@ -127,6 +113,18 @@ const chatsReducer = (state = initalState, action) => {
             : chat;
         }),
         inputValue: '',
+      };
+
+    case LOAD_CHATS:
+      return {
+        ...state,
+        chats: action.fetchChats,
+      };
+
+    case TOGGLE_IS_LOADING:
+      return {
+        ...state,
+        isLoading: action.isLoading,
       };
 
     default:
@@ -164,9 +162,14 @@ export const setCurrentChat = routerChatId => ({
   routerChatId,
 });
 
-export const blinkActiveChat = blinkChat => ({
-  type: BLINK_ACTIVE_CHAT,
-  blinkChat,
+export const markChatUnread = chatId => ({
+  type: MARK_CHAT_UNREAD,
+  chatId,
+});
+
+export const markChatRead = chatId => ({
+  type: MARK_CHAT_READ,
+  chatId,
 });
 
 export const deleteMsg = msgId => ({
@@ -174,22 +177,75 @@ export const deleteMsg = msgId => ({
   msgId,
 });
 
-export const msgAnswer = author => {
+export const loadChats = fetchChats => ({
+  type: LOAD_CHATS,
+  fetchChats,
+});
+
+export const toggleIsLoading = isLoading => ({
+  type: TOGGLE_IS_LOADING,
+  isLoading,
+});
+
+export const messagesDidUpadte = author => {
   return (dispatch, getState) => {
-    const currentChat = getState().messenger.currentChat;
+    let currentChat = getState().messenger.currentChat;
     dispatch(updateMessagesData(author, currentChat));
-    new Promise((resolve, reject) => {
-      setTimeout(() => {
-        dispatch(updateMessagesData('bot', currentChat));
-        resolve();
-      }, 1000);
-    }).then(() => {
-      let blinkId = setTimeout(function blink() {
-        dispatch(blinkActiveChat(currentChat));
-        blinkId = setTimeout(blink, 200);
-      }, 0);
-      setTimeout(() => clearInterval(blinkId), 800);
+
+    setTimeout(() => {
+      const { pathname } = getState().router.location;
+      const {
+        params: { id },
+      } = matchPath(pathname, {
+        path: '/chat/:id',
+        exact: true,
+      });
+      dispatch(updateMessagesData('bot', currentChat));
+      dispatch(markChatUnread(currentChat));
+      if (id === currentChat) {
+        setTimeout(() => {
+          dispatch(markChatRead(currentChat));
+        }, 1000);
+      }
+      const newChats = getState().messenger.chats;
+      chatsAPI.uploadChats(newChats);
+    }, 1000);
+  };
+};
+
+export const getChatsAPI = () => {
+  return dispatch => {
+    dispatch(toggleIsLoading(true));
+    chatsAPI.loadChats().then(data => {
+      if (data) {
+        dispatch(loadChats(data));
+      }
+      dispatch(toggleIsLoading(false));
     });
+  };
+};
+
+export const deleteChatAPI = chatId => {
+  return (dispatch, getState) => {
+    dispatch(deleteChat(chatId));
+    const newChats = getState().messenger.chats;
+    chatsAPI.uploadChats(newChats);
+  };
+};
+
+export const addChatAPI = () => {
+  return (dispatch, getState) => {
+    dispatch(addChat());
+    const newChats = getState().messenger.chats;
+    chatsAPI.uploadChats(newChats);
+  };
+};
+
+export const deleteMsgAPI = msgId => {
+  return (dispatch, getState) => {
+    dispatch(deleteMsg(msgId));
+    const newChats = getState().messenger.chats;
+    chatsAPI.uploadChats(newChats);
   };
 };
 

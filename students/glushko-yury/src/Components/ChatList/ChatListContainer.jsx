@@ -1,23 +1,45 @@
+import React from 'react';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import {
   updateAddChatInputValue,
-  deleteChat,
-  addChat,
+  markChatRead,
+  getChatsAPI,
+  deleteChatAPI,
+  addChatAPI,
 } from '../../redux/chats-reducer';
+import { loadProfileAPI } from '../../redux/profile-reducer';
 import ChatList from './ChatList';
+
+class ChatListContainter extends React.Component {
+  componentDidMount() {
+    this.props.getChatsAPI();
+    this.props.loadProfileAPI();
+  }
+  componentDidUpdate(prevProps) {
+    const { currentChat, markChatRead } = this.props;
+    if (prevProps.currentChat !== currentChat) {
+      markChatRead(currentChat);
+    }
+  }
+  render() {
+    return <ChatList {...this.props} />;
+  }
+}
 
 const mapStateToProps = state => ({
   chats: state.messenger.chats,
   addChatInputValue: state.messenger.addChatInputValue,
   currentChat: state.messenger.currentChat,
-  isActiveChat: state.messenger.isActiveChat,
-  blinkChat: state.messenger.blinkChat,
+  isMarkChat: state.messenger.isMarkChat,
 });
 
 export default connect(mapStateToProps, {
   updateAddChatInputValue,
-  deleteChat,
-  addChat,
   push,
-})(ChatList);
+  markChatRead,
+  getChatsAPI,
+  deleteChatAPI,
+  addChatAPI,
+  loadProfileAPI,
+})(ChatListContainter);

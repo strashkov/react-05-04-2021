@@ -1,4 +1,5 @@
 import TextField from '@material-ui/core/TextField';
+import PropTypes from 'prop-types';
 
 const Input = ({ inputValue, updateInputValue }) => {
   const updateValue = e => {
@@ -17,6 +18,11 @@ const Input = ({ inputValue, updateInputValue }) => {
       onChange={updateValue}
     />
   );
+};
+
+Input.propTypes = {
+  inputValue: PropTypes.string,
+  updateInputValue: PropTypes.func,
 };
 
 export default Input;
