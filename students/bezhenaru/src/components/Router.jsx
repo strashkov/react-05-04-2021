@@ -5,7 +5,7 @@ import {
     // Redirect
 } from "react-router-dom";
 import PropTypes from 'prop-types'
-import Layout from './layout.jsx';
+import Layout from '../containers/Layout';
 
 
 export default class Router extends Component {
@@ -17,15 +17,11 @@ export default class Router extends Component {
         return (
             <Switch>
                 <Route exact path='/' component={Layout} />
-                <Route exact path='/chat/:id' render={(props) => {
-                    // if (props.match.params.id === '5') {
-                    //     return <Redirect to='/chat/2' />
-                    // }
+                <Route exact path='/chat/:id' render={(props) => {                  
                     return <Layout chatId={props.match.params.id} />
-                }} />
-
+                }} />                
                 <Route exact path="/profile" render={() => {
-                    return <Layout chatId={ "profile" }/>
+                    return <Layout chatId={"profile"} />;
                 }} />
             </Switch>
         )

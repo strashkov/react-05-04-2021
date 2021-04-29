@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Message from './Message.jsx';
+import Message from './message/Message.jsx';
 import '../styles/style.css';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
@@ -8,81 +8,32 @@ import SendIcon from '@material-ui/icons/Send';
 
 export default class MessageField extends React.Component {
     static propTypes = {
-        chatId: PropTypes.string,
+        messages: PropTypes.arrayOf(PropTypes.shape({
+            author: PropTypes.string.isRequired,
+            text: PropTypes.string.isRequired
+        })),
+        onSendMessage: PropTypes.func.isRequired
     };
-    state = {
-        messages: {
-            '1': [
-                {
-                    author: 'Robocop',
-                    text: 'Привет!',
-                },
-                {
-                    author: 'Robocop',
-                    text: 'Как дела?',
-                }            ],
-            '2': [
-                {
-                    author: 'Robocop',
-                    text: 'Чат № 2',
-                }
-            ],
-            '3': [
-                {
-                    author: 'Robocop',
-                    text: 'Чат № 3!',
-                }
-            ]
-        },
-        input: '',
+    state = {      
+        input: ''
     };
 
     constructor(props) {
         super(props);
         this.messageFieldRef = React.createRef();
     }
-    componentDidUpdate(prevProps, prevState) {
-        const { chatId } = this.props;
-        if (
-            prevState.messages[chatId].length <
-                this.state.messages[chatId].length &&
-            this.state.messages[chatId][this.state.messages[chatId].length - 1].author !== 'Robocop'
-        ) {
-            setTimeout( () =>
-                this.setState((state) => ({
-                    messages: { //слияние объектов: ...спред-оператор добавляет к старому объекту новый
-                        ...state.messages,
-                        [chatId]: [
-                            ...state.messages[chatId],
-                            {
-                                text: `Не приставай, я робот чата ${chatId}!`,
-                                    author: 'Robocop'
-                                }
-                            ]
-                        }
-                    })), 1000);
-            }
+    componentDidUpdate() {        
         this.messageFieldRef.current.scrollTop =
             this.messageFieldRef.current.scrollHeight -
             this.messageFieldRef.current.clientHeight;
     }
 
     sendMessage = () => {
-        const chatId = this.props.chatId;
+        this.props.onSendMessage(this.state.input);
 
-        this.setState((state) => ({
-            messages: {
-                ...state.messages,
-                [chatId]: [
-                    ...state.messages[chatId],
-                    {
-                        text: state.input,
-                        author: 'me',
-                    },
-                ],
-            },
-            input: '',
-        }));
+        this.setState({           
+            input: ''
+        });
     };
 
     handleChangeInput = ({ target: { value } }) => {
@@ -97,14 +48,7 @@ export default class MessageField extends React.Component {
         }
     };
     render() {
-        const { chatId } = this.props;
-
-        if (!chatId) {
-            return <div className='empty-chat'>Выберите чат</div>;
-        }
-        const messageElements = this.state.messages[
-            chatId
-        ].map(({ author, text }, index) => (
+        const messageElements = this.props.messages.map(({ author, text }, index) => (
             <Message key={index} text={text} author={author} />
         ));
  
