@@ -1,5 +1,6 @@
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import initReducers from './../reducers';
+import middlewares from '../middlewares';
 
 function initStore()  {
   const initialStore = {};
@@ -7,6 +8,9 @@ function initStore()  {
   return createStore(
     initReducers,
     initialStore,
+    compose(
+      applyMiddleware(...middlewares),
+    ),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   );
 }

@@ -90,7 +90,6 @@ class MessageField extends React.Component {
         userName = {this.props.messages[messageId].userName} 
         text={this.props.messages[messageId].text} 
       />));
-    
 
      
     return <div>
