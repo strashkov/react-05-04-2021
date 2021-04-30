@@ -4,7 +4,7 @@ import s from './SideBar.module.css';
 
 const menuBar = {
     profilePage: { name: 'Profile', path: '/profile' },
-    chatsPage: { name: 'Chats', path: '/' }
+    chatsPage: { name: 'Chats', path: '/chat/1' }
 }
 
 export default class SideBar extends React.Component {

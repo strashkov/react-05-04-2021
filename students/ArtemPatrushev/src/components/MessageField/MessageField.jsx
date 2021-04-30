@@ -9,12 +9,10 @@ import SendIcon from '@material-ui/icons/Send';
 
 export default class MessageField extends React.Component {
     static propTypes = {
-        messages: PropTypes.arrayOf(PropTypes.shape({   // Приходит массив объектов с описанием свойств объекта
-            author: PropTypes.string.isRequired,
-            text: PropTypes.string.isRequired
-        })),
-        onSendNewMessage: PropTypes.func.isRequired
-
+        chatId: PropTypes.string.isRequired,
+        chats: PropTypes.object.isRequired,
+        messages: PropTypes.object.isRequired,
+        sendMessage: PropTypes.func.isRequired
     };
 
     state = {
@@ -32,25 +30,51 @@ export default class MessageField extends React.Component {
     };
 
     // данная функция по отпровки сообщения обчно делается отдельно, а функции-hadle (которые прописаны ниже), вызывают эту функцию + могут ставить условия
-    sendMessage = () => {
-        this.props.onSendNewMessage(this.state.input);
-        this.setState({
-            input: '' // после отправки очищаем поле ввода у input
+    onSendNewMessage = () => {
+        const { input } = this.state;
+
+        if(!input) {
+            return;
+        }
+
+        const { chatId, messages } = this.props;
+        const messageId = Object.keys(messages).length + 1;
+
+        this.props.sendMessage({
+            messageId,
+            chatId,
+            text: input,
+            author: 'me'
         });
+
+        this.setState({
+            input: ''
+        });
+
+        setTimeout(() => {
+            const { messages } = this.props;
+            const messageId = Object.keys(messages).length + 1;
+
+            this.props.sendMessage({
+                messageId,
+                chatId,
+                text: 'I\'m robot',
+                author: 'bot'
+            });
+        }, 1000);
     };
 
     handleClick = () => {
-        this.sendMessage();
+        this.onSendNewMessage();
     };
 
     handleInputKeyUp = (event) => {
         if (event.keyCode === 13) { // берем событие, проверяем на какой клавише оно произошло (по коду клавиши (нужно гуглить)), 13 - код enter
-            this.sendMessage();
+            this.onSendNewMessage();
         }
     };
 
     handleChangeInput = (/*event*/ { target: { value } }) => {
-        console.log(value);
         this.setState({
             input: /*event.target.value*/ value // меянем state класса компонента, через прослушивание input 
         });
@@ -58,45 +82,44 @@ export default class MessageField extends React.Component {
 
     render() {
 
-        // const { chatId } = this.props;     // или так: const chatId = this.props.chatId;
+        const { chatId, chats, messages } = this.props;     // или так: const chatId = this.props.chatId;
+        // console.log(dvjbd);
 
         // if (!chatId) {
         //     return <div className={s.emptyChat}>Check a chat</div>;  // если данное условие подходит, то рендерится эта разметка
         // }
 
-        const messageElements = this.props.messages.map(({ text, author }, index) => (
-            <Message key={index} text={text} author={author} />
-        ));
+        const messageElements = chats[chatId].messageList.map((messageId) => {
+            const { text, author } = messages[messageId];
+            return (
+                <Message
+                    key={messageId}
+                    text={text}
+                    author={author} />
+            )
+        });
 
         return (
+
             <div className={s.messageFieldWrapper}>
-                <div /*ref={this.messageFieldRef}*/ ref={this.messageFieldRef} className={s.messageField}>
+                <div ref={this.messageFieldRef} className={s.messageField}>
                     {messageElements}
                 </div>
                 <div className={s.actionInputBlock}>
-                    <TextField                            // это специальный тег от библиотеки material UI
+                    <TextField                                      // это специальный тег от библиотеки material UI
                         className={s.textField}
-                        value={this.state.input}
+                        value={this.state.input}                    // считываем значение инпута в state класса компонента
                         autoFocus
                         fullWidth
                         placeholder='Введите сообщение'
-                        onKeyUp={this.handleInputKeyUp}
+                        onKeyUp={this.handleInputKeyUp}              // событие отпущенной клавиши, ставится на input, т.к. фокус именно на нем
                         onChange={this.handleChangeInput} />
-                    {/* <input 
-                            type="text" 
-                            value={this.state.input} // считываем значение инпута в state класса компонента
-                            onChange={this.handleChangeInput}
-                            autoFocus
-                            onKeyUp={this.handleInputKeyUp} // событие отпущенной клавиши, ставится на input, т.к. фокус именно на нем
-                            />  */}
-                    <Fab                                  // спец тег от material UI
-                        // color='primary'
-                        disabled={this.state.input === ''} // если в инпуте ничего не прописано, то кнопка не активна
+                    <Fab
+                        disabled={this.state.input === ''}          // если в инпуте ничего не прописано, то кнопка не активна
                         onClick={this.handleClick}
                     >
                         <SendIcon />
                     </Fab>
-                    {/* </div> */}
                 </div>
             </div>
         );
