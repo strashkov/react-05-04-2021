@@ -111,7 +111,11 @@ export default function chatReducer(store = initialStore, action) {
       };
     }
     case LOAD_CHATS_SUCCESS: {
-      const { chats } = action.payload.entities;
+      const { chats = {} } = action.payload.entities;
+
+      Object.keys(chats).forEach((id) => {
+        chats[id].messageList = [];
+      });
 
       return {
         ...store,

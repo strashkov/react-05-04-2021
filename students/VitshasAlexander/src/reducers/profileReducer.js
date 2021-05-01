@@ -5,12 +5,7 @@ import {
 } from "../actions/profileActions";
 
 const initialStore = {
-  user: {
-    // firstName: "Filipp",
-    // lastName: "Romanovski",
-    // bio: "My Route to Santiago de Compostela",
-    // photo: "filipp-romanovski-eejet4GDlzc-unsplash.jpg",
-  },
+  user: {},
   isLoading: false,
 };
 
