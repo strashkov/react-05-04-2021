@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import {
   updateInputValue,
-  messagesDidUpadte,
+  messagesDidUpdate,
 } from '../../../redux/chats-reducer';
 import SendingForm from './SendingForm';
 
@@ -11,5 +11,5 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   updateInputValue,
-  messagesDidUpadte,
+  messagesDidUpdate,
 })(SendingForm);

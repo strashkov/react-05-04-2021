@@ -12,9 +12,15 @@ const MARK_CHAT_READ = 'chatList/MARK_CHAT_READ';
 const DELETE_MSG = 'messageField/DELETE_MSG';
 const LOAD_CHATS = 'LOAD_CHATS';
 const TOGGLE_IS_LOADING = 'TOGGLE_IS_LOADING';
+const TOGGLE_CHAT_IS_DELETING = 'TOGGLE_CHAT_IS_DELETING';
+const TOGGLE_MSG_IS_DELETING = 'TOGGLE_MSG_IS_DELETING';
+const TOGGLE_IS_ADDING = 'TOGGLE_IS_ADDING';
 
 const initalState = {
+  isAdding: false,
+  isDeleting: false,
   isLoading: false,
+  msgIsDeleting: false,
   addChatInputValue: '',
   inputValue: '',
   currentChat: '',
@@ -31,6 +37,12 @@ const chatsReducer = (state = initalState, action) => {
         addChatInputValue: action.inputValue,
       };
 
+    case TOGGLE_IS_ADDING:
+      return {
+        ...state,
+        isAdding: action.isAdding,
+      };
+
     case DELETE_CHAT:
       let newChats = state.chats;
       newChats.splice(action.chatId - 1, 1);
@@ -43,15 +55,9 @@ const chatsReducer = (state = initalState, action) => {
       };
 
     case ADD_CHAT:
-      const chatName = state.addChatInputValue;
-      const newChat = {
-        chatId: String(state.chats.length + 1),
-        chatName: chatName,
-        messages: [],
-      };
       return {
         ...state,
-        chats: [...state.chats, newChat],
+        chats: [...state.chats, action.newChat],
         addChatInputValue: '',
       };
 
@@ -62,21 +68,11 @@ const chatsReducer = (state = initalState, action) => {
       };
 
     case UPDATE_MESSAGES_DATA:
-      idx = action.currentChat - 1;
-      const newMsg = {
-        id:
-          state.chats[idx].messages.length > 0
-            ? state.chats[idx].messages[state.chats[idx].messages.length - 1]
-                .id + 1
-            : 1,
-        author: action.author,
-        text: action.author === 'me' ? state.inputValue : 'Я робот',
-      };
       return {
         ...state,
         chats: state.chats.map(chat => {
           return chat.chatId === action.currentChat
-            ? { ...chat, messages: [...chat.messages, newMsg] }
+            ? { ...chat, messages: [...chat.messages, action.newMsg] }
             : chat;
         }),
         inputValue: '',
@@ -127,10 +123,27 @@ const chatsReducer = (state = initalState, action) => {
         isLoading: action.isLoading,
       };
 
+    case TOGGLE_CHAT_IS_DELETING:
+      return {
+        ...state,
+        isDeleting: action.isDeleting,
+      };
+
+    case TOGGLE_MSG_IS_DELETING:
+      return {
+        ...state,
+        msgIsDeleting: action.msgIsDeleting,
+      };
+
     default:
       return state;
   }
 };
+
+export const toggleIsAdding = isAdding => ({
+  type: TOGGLE_IS_ADDING,
+  isAdding,
+});
 
 export const updateAddChatInputValue = inputValue => ({
   type: UPDATE_ADD_CHAT_INPUT_VALUE,
@@ -142,8 +155,9 @@ export const deleteChat = chatId => ({
   chatId,
 });
 
-export const addChat = () => ({
+export const addChat = newChat => ({
   type: ADD_CHAT,
+  newChat,
 });
 
 export const updateInputValue = text => ({
@@ -151,9 +165,9 @@ export const updateInputValue = text => ({
   text,
 });
 
-export const updateMessagesData = (author, currentChat) => ({
+export const updateMessagesData = (newMsg, currentChat) => ({
   type: UPDATE_MESSAGES_DATA,
-  author,
+  newMsg,
   currentChat,
 });
 
@@ -187,12 +201,28 @@ export const toggleIsLoading = isLoading => ({
   isLoading,
 });
 
-export const messagesDidUpadte = author => {
-  return (dispatch, getState) => {
-    let currentChat = getState().messenger.currentChat;
-    dispatch(updateMessagesData(author, currentChat));
+export const toggleChatIsDeleting = isDeleting => ({
+  type: TOGGLE_CHAT_IS_DELETING,
+  isDeleting,
+});
 
-    setTimeout(() => {
+export const toggleMsgIsDeleting = msgIsDeleting => ({
+  type: TOGGLE_MSG_IS_DELETING,
+  msgIsDeleting,
+});
+
+export const messagesDidUpdate = author => {
+  return (dispatch, getState) => {
+    const currentChat = getState().messenger.currentChat;
+    const state = getState().messenger;
+    const lastMsg = state.chats[currentChat - 1].messages;
+    const newMsg = {
+      id: lastMsg[lastMsg.length - 1]?.id + 1 || 1,
+      author: author,
+      text: state.inputValue,
+    };
+    dispatch(updateMessagesData(newMsg, currentChat));
+    chatsAPI.sendMessage(newMsg, currentChat).then(() => {
       const { pathname } = getState().router.location;
       const {
         params: { id },
@@ -200,16 +230,23 @@ export const messagesDidUpadte = author => {
         path: '/chat/:id',
         exact: true,
       });
-      dispatch(updateMessagesData('bot', currentChat));
-      dispatch(markChatUnread(currentChat));
-      if (id === currentChat) {
-        setTimeout(() => {
-          dispatch(markChatRead(currentChat));
-        }, 1000);
-      }
-      const newChats = getState().messenger.chats;
-      chatsAPI.uploadChats(newChats);
-    }, 1000);
+      const state = getState().messenger;
+      const lastMsg = state.chats[currentChat - 1].messages;
+      const newMsg = {
+        id: lastMsg[lastMsg.length - 1]?.id + 1 || 1,
+        author: 'bot',
+        text: 'Я робот',
+      };
+      chatsAPI.sendMessage(newMsg, currentChat).then(() => {
+        dispatch(updateMessagesData(newMsg, currentChat));
+        dispatch(markChatUnread(currentChat));
+        if (id === currentChat) {
+          setTimeout(() => {
+            dispatch(markChatRead(currentChat));
+          }, 1000);
+        }
+      });
+    });
   };
 };
 
@@ -226,26 +263,40 @@ export const getChatsAPI = () => {
 };
 
 export const deleteChatAPI = chatId => {
-  return (dispatch, getState) => {
-    dispatch(deleteChat(chatId));
-    const newChats = getState().messenger.chats;
-    chatsAPI.uploadChats(newChats);
+  return dispatch => {
+    dispatch(toggleChatIsDeleting(true));
+    chatsAPI.deleteChat(chatId).then(() => {
+      dispatch(deleteChat(chatId));
+      dispatch(toggleChatIsDeleting(false));
+    });
   };
 };
 
 export const addChatAPI = () => {
   return (dispatch, getState) => {
-    dispatch(addChat());
-    const newChats = getState().messenger.chats;
-    chatsAPI.uploadChats(newChats);
+    const state = getState().messenger;
+    const chatName = state.addChatInputValue;
+    const newChat = {
+      chatId: String(state.chats.length + 1),
+      chatName: chatName,
+      messages: [],
+    };
+    dispatch(toggleIsAdding(true));
+    chatsAPI.addChat(newChat).then(() => {
+      dispatch(addChat(newChat));
+      dispatch(toggleIsAdding(false));
+    });
   };
 };
 
 export const deleteMsgAPI = msgId => {
   return (dispatch, getState) => {
-    dispatch(deleteMsg(msgId));
-    const newChats = getState().messenger.chats;
-    chatsAPI.uploadChats(newChats);
+    dispatch(toggleMsgIsDeleting(true));
+    const currentChat = getState().messenger.currentChat;
+    chatsAPI.deleteMessage(currentChat, msgId).then(() => {
+      dispatch(deleteMsg(msgId));
+      dispatch(toggleMsgIsDeleting(false));
+    });
   };
 };
 

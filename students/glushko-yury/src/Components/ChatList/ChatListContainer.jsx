@@ -32,6 +32,8 @@ const mapStateToProps = state => ({
   addChatInputValue: state.messenger.addChatInputValue,
   currentChat: state.messenger.currentChat,
   isMarkChat: state.messenger.isMarkChat,
+  isDeleting: state.messenger.isDeleting,
+  isAdding: state.messenger.isAdding,
 });
 
 export default connect(mapStateToProps, {

@@ -1,27 +1,21 @@
 import * as axios from 'axios';
 
-const CHATS_URL = 'chats.json';
-const PROFILE_URL = 'profile.json';
-
 const instance = axios.create({
-  baseURL:
-    'https://messenger-40e60-default-rtdb.europe-west1.firebasedatabase.app/',
+  baseURL: 'http://localhost:8080/',
   headers: {
-    'Content-Type': 'application/json',
+    'content-type': 'application/json',
   },
 });
 export const chatsAPI = {
-  loadChats: () =>
-    instance
-      .get(CHATS_URL)
-      .then(response =>
-        response.data?.map(chat =>
-          chat.messages ? chat : { ...chat, messages: [] }
-        )
-      ),
-  uploadChats: chats => instance.put(CHATS_URL, chats),
+  loadChats: () => instance.get('chats/').then(response => response.data),
+  addChat: newChat => instance.post('chats/', newChat),
+  deleteChat: chatId => instance.delete(`chats/${chatId}`),
+  sendMessage: (newMsg, chatId) =>
+    instance.post(`chats/messages/${chatId - 1}`, newMsg),
+  deleteMessage: (chatId, msgId) =>
+    instance.delete(`chats/messages/${chatId - 1}?messageId=${msgId}`),
 };
 
 export const profileAPI = {
-  loadProfile: () => instance.get(PROFILE_URL).then(response => response.data),
+  loadProfile: () => instance.get(`profile`).then(response => response.data),
 };

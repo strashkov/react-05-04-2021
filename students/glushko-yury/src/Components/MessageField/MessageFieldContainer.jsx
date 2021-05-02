@@ -34,6 +34,8 @@ const WithChatIdMessageFieldContainer = withRouter(MessageFieldContainer);
 const mapStateToProps = state => ({
   chats: state.messenger.chats,
   isLoading: state.messenger.isLoading,
+  isDeleting: state.messenger.isDeleting,
+  msgIsDeleting: state.messenger.msgIsDeleting,
 });
 
 export default connect(mapStateToProps, {

@@ -1,10 +1,9 @@
 import { profileAPI } from '../api/api';
+import { toggleIsLoading } from './chats-reducer';
 
 const LOAD_PROFILE = 'LOAD_PROFILE';
 
-const initialState = {
-  // userName: 'Yury',
-};
+const initialState = {};
 
 const profileReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -26,11 +25,13 @@ export const loadProfile = profile => ({
 
 export const loadProfileAPI = () => {
   return dispatch => {
+    dispatch(toggleIsLoading(true));
     profileAPI.loadProfile().then(data => {
       const { userName } = data;
       if (userName) {
         dispatch(loadProfile(userName));
       }
+      dispatch(toggleIsLoading(false));
     });
   };
 };

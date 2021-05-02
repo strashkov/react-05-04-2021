@@ -7,6 +7,8 @@ import SendingFormContainer from './SendingForm/SendingFormContainer';
 import Loader from '../common/Loader/Loader';
 
 const MessageField = ({
+  msgIsDeleting,
+  isDeleting,
   deleteMsgAPI,
   isLoading,
   chats,
@@ -19,7 +21,12 @@ const MessageField = ({
   const currentMessages = chats[chatId - 1]?.messages;
   useEffect(() => setCurrentChat(chatId), [setCurrentChat, chatId]);
 
-  if (isLoading) return <Loader />;
+  if (isLoading || isDeleting)
+    return (
+      <div className={style.messageFieldWrapper}>
+        <Loader />
+      </div>
+    );
 
   if (currentMessages?.length === 0) {
     return (
@@ -42,7 +49,12 @@ const MessageField = ({
     return currentMessages ? (
       <div className={style.messageFieldWrapper}>
         <div className={style.messageField} ref={messageFieldRef}>
-          <Message messages={currentMessages} deleteMsgAPI={deleteMsgAPI} />
+          {msgIsDeleting && <Loader />}
+          <Message
+            messages={currentMessages}
+            deleteMsgAPI={deleteMsgAPI}
+            msgIsDeleting={msgIsDeleting}
+          />
         </div>
         <SendingFormContainer />
       </div>

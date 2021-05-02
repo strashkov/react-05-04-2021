@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { ListItemText } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import ListItem from '@material-ui/core/ListItem';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
@@ -8,6 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import style from './ChatList.module.scss';
 
 const ChatList = ({
+  isAdding,
   chats,
   addChatInputValue,
   updateAddChatInputValue,
@@ -16,29 +19,31 @@ const ChatList = ({
   isMarkChat,
   deleteChatAPI,
   addChatAPI,
+  isDeleting,
 }) => {
   const listEl = chats.map(({ chatId, chatName }) => (
-    <div key={chatId} className={style.linkWrapper}>
-      <ListItem
-        onClick={() => push(`/chat/${chatId}`)}
-        button
-        selected={currentChat === chatId}
-        style={
-          isMarkChat.some(id => id === chatId)
-            ? { backgroundColor: 'rgba(255, 255, 255, 0.5)' }
-            : null
-        }
-      >
-        {chatName}
-      </ListItem>
+    <ListItem
+      key={chatId}
+      onClick={() => push(`/chat/${chatId}`)}
+      button
+      selected={currentChat === chatId}
+      style={
+        isMarkChat.some(id => id === chatId)
+          ? { backgroundColor: 'rgba(255, 255, 255, 0.5)' }
+          : null
+      }
+    >
+      <ListItemText primary={chatName} />
       <IconButton
+        className={style.delBtn}
+        disabled={isDeleting}
         edge='end'
         aria-label='delete'
         onClick={() => deleteChatAPI(chatId)}
       >
         <DeleteIcon />
       </IconButton>
-    </div>
+    </ListItem>
   ));
   const addChatHandler = event => {
     event.preventDefault();
@@ -46,7 +51,11 @@ const ChatList = ({
   };
   return (
     <div className={style.chatListWrapper}>
-      <div className={style.chatList}>{listEl}</div>
+      {isAdding ? (
+        <CircularProgress className={style.loader} />
+      ) : (
+        <div className={style.chatList}>{listEl}</div>
+      )}
       <form onSubmit={addChatHandler} className={style.form}>
         <TextField
           id='standard-basic'
@@ -57,7 +66,7 @@ const ChatList = ({
         <Fab
           color='primary'
           aria-label='add'
-          disabled={!addChatInputValue}
+          disabled={!addChatInputValue || isAdding}
           type='submit'
         >
           <AddIcon />
@@ -84,6 +93,8 @@ ChatList.propTypes = {
   isMarkChat: PropTypes.arrayOf(PropTypes.string),
   currentChat: PropTypes.string,
   addChatInputValue: PropTypes.string,
+  isAdding: PropTypes.bool,
+  isDeleting: PropTypes.bool,
   updateAddChatInputValue: PropTypes.func,
   push: PropTypes.func,
   deleteChatAPI: PropTypes.func,
