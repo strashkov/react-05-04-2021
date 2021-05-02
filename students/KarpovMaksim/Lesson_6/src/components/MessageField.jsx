@@ -29,11 +29,8 @@ class MessageField extends React.Component {
   };
   
   static defaultProps = {
-    chatId: '1',
-    lastUserName: 'Вася',
+    chatId: '1'
   }
-
-  
 
   componentDidUpdate() {
     this.messageFieldRef.current.scrollTop = 
@@ -43,7 +40,7 @@ class MessageField extends React.Component {
     if(this.state.input) {
       if(event.keyCode === 13) {
         console.log('enter')
-        this.sendMessage();
+        this.sendMessage;
       }
     }
   }
@@ -53,15 +50,9 @@ class MessageField extends React.Component {
     })
   }
   sendMessage = () => {
-    const { chatId, messages, chats } = this.props;
+    const { chatId, messages } = this.props;
 
-    const messagesListLenght = Object.entries(messages).length;
-    const lastMessage = chats[chatId].messageList.length;
-    const lastUserName = (chats[chatId].messageList.map((messageId) => {
-       return messages[messageId].userName;
-     }))[lastMessage];
-
-    const messageId = messagesListLenght + 1;
+    const messageId = Object.entries(messages).length + 1;
 
     this.props.sendMessage(
       messageId, 
@@ -71,20 +62,13 @@ class MessageField extends React.Component {
     this.setState({
       input: '' 
     })
-    // if(lastUserName !== 'Робот') {
-    //   setTimeout(() => {
-    //     this.props.sendMessage(
-    //       messageId + 1,
-    //       'Не приставай', 
-    //       'Робот',
-    //       chatId)
-    //   },1000)
-    // }
   }
-
   render() {
+    
     const { chats, chatId } = this.props;
-  
+    if (Object.keys(chats).length === 0) {
+     return <div ref={this.messageFieldRef} className='message-field'>Чатов не найдено</div>
+    }
     const messageElements = chats[chatId].messageList.map((messageId) => (
       <Message 
         key={messageId} 

@@ -1,5 +1,6 @@
 import { SEND_MESSAGE } from '../actions/messageActions';
-import { ADD_CHAT } from "../actions/chatActions";
+import { ADD_CHAT,  DELETE_CHAT } from "../actions/chatActions";
+import { Redirect } from 'react-router-dom';
 
 const initialStore = {
     chats: {
@@ -64,6 +65,22 @@ export default function chatReducer(store = initialStore, action) {
                     ...store.messages
                 }
             };
+        }
+        case DELETE_CHAT: {
+            const {chatId} = action;
+            let newChats = [];
+            let i = 1;
+            (Object.entries(store.chats).filter((value, id) => id != chatId - 1))
+                .map(([key, value]) => {
+                    newChats.push([String(i), value]);
+                    i++;
+            })
+            return {
+                chats: Object.fromEntries(newChats),
+                messages: {
+                    ...store.messages
+                }
+            }
         }
         default:
             return store;

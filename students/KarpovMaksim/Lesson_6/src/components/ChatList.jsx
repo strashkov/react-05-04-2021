@@ -9,9 +9,11 @@ import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
 import { connect } from 'react-redux';
-import { addChat } from '../actions/chatActions';
+import { addChat, deleteChat } from '../actions/chatActions';
 import { bindActionCreators } from 'redux';
 import { sendMessage } from '../actions/messageActions';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 
 
 class ChatList extends React.Component {
@@ -20,7 +22,8 @@ class ChatList extends React.Component {
     chats: PropTypes.object.isRequired,
     addChat: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
-    push: PropTypes.func.isRequired
+    push: PropTypes.func.isRequired,
+    deleteChat: PropTypes.func.isRequired
 
   };
 
@@ -35,6 +38,7 @@ class ChatList extends React.Component {
   };
 
   hadlerAddChatClick = () => {
+    console.log(this.state.chatName)
     this.props.addChat(this.state.chatName, 1);
     
     this.setState( {
@@ -47,17 +51,48 @@ class ChatList extends React.Component {
     this.props.push(link);
   };
 
+  hadlerDeleteChatClick = (event) => {
+    this.props.deleteChat(event.currentTarget.dataset.id);
+    this.handleNavigate('/');
+    
+  }
   render() {
     const { chatName } = this.state;
     const { chats } = this.props;
+    //console.log(chats == true)
+    if (Object.keys(chats).length === 0) {
+      console.log('sdsdsd')
+      return  <div className="chat-list-field">
+        Нет чатов
+        <List>
+          <ListItem button >
+              <TextField 
+                value={chatName}
+                placeholder='Enter new chat name' 
+                onChange={this.handlerChatNameChange}/>
+              <IconButton
+                onClick={this.hadlerAddChatClick}
+                disabled={!chatName}>
+                <SendIcon />
+              </IconButton>
+            </ListItem>
+        </List>
+        </div>
+    }
     return (
       <div className="chat-list-field">
         <List>
         {Object.entries(chats).map(([id, value]) => (
-            <ListItem key={id} button selected={id === this.props.chatId} onClick={ () => this.handleNavigate(`/chat/${id}`) }>
-              <div className='chat-list-icon'></div>
-              <ListItemText primary={value.title}/>
+            <ListItem key={id} button selected={id === this.props.chatId} >
+              <div className='chat-list-icon' onClick={ () => this.handleNavigate(`/chat/${id}`) }></div>
+              <ListItemText 
+                primary={value.title} 
+                onClick={ () => this.handleNavigate(`/chat/${id}`) }/>
+              <IconButton  data-id={id} onClick={this.hadlerDeleteChatClick}>
+                <DeleteIcon  />
+              </IconButton>
             </ListItem>
+            
           ))}
           <ListItem button >
             <TextField 
@@ -80,6 +115,6 @@ class ChatList extends React.Component {
 const mapStateToProps = (store) => ({
   chats: store.chatReducer.chats,
 });
-const mapDispatchToProps = dispatch => bindActionCreators({ addChat, sendMessage, push }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat, sendMessage, push, deleteChat }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
