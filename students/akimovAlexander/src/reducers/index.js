@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import chatReducer from './chatReducer';
-import profileReducer from './profileReducer';
 import messageReducer from './messageReducer';
+import profileReducer from './profileReducer';
 
 export default combineReducers({
     chatReducer,
-    profileReducer,
     messageReducer,
+    profileReducer
 });

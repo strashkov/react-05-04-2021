@@ -1,28 +1,24 @@
-// import update from 'react-addons-update';
 import { SEND_MESSAGE } from '../actions/messageActions';
-import { ADD_CHAT } from '../actions/chatActions';
+import { ADD_CHAT } from "../actions/chatActions";
 
 const initialStore = {
     chats: {
         1: {
-            title: 'Чат 1',
-            messageList: [1]
+            title: 'Бил Гейтс',
+            messageList: [1, 2]
         },
         2: {
-            title: 'Чат 2',
+            title: 'Илон Маск',
             messageList: [2]
-        },
-        3: {
-            title: 'Чат 3',
-            messageList: [1]
-        },
-    }
+        }
+    },
 };
 
 export default function chatReducer(store = initialStore, action) {
     switch (action.type) {
         case SEND_MESSAGE: {
             const { chatId, messageId } = action;
+
             return {
                 chats: {
                     ...store.chats,
@@ -34,10 +30,11 @@ export default function chatReducer(store = initialStore, action) {
                         ]
                     }
                 },
-            }
+            };
         }
         case ADD_CHAT: {
             const chatId = Object.keys(store.chats).length + 1;
+
             return {
                 chats: {
                     ...store.chats,
