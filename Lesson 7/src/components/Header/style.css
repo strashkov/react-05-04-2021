@@ -1,0 +1,28 @@
+.header {
+    background-color: #71ca5f;
+    font-size: 18px;
+    line-height: 40px;
+    color: #fff;
+    display: flex;
+}
+
+.header-profile-container {
+    display: flex;
+}
+
+.header-profile {
+    width: 30%;
+    border-right: 2px solid #ccc;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+div.header-profile-avatar {
+    background-color: #e49d19;
+    margin-right: 12px;
+}
+
+.header-title {
+    padding: 16px;
+}
+

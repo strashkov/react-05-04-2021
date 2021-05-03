@@ -1,0 +1,31 @@
+.message-field {
+    display: flex;
+    flex-direction: column;
+    background-color: #dfdfdf;
+    color: #fff;
+    width: 100%;
+    padding: 20px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+.actions {
+    width: 100%;
+    display: flex;
+    margin-top: 12px;
+}
+
+.actions-button {
+    color: #fff !important;
+    background-color: #843ee0 !important;
+}
+
+.actions-button:hover {
+    color: #dfdfdf !important;
+    background-color: #5d1db1 !important;
+}
+
+.actions-button:disabled {
+    background-color: rgba(0, 0, 0, 0.12) !important;
+}
