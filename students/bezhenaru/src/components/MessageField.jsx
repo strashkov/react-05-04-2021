@@ -1,88 +1,45 @@
 import React from 'react';
-import Message from './Message.jsx';
+import PropTypes from 'prop-types';
+import Message from './message/Message.jsx';
 import '../styles/style.css';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
-import SendIcon  from '@material-ui/icons/Send';
-import PropTypes from 'prop-types';
+import SendIcon from '@material-ui/icons/Send';
 
 export default class MessageField extends React.Component {
     static propTypes = {
-        chatId: PropTypes.string
+        messages: PropTypes.arrayOf(PropTypes.shape({
+            author: PropTypes.string.isRequired,
+            text: PropTypes.string.isRequired
+        })),
+        onSendMessage: PropTypes.func.isRequired
     };
-    state = {
-        messages: {        
-            '1': [
-            {
-                author: 'Robocop', 
-                text: "Привет!"
-            },
-            {
-                author: 'Robocop', 
-                text: "Как дела?" 
-            },
-            ],
-            '2': [
-                {
-                    author: 'Robocop', 
-                    text: "Чат № 2"
-                },
-                ],
-                '3': [
-                    {
-                        author: 'Robocop', 
-                        text: "Чат № 3!"
-                    },                
-                ],
-            },
-         input: ''
+    state = {      
+        input: ''
     };
 
     constructor(props) {
         super(props);
         this.messageFieldRef = React.createRef();
     }
-    componentDidUpdate(prevProps, prevState) {
-        if (
-            prevState.messages.length < this.state.messages.length &&
-            this.state.messages[this.state.messages.length - 1].author !== 'Robocop') {
-            setTimeout(() =>
-                this.setState((state) => ({
-                    messages: [
-                        ...state.messages,  
-                       {
-                        text: 'не приставай, я робот',
-                        author: 'Robocop'
-                       }
-                    ]
-                })), 1000);
-        }
+    componentDidUpdate() {        
         this.messageFieldRef.current.scrollTop =
-        this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;        
+            this.messageFieldRef.current.scrollHeight -
+            this.messageFieldRef.current.clientHeight;
     }
 
     sendMessage = () => {
-        const chatId = this.props.chatId;
+        this.props.onSendMessage(this.state.input);
 
-        this.setState((state) => ({
-            messages: {
-                ...state.messages,
-                [chatId]: [
-                    ...state.messages[chatId],
-                    {
-                        text: state.input,
-                        sender: 'me'
-                    }
-                ]
-            },
+        this.setState({           
             input: ''
-        }));
+        });
     };
 
     handleChangeInput = ({ target: { value } }) => {
         this.setState({
-            input: value /*event.target.value*/
-        })
+            input: value /*event.target.value*/,
+        });
     };
 
     handleInputKeyUp = (event) => {
@@ -91,39 +48,34 @@ export default class MessageField extends React.Component {
         }
     };
     render() {
-        const { chatId } = this.props;
-
-        if (!chatId) {
-            return <div className='empty-chat'>Выберите чат</div>;
-        }
-        const messageElements = this.state.messages.map(({author, text}, index) => (
-            <Message key={ index } text={text} author={author} />)
-        );
-
+        const messageElements = this.props.messages.map(({ author, text }, index) => (
+            <Message key={index} text={text} author={author} />
+        ));
+ 
         return (
-            <div className="message-field-wrapper">
-                <div ref={this.messageFieldRef} className="message-field">
-                    { messageElements }
+            <div className='message-field-wrapper'>
+                <div ref={this.messageFieldRef} className='message-field'>
+                    {messageElements}
                 </div>
                 <div className='actions'>
                     <TextField
-                        className='textField'
                         placeholder='Your message'
                         fullWidth
                         value={this.state.input}
-                        type="text"
+                        type='text'
                         autoFocus
                         onKeyUp={this.handleInputKeyUp}
-                        onChange={this.handleChangeInput} />
+                        onChange={this.handleChangeInput}
+                    />
                     <Fab
-                        color='primary'            
+                        color='primary'
                         disabled={this.state.input === ''}
-                        onClick={this.sendMessage}>
+                        onClick={this.sendMessage}
+                    >
                         <SendIcon />
                     </Fab>
-                </div> 
+                </div>
             </div>
-        )        
+        );
     }
 }
- 

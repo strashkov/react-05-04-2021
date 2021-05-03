@@ -6,8 +6,12 @@ module.exports = {
     output: {
         path: path.resolve (__dirname, 'build'),
         filename: 'bundle.js', 
+        publicPath: '/'
     },
-
+    devServer: {
+        historyApiFallback: true
+    },
+    devtool: 'eval-source-map',
     plugins: [
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'src', 'index.html'),
@@ -18,7 +22,10 @@ module.exports = {
         rules: [
             {
                 test: /\.jsx?$/,
-                exclude: /node_modules/,
+                exclude: /node_modules/,                
+                resolve: {
+                    extensions: ['.js', '.jsx']
+                },
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -40,4 +47,4 @@ module.exports = {
               }
         ]
     }
-}
+};

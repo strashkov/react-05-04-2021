@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './style.css';
 
 export default class Message extends React.Component {
     static propTypes = {
@@ -15,7 +16,6 @@ export default class Message extends React.Component {
                 <div>{ this.props.text }</div>
                 <div className="message-author">{ this.props.author }</div>
             </div>
-
         )
     }
 }  
