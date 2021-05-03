@@ -7,19 +7,38 @@ import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import Avatar from '@material-ui/core/Avatar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import './style.css';
 
 export default class ChatList extends React.Component {
     static propTypes = {
-        chats: PropTypes.object.isRequired,
-        history: PropTypes.object.isRequired,
-        match: PropTypes.object.isRequired,
-        addChat: PropTypes.func.isRequired
+        isLoading: PropTypes.bool,
+        chatId: PropTypes.string,
+        chats: PropTypes.objectOf(PropTypes.shape({
+            title: PropTypes.string.isRequired,
+            unread: PropTypes.bool,
+        })).isRequired,
+        addChat: PropTypes.func.isRequired,
+        markChatRead: PropTypes.func.isRequired,
+        loadChats: PropTypes.func.isRequired,
+        push: PropTypes.func.isRequired
     };
 
     state = {
         chatName: ''
     };
+
+    componentDidMount() {
+        this.props.loadChats();
+    }
+
+    componentDidUpdate(prevProps) {
+        const { chatId, markChatRead } = this.props;
+
+        if (chatId && prevProps.chatId !== chatId) {
+            markChatRead(chatId);
+        }
+    }
 
     handleChatNameChange = (event) => {
         this.setState({
@@ -36,13 +55,16 @@ export default class ChatList extends React.Component {
     };
 
     handleLinkClick = (link) => {
-        this.props.history.push(link);
+        this.props.push(link);
     };
 
     render() {
         const { chatName } = this.state;
-        const { chats, match } = this.props;
-        const chatId = match.params.id;
+        const { chats, isLoading } = this.props;
+
+        if (isLoading) {
+            return <CircularProgress />;
+        }
 
         return (
             <div className="chat-list">
@@ -51,12 +73,13 @@ export default class ChatList extends React.Component {
                         <ListItem
                             key={id}
                             button
-                            selected={id === chatId}
+                            selected={id === this.props.chatId}
                             onClick={() => { this.handleLinkClick(`/chat/${id}`) }}>
                             <Avatar className='chat-list-avatar'>
                                 {value.title.split(' ').map(w => w.charAt(0))}
                             </Avatar>
                             <ListItemText primary={value.title} />
+                            { value.unread && <div className='chat-list-unread' />}
                         </ListItem>
                     ))}
                     <ListItem>

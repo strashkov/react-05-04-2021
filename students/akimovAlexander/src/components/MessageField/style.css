@@ -1,6 +1,4 @@
 .message-field {
-    display: flex;
-    flex-direction: column;
     background-color: #e2e2e2;
     color: #fff;
     width: 100%;

@@ -13,14 +13,14 @@ export default class Layout extends React.Component {
     };
 
     render() {
-        const { children, title } = this.props;
+        const { children, title, chatId } = this.props;
 
         return (
             <Container className="layout">
                 <Header title={title} />
                 <div className="layout-content">
                     <div className="layout-content-left">
-                        <ChatList />
+                        <ChatList chatId={chatId} />
                     </div>
                     <div className="layout-content-right">
                         {children}

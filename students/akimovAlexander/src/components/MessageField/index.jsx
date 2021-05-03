@@ -1,5 +1,5 @@
 import React from 'react';
-import Message from '../Message';
+import Message from '../../containers/Message';
 import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
 import Fab from '@material-ui/core/Fab';
@@ -37,7 +37,8 @@ export default class MessageField extends React.Component {
         }
 
         const { chatId, messages } = this.props;
-        const messageId = Object.keys(messages).length + 1;
+        const lastMessageId = Number(Object.keys(messages).pop());
+        const messageId = lastMessageId + 1;
 
         this.props.sendMessage({
             messageId,
@@ -66,12 +67,14 @@ export default class MessageField extends React.Component {
     render() {
         const { chats, messages, chatId } = this.props;
 
-        const messageElements = chats[chatId].messageList.map((messageId) => {
+        const messageElements = chats[chatId]?.messageList.map((messageId) => {
             const { text, sender } = messages[messageId];
 
             return (
                 <Message
                     key={messageId}
+                    chatId={chatId}
+                    messageId={messageId}
                     text={text}
                     sender={sender} />
             )
