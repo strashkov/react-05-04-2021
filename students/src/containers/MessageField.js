@@ -5,13 +5,14 @@ import MessageField from '../components/MessageField/index.jsx';
 
 const mapStateToProps = (store) => {
     return {
-        chats: store.chatReducer.chats,
         messages: store.messageReducer.messages,
+        isLoading: store.messageReducer.isLoading
     };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    sendMessage
+    sendMessage,
+    loadMessages
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageField);

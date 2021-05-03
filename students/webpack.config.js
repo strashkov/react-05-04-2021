@@ -9,7 +9,13 @@ module.exports = {
         publicPath: '/'
     },
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
+        proxy: {
+            '/api': {
+                target: 'http://localhost:8080/',
+                pathRewrite: { '^/api': '' },
+            }
+        }
     },
     devtool: 'eval-source-map',
     module: {

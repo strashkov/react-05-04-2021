@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import Layout from '../components/Layout/index.jsx';
 import MessageField from '../containers/MessageField.js';
 import Profile from '../containers/Profile.js';
+import { CHAT_PATTERN } from '../constants/index.js';
 
 
 export default class Router extends React.Component {
@@ -16,12 +17,13 @@ export default class Router extends React.Component {
                 <Route exact path='/' render={() => (
                     <Redirect to='/profile' />
                 )} />
-                <Route path='/chat/:id' render={(props) => {
+                <Route path={CHAT_PATTERN} render={(props) => {
                     const chatId = props.match.params.id;
+
 
                     return (
                         <Layout
-                            title={`Messages: ${this.props.chats[chatId].title}`}
+                            title={`Messages: ${this.props.chats[chatId]?.title || ''}`}
                             chatId={chatId}>
                             <MessageField chatId={chatId} />
                         </Layout>
