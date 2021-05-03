@@ -23,7 +23,7 @@ export default class Layout extends React.Component {
                         <ChatList chatId={chatId} />
                     </div>
                     <div className="layout-content-right">
-                        { children }
+                        {children}
                     </div>
                 </div>
             </Container>

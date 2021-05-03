@@ -3,20 +3,15 @@ import {
     ADD_CHAT,
     DELETE_CHAT,
     MARK_CHAT_UNREAD,
-    MARK_CHAT_READ
+    MARK_CHAT_READ,
+    LOAD_CHATS_REQUEST,
+    LOAD_CHATS_SUCCESS,
+    LOAD_CHATS_ERROR
 } from "../actions/chatActions";
 
 const initialStore = {
-    chats: {
-        1: {
-            title: 'Вася Петров',
-            messageList: [1]
-        },
-        2: {
-            title: 'Петя Васечкин',
-            messageList: [2]
-        }
-    },
+    chats: {},
+    isLoading: false
 };
 
 export default function chatReducer(store = initialStore, action) {
@@ -102,6 +97,27 @@ export default function chatReducer(store = initialStore, action) {
             return {
                 ...store,
                 chats: newChats
+            };
+        }
+        case LOAD_CHATS_REQUEST: {
+            return {
+                ...store,
+                isLoading: true,
+            };
+        }
+        case LOAD_CHATS_SUCCESS: {
+            const { chats } = action.payload.entities;
+
+            return {
+                ...store,
+                chats,
+                isLoading: false,
+            };
+        }
+        case LOAD_CHATS_ERROR: {
+            return {
+                ...store,
+                isLoading: false,
             };
         }
         default:

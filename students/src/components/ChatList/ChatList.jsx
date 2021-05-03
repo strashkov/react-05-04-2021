@@ -8,10 +8,12 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from "@material-ui/icons/Delete";
 import Avatar from '@material-ui/core/Avatar';
+import CircularProgress from "@material-ui/core/CircularProgress";
 import './style.css';
 
 export default class ChatList extends React.Component {
     static propTypes = {
+        isLoading: PropTypes.bool,
         chatId: PropTypes.string,
         chats: PropTypes.objectOf(PropTypes.shape({
             title: PropTypes.string.isRequired,
@@ -20,12 +22,17 @@ export default class ChatList extends React.Component {
         addChat: PropTypes.func.isRequired,
         deleteChat: PropTypes.func.isRequired,
         markChatRead: PropTypes.func.isRequired,
-        push: PropTypes.func.isRequired
+        push: PropTypes.func.isRequired,
+        loadChats: PropTypes.func.isRequired
     };
 
     state = {
         chatName: ''
     };
+
+    componentDidMount() {
+        this.props.loadChats();
+    }
 
     componentDidUpdate(prevProps) {
         const { chatId, markChatRead } = this.props;
@@ -72,8 +79,11 @@ export default class ChatList extends React.Component {
 
     render() {
         const { chatName } = this.state;
-        const { chats, chatId } = this.props;
+        const { chats, chatId, isLoading } = this.props;
 
+        if (isLoading) {
+            return <CircularProgress />;
+        }
         return (
             <div>
                 <List>

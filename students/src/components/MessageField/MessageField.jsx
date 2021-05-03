@@ -98,7 +98,6 @@ export default class MessageField extends React.Component {
                         onChange={this.handleChangeInput} />
                     <Fab
                         className='actions-button'
-                        // color='primary'
                         disabled={input === ''}
                         onClick={this.sendMessage}>
                         <SendIcon />

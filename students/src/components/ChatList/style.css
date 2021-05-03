@@ -9,7 +9,7 @@
 button.chat-list-delete {
     position: absolute;
     display: none;
-    right: 0;
+    right: 25px;
 }
 
 div.chat-list-avatar {
