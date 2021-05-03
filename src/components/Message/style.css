@@ -1,4 +1,14 @@
+.message-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.message-wrapper:hover .message-delete {
+    display: block;
+}
+
 .message {
+    position: relative;
     background-color: #71ca5f;
     padding: 8px 16px;
     border-radius: 16px;
@@ -10,4 +20,10 @@
 .message-sender {
     font-size: 14px;
     color: #023d0f;
+}
+
+button.message-delete {
+    position: absolute;
+    display: none;
+    top: 0;
 }

@@ -1,24 +1,16 @@
 {
   "name": "project-react",
   "version": "1.0.0",
-  "description": "ReactJS. Базовый курс",
-  "main": "webpack.config.js",
+  "description": "React messenger",
+  "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
     "build:dev": "webpack --mode development",
     "start": "webpack serve --mode development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/strashkov/react-05-04-2021.git"
-  },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/strashkov/react-05-04-2021/issues"
-  },
-  "homepage": "https://github.com/strashkov/react-05-04-2021#readme",
   "devDependencies": {
     "@babel/core": "^7.13.14",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
@@ -39,10 +31,16 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
+    "connected-react-router": "^6.9.1",
+    "history": "^4.10.1",
+    "normalizr": "^3.6.1",
     "react": "^17.0.2",
+    "react-addons-update": "^15.6.3",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-api-middleware": "^3.2.1",
+    "redux-persist": "^6.0.0"
   }
 }

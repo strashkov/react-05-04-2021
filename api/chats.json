@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "title": "Вася Петров",
+    "messageList": [
+      {
+        "id": 1,
+        "text": "Привет!",
+        "sender": "bot"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Петя Васечкин",
+    "messageList": [
+      {
+        "id": 2,
+        "text": "Как дела?",
+        "sender": "bot"
+      }
+    ]
+  }
+]

@@ -1,3 +1,17 @@
+.chat-list {
+    position: relative;
+}
+
+.chat-list:hover .chat-list-delete {
+    display: block;
+}
+
+button.chat-list-delete {
+    position: absolute;
+    display: none;
+    right: 25px;
+}
+
 div.chat-list-avatar {
     margin-right: 12px;
     color: #dfdfdf;
@@ -6,4 +20,32 @@ div.chat-list-avatar {
 
 .chat-list-text {
     color: #5215a3;
+}
+
+.chat-list-unread {
+    width: 10px;
+    height: 10px;
+    font-size: 32px;
+    background-color: #843ee0;
+    box-shadow: 0 0 4px #843ee0;
+    border-radius: 10px;
+    animation: pulse 0.5s linear;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.8, 0.8);
+    }
+
+    50% {
+        transform: scale(1.2, 1.2);
+    }
+
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+.chat-input {
+    width: 100%;
 }
