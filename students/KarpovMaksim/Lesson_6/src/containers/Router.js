@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Router from '../components/Router.jsx';
+import Router from '../components/Router';
 
 const mapStateToProps = (store) => {
     return {

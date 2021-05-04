@@ -1,6 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { push } from 'connected-react-router';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -8,20 +6,15 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
-import { connect } from 'react-redux';
-import { addChat, deleteChat } from '../actions/chatActions';
-import { bindActionCreators } from 'redux';
-import { sendMessage } from '../actions/messageActions';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 
 
-class ChatList extends React.Component {
+export default class ChatList extends React.Component {
   static propTypes = {
     chatId: PropTypes.string,
     chats: PropTypes.object.isRequired,
     addChat: PropTypes.func.isRequired,
-    sendMessage: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
     deleteChat: PropTypes.func.isRequired
 
@@ -59,7 +52,6 @@ class ChatList extends React.Component {
   render() {
     const { chatName } = this.state;
     const { chats } = this.props;
-    //console.log(chats == true)
     if (Object.keys(chats).length === 0) {
       console.log('sdsdsd')
       return  <div className="chat-list-field">
@@ -112,9 +104,3 @@ class ChatList extends React.Component {
   }
 }
 
-const mapStateToProps = (store) => ({
-  chats: store.chatReducer.chats,
-});
-const mapDispatchToProps = dispatch => bindActionCreators({ addChat, sendMessage, push, deleteChat }, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

@@ -5,12 +5,13 @@ import { Link } from 'react-router-dom';
 
 export default class Header extends React.Component {
   static propTypes = {
-    chatId: PropTypes.string,
+    title: PropTypes.string
   }
   render() {
+    const { title } = this.props;
     return <div className="header">
       <Typography style={{marginLeft: '20px', marginTop: '5px', height: '100vh', fontSize: '20px' }}>
-        Чат { this.props.chatId || 'не выбран'}
+        { title }
       </Typography>
       <Link to={'/profile/'}>My profile</Link>
     </div>

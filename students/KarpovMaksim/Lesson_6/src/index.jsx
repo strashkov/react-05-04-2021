@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import Router from './components/Router.jsx';
-import { BrowserRouter } from 'react-router-dom';
+import Router from './containers/Router';
 import { ConnectedRouter } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import initStore, { history } from './utils/store'
