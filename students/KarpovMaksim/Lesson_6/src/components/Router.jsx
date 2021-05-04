@@ -1,5 +1,5 @@
 import React from 'react';
-import {Switch, Route } from 'react-router-dom';
+import {Switch, Route, Redirect } from 'react-router-dom';
 import { CHAT_PATTERN } from '../constants/index.js';
 import MessageField from './MessageField';
 import Layout from './Layout';
@@ -13,7 +13,9 @@ export default class Router extends React.Component {
   render() {
     return (
       <Switch>
-        <Route exact path='/' component={Layout} />
+        <Route exact path='/' render={() => (
+                    <Redirect to='/profile'/>
+                )} />
         <Route exact path={CHAT_PATTERN} render={ (props) => {
           const chatId = props.match.params.id;
           return (

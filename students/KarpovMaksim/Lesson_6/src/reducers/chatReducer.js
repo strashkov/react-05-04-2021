@@ -1,12 +1,23 @@
 import { SEND_MESSAGE } from '../actions/messageActions';
 import { ADD_CHAT,  DELETE_CHAT } from "../actions/chatActions";
-import { Redirect } from 'react-router-dom';
 
 const initialStore = {
     chats: {
-        1: {title: 'Чат 1', messageList: [1,3]},
-        2: {title: 'Чат 2', messageList: [2]},
-        3: {title: 'Чат 3', messageList: [3]},
+        1: {
+            title: 'Чат 1', 
+            messageList: [1],
+            isRemoved: false
+        },
+        2: {
+            title: 'Чат 2',
+            messageList: [2],
+            isRemoved: false
+        },
+        3: {
+            title: 'Чат 3',
+            messageList: [3],
+            isRemoved: false
+        },
     },
     messages: {
         1: {        
@@ -58,7 +69,8 @@ export default function chatReducer(store = initialStore, action) {
                     ...store.chats,
                     [chatId]: {
                         title: action.title,
-                        messageList: [chatMessageListId]
+                        messageList: [chatMessageListId],
+                        isRemoved: false
                     }
                 },
                 messages: {
@@ -68,15 +80,22 @@ export default function chatReducer(store = initialStore, action) {
         }
         case DELETE_CHAT: {
             const {chatId} = action;
-            let newChats = [];
-            let i = 1;
-            (Object.entries(store.chats).filter((value, id) => id != chatId - 1))
-                .map(([key, value]) => {
-                    newChats.push([String(i), value]);
-                    i++;
-            })
+            // let newChats = [];
+            // let i = 1;
+            // console.log(store.chats);
+            // (Object.entries(store.chats).filter((value, id) => id != chatId - 1))
+            //     .map(([key, value]) => {
+            //         newChats.push([String(i), value]);
+            //         i++;
+            // })
             return {
-                chats: Object.fromEntries(newChats),
+                chats: {
+                    ...store.chats,
+                    [chatId]: {
+                        ...store.chats[chatId],
+                        isRemoved: true 
+                    }
+                },
                 messages: {
                     ...store.messages
                 }

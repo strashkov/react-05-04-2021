@@ -31,9 +31,8 @@ export default class ChatList extends React.Component {
   };
 
   hadlerAddChatClick = () => {
-    console.log(this.state.chatName)
     this.props.addChat(this.state.chatName, 1);
-    
+  
     this.setState( {
         chatName: ''
       }
@@ -74,7 +73,8 @@ export default class ChatList extends React.Component {
     return (
       <div className="chat-list-field">
         <List>
-        {Object.entries(chats).map(([id, value]) => (
+        {Object.entries(chats).map(([id, value]) => 
+          !value.isRemoved?(
             <ListItem key={id} button selected={id === this.props.chatId} >
               <div className='chat-list-icon' onClick={ () => this.handleNavigate(`/chat/${id}`) }></div>
               <ListItemText 
@@ -85,7 +85,7 @@ export default class ChatList extends React.Component {
               </IconButton>
             </ListItem>
             
-          ))}
+          ): null)}
           <ListItem button >
             <TextField 
               value={chatName}
