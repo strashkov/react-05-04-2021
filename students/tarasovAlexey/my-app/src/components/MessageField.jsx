@@ -1,18 +1,17 @@
 import React from 'react';
-import Message from './Message.jsx';
+import Message from './Message/Message';
 import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
 import Fab from '@material-ui/core/Fab';
-import './styles/style.css';
 import PropTypes from 'prop-types';
+import '../styles/style.css';
 
 export default class MessageField extends React.Component {
     static propTypes = {
-        messages: PropTypes.arrayOf(PropTypes.shape({
-            sender: PropTypes.string.isRequired,
-            text: PropTypes.string.isRequired,
-        })),
-        onAddMessage: PropTypes.func.isRequired,
+        chatId: PropTypes.string.isRequired,
+        chats: PropTypes.object.isRequired,
+        messages: PropTypes.object.isRequired,
+        sendMessage: PropTypes.func.isRequired
     };
 
     state = {
@@ -29,59 +28,79 @@ export default class MessageField extends React.Component {
         this.messageFieldRef.current.scrollTop =
             this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
     }
-    addMessage = () => {
-        this.props.onAddMessage(this.state.input)
+
+    sendMessage = () => {
+        const {input} = this.state;
+
+        if (!input) {
+            return;
+        }
+
+        const {chatId, messages} = this.props;
+        const messageId = Object.keys(messages).length + 1;
+
+        this.props.sendMessage({
+            messageId,
+            chatId,
+            text: input,
+            sender: 'me'
+        });
+
         this.setState({
             input: ''
         });
+
     };
 
-    handleChangeInput = ({ target: { value } }) => {
+    handleChangeInput = ({target: {value}}) => {
         this.setState({
-            input: value /*event.target.value*/
+            input: value
         })
     };
 
     handleInputKeyUp = (event) => {
         if (event.keyCode === 13) {
-            this.addMessage();
+            this.sendMessage();
         }
     };
 
     render() {
-        // if (!chatId) {
-        //     return <div className='empty-chat'>Выберите чат</div>;
-        // }
-        const messageElements = this.props.messages.map(({text, sender}, index) => (
-            <Message
-                key={index}
-                text={text}
-                sender={sender}/>)
-        );
+        const {chats, messages, chatId} = this.props;
+
+        const messageElements = chats[chatId].messageList.map((messageId) => {
+            const {text, sender} = messages[messageId];
+
+            return (
+                <Message
+                    key={messageId}
+                    text={text}
+                    sender={sender}/>
+            )
+        });
 
         return (
-            <div className="message-field-wrapper">
+            <>
                 <div ref={this.messageFieldRef} className="message-field">
-                    { messageElements }
+                    {messageElements}
                 </div>
                 <div className='actions'>
                     <TextField
-                        style={{ marginRight: '12px' }}
+                        style={{marginRight: '12px'}}
                         placeholder='Введите сообщение'
                         fullWidth
                         value={this.state.input}
                         type="text"
                         autoFocus
                         onKeyUp={this.handleInputKeyUp}
-                        onChange={this.handleChangeInput} />
+                        onChange={this.handleChangeInput}/>
                     <Fab
                         color='primary'
                         disabled={this.state.input === ''}
-                        onClick={this.addMessage}>
-                        <SendIcon />
+                        onClick={this.sendMessage}>
+                        <SendIcon/>
                     </Fab>
                 </div>
-            </div>
+            </>
         )
     }
 }

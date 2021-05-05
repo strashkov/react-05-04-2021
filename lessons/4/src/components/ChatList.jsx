@@ -10,7 +10,7 @@ const chats = [
     {
         id: '1',
         text: 'Chat 1'
-    },
+    }, 
     {
         id: '2',
         text: 'Chat 2'

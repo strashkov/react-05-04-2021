@@ -7,7 +7,6 @@ export const AppState = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
   const addChat = (chat) => {
-    console.log(chat);
     const id = Object.keys(state.chat_list).length;
     const tempObject = state.chat_list;
     const tempMessageObject = state.messages_list;
@@ -40,11 +39,25 @@ export const AppState = ({ children }) => {
 
   }
 
+  const msgCount = () => {
+    const arrayMessages = [];
+    Object.keys(state.messages_list).forEach(item => {
+
+      state.messages_list[item].forEach(msg => {
+        arrayMessages.push(msg);
+      })
+    });
+    return arrayMessages;
+  }
+
   return (
     <AppContext.Provider
       value={{
         chat_list: state.chat_list,
         messages_list: state.messages_list,
+        msgCount: msgCount().filter(item => item.autor === 'User').length,
+        myLastMessages: msgCount().filter(item => item.autor === 'User'),
+        botLastMessages: msgCount().filter(item => item.autor === 'Bot'),
         addChat,
         addMessage
       }}

@@ -14,7 +14,7 @@ export default class ChatList extends React.Component {
     static propTypes = {
         chatId: PropTypes.string,
         chats: PropTypes.object.isRequired,      // isRequired значит обязательный пропс, без которого работать не будет
-        onAddNewChat: PropTypes.func.isRequired
+        addChat: PropTypes.func.isRequired
     };
 
     state = {
@@ -27,12 +27,12 @@ export default class ChatList extends React.Component {
             newChatName: event.target.value
         });
     };
-
+    
     handleClickAddNewChat = () => {
-        this.props.onAddNewChat(this.state.newChatName);
+        this.props.addChat(this.state.newChatName);
         
         this.setState({
-                newChatName: ''
+            newChatName: ''
         });
     }
 

@@ -6,12 +6,20 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js',
+        publicPath: '/'
     },
+    devServer: {
+        historyApiFallback: true
+    },
+    devtool: 'eval-source-map',
     module: {
         rules: [
             {
                 test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components)/,
+                exclude: /node_modules/,
+                resolve: {
+                    extensions: ['.js', '.jsx']
+                },
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -38,9 +46,5 @@ module.exports = {
             template: path.join(__dirname, 'src', 'index.html'),
             filename: "index.html"
         })
-    ],
-    resolve: {
-        modules: [`${__dirname}/src`, 'node_modules'],
-        extensions: ['.js', '.jsx'],
-    },
+    ]
 };

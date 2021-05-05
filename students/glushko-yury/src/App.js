@@ -14,8 +14,8 @@ class App extends React.Component {
         <HeaderContainer />
         <ChatListContainer />
         <Switch>
-          <Route exact path='/profile' component={ProfileContainer} />
           <Route exact path='/' component={EmptyChatContainer} />
+          <Route exact path='/profile' component={ProfileContainer} />
           <Route exact path='/chat/:chatId' component={MessageFieldContainer} />
         </Switch>
       </div>

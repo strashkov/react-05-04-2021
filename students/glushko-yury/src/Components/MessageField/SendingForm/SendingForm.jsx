@@ -3,10 +3,10 @@ import style from './SendingForm.module.scss';
 import Button from './Button/Button';
 import Input from './Input/Input';
 
-const SendingForm = ({ inputValue, updateInputValue, updateMessagesData }) => {
+const SendingForm = ({ inputValue, updateInputValue, messagesDidUpdate }) => {
   const submitHandler = e => {
     e.preventDefault();
-    updateMessagesData('me');
+    messagesDidUpdate('me');
   };
 
   return (
@@ -19,6 +19,8 @@ const SendingForm = ({ inputValue, updateInputValue, updateMessagesData }) => {
 
 SendingForm.propTypes = {
   inputValue: PropTypes.string,
+  updateInputValue: PropTypes.func,
+  messagesDidUpdate: PropTypes.func,
 };
 
 export default SendingForm;

@@ -1,36 +1,64 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Typography from '@material-ui/core/Typography';
-import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
-
-
-
+import ListItemText from '@material-ui/core/ListItemText';
+import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
 
 export default class ChatList extends React.Component {
     static propTypes = {
-        chats: PropTypes.array.isRequired
+        chatId: PropTypes.string,
+        chats: PropTypes.object.isRequired,
+        addChat: PropTypes.func.isRequired
+    };
+
+    state = {
+        chatName: ''
+    };
+
+    handleChatNameChange = (event) => {
+        this.setState({
+            chatName: event.target.value
+        });
+    };
+
+    handleAddChatClick = () => {
+        this.props.addChat(this.state.chatName);
+
+        this.setState({
+            chatName: ''
+        });
     };
 
     render() {
+        const { chatName } = this.state;
         const { chats } = this.props;
-        return (
-            <List className="chat-list">
-                {chats.map(({ id, text }) => (
-                    <Link to={`/chat/${id}`} key={id} className="chat-link">
-                        <ListItem button selected={id === this.props.chatId}>
-                            <ListItemIcon>
-                            </ListItemIcon>
-                            <Typography variant="inherit" noWrap>
-                                {text}
-                            </Typography>
-                        </ListItem>
-                    </Link>
-                ))}
 
-            </List>
+        return (
+            <div className="chat-list">
+                <List>
+                    {Object.entries(chats).map(([id, value]) => (
+                        <Link key={id} to={`/chat/${id}`}>
+                            <ListItem button selected={id === this.props.chatId}>
+                                <ListItemText primary={value.title} />
+                            </ListItem>
+                        </Link>
+                    ))}
+                    <ListItem>
+                        <TextField
+                            value={chatName}
+                            onChange={this.handleChatNameChange} />
+                        <IconButton
+                            disabled={!chatName}
+                            onClick={this.handleAddChatClick}>
+                            <AddIcon />
+                        </IconButton>
+                    </ListItem>
+                </List>
+            </div>
         );
     }
 }

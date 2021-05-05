@@ -1,0 +1,50 @@
+[
+  {
+    "chatId": "1",
+    "chatName": "Chat 1",
+    "messages": [
+      {
+        "id": 1,
+        "author": "bot",
+        "text": "Lorem"
+      },
+      {
+        "id": 2,
+        "author": "bot",
+        "text": "Ipsum"
+      }
+    ]
+  },
+  {
+    "chatId": "2",
+    "chatName": "Chat 2",
+    "messages": [
+      {
+        "id": 1,
+        "author": "bot",
+        "text": "Chat 2"
+      },
+      {
+        "id": 2,
+        "author": "bot",
+        "text": "Ipsum"
+      }
+    ]
+  },
+  {
+    "chatId": "3",
+    "chatName": "Chat 3",
+    "messages": [
+      {
+        "id": 1,
+        "author": "bot",
+        "text": "Chat 3"
+      },
+      {
+        "id": 2,
+        "author": "bot",
+        "text": "Ipsum"
+      }
+    ]
+  }
+]

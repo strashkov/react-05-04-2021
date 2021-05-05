@@ -9,17 +9,19 @@
 .chatList {
   overflow-x: auto;
 }
-.linkWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-right: 13px;
-}
-.link {
-  text-decoration: none;
-  color: inherit;
-  width: 100%;
-}
+
 .form {
   padding: 10px;
+}
+
+.delBtn {
+  opacity: 0.1;
+
+  &:hover {
+    color: #f16d7f;
+    opacity: 1;
+  }
+}
+.loader {
+  margin: auto;
 }

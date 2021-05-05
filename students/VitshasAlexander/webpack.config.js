@@ -7,7 +7,12 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "app.js",
+    publicPath: "/",
   },
+  devServer: {
+    historyApiFallback: true,
+  },
+  devtool: "eval-source-map",
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "src", "index.html"),
@@ -20,7 +25,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx$/,
+        test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
         resolve: {
           extensions: [".js", ".jsx"],
@@ -53,25 +58,7 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: [
-          "style-loader",
-          "css-loader",
-          {
-            loader: "postcss-loader",
-            options: {
-              postcssOptions: {
-                plugins: [
-                  [
-                    "postcss-preset-env",
-                    {
-                      // Options
-                    },
-                  ],
-                ],
-              },
-            },
-          },
-        ],
+        use: ["style-loader", "css-loader"],
       },
     ],
   },
