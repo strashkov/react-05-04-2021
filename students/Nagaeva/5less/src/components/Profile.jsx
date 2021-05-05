@@ -1,28 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 
-
-export default class Profile extends Component {
+export default class Profile extends React.Component {
     static propTypes = {
-        chatId: PropTypes.string,
+        firstName: PropTypes.string.isRequired,
+        lastName: PropTypes.string.isRequired
     };
+
     render() {
+        const { firstName, lastName } = this.props;
+
         return (
-            <Container className="profile">
-                <div className="header-profile" display="flex">
-                    <Typography >
-                        Rick Sanchez
-                    </Typography>
-                    <Typography>
-                        Genius scientist
-                    </Typography>
-                    <Typography>
-                        fuckthewholeworld@gmail.com
-                    </Typography>
-                </div>
-            </Container>
-        )
+            <div className="profile">
+                <p>First Name: { firstName }</p>
+                <p>Last Name: { lastName }</p>
+            </div>
+        );
     }
 }

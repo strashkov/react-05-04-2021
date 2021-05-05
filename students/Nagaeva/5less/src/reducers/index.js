@@ -8,5 +8,5 @@ import profileReducer from "./profileReducer";
 export default combineReducers({
     chatReducer,
     messageReducer,
-    profileReducer,
+    profileReducer
 });

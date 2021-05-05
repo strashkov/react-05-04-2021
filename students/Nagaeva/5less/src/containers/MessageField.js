@@ -7,7 +7,7 @@ import {
 import {
     sendMessage
 } from "../actions/messageActions";
-import MessageFields from "../components/MessageFields.jsx";
+import MessageFields from "../components/MessageField";
 
 const mapStateToProps = (store) => {
     return {
