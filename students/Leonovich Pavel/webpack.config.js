@@ -1,4 +1,4 @@
-const path = require('path');
+const path  = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -13,9 +13,13 @@ module.exports = {
     },
     devtool: 'eval-source-map',
     module: {
-        rules: [{
+        rules: [
+            {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
+                resolve: {
+                    extensions: ['.js', '.jsx']
+                },
                 use: {
                     loader: 'babel-loader',
                     options: {
