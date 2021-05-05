@@ -1,38 +1,47 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
-import { Avatar } from '@material-ui/core';
+import Header from './Header.jsx';
 import '../styles/style.css';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { userInfo } from '../actions/profileAction';
 
-export default class Profile extends React.Component {
+class Profile extends React.Component {
     static propTypes = {
-
+        name: PropTypes.string,
+        lastName: PropTypes.string,
+        middleName: PropTypes.string,
+        country: PropTypes.string,
+        city: PropTypes.string,
+        years: PropTypes.string,
+        userInfo: PropTypes.func.isRequired
     };
     state = {
-        name: '',
-        lastName: '',
-        middleName: '',
-        country: '',
-        city: '',
-        years: '',
-        forSubmitDisable: 'true'
+        forSubmitDisable: true
     };
 
     handleInputChange = (event) => {
-        this.setState((state) => {
-            return {
-                name: event.target.parentNode.children[0].value,
-                lastName: event.target.parentNode.children[1].value,
-                middleName: event.target.parentNode.children[2].value,
-                country: event.target.parentNode.children[3].value,
-                city: event.target.parentNode.children[4].value,
-                years: event.target.parentNode.children[5].value
-            }
-        });
+        this.props.userInfo(
+            event.target.parentNode.children[0].value,
+            event.target.parentNode.children[1].value,
+            event.target.parentNode.children[2].value,
+            event.target.parentNode.children[3].value,
+            event.target.parentNode.children[4].value,
+            event.target.parentNode.children[5].value,
+        );
     };
 
     handleClickSubmit = (event) => {
         event.preventDefault();
+        this.props.userInfo(
+            event.target.parentNode.children[0].value,
+            event.target.parentNode.children[1].value,
+            event.target.parentNode.children[2].value,
+            event.target.parentNode.children[3].value,
+            event.target.parentNode.children[4].value,
+            event.target.parentNode.children[5].value,
+        );
         this.setState({
             forSubmitDisable: this.state.forSubmitDisable ? false : true
 
@@ -41,28 +50,13 @@ export default class Profile extends React.Component {
 
     render() {
 
-        const { name } = this.state;
-        const { lastName } = this.state;
-        const { middleName } = this.state;
-        const { country } = this.state;
-        const { city } = this.state;
-        const { years } = this.state;
         const { forSubmitDisable } = this.state;
+        const { name, lastName, middleName, country, city, years } = this.props;
 
         return <Container className='layout'>
-            <div className='header header-flex'>
-                <Link to={`/`}>
-                    <div>
-                        Открыть чаты
-                       </div>
-                </Link>
-                <div>
-                    Профиль
-            </div>
-            </div>
+            <Header />
             <div className='content'>
                 <div className='card-profile'>
-                    <Avatar src='' className='form-avatar' />
                     <form className='form-flex'>
                         <input type='text'
                             disabled={forSubmitDisable}
@@ -94,28 +88,32 @@ export default class Profile extends React.Component {
                             value={years}
                             onChange={this.handleInputChange}
                             className='card-profile__input card-profile__input-activ' placeholder='Лет' />
-                        <div className="form__radio">
-                            <input
-                                disabled={forSubmitDisable}
-                                id="radio-1" type="radio" name="radio" value="Мужчина" defaultChecked />
-                            <label htmlFor="radio-1">Мужчина</label>
-                            <input
-                                disabled={forSubmitDisable}
-                                id="radio-2" type="radio" name="radio" value="Женщина" />
-                            <label htmlFor="radio-2">Женщина</label>
-                        </div>
                         <input type='submit'
                             preventdefault="true"
                             onClick={this.handleClickSubmit}
                             className='' value='Изменить' />
                     </form>
-                    {/* <input type="file" /> */}
                 </div>
             </div>
-
         </Container >
-
-
     }
-
 }
+
+const mapStateToProps = (store) => { /*Получаем State и передаем его в пропсы*/
+    const { name, lastName, middleName, country, city, years } = store.profileReducer.userInfo;
+    return {
+        name: name,
+        lastName: lastName,
+        middleName: middleName,
+        country: country,
+        city: city,
+        years: years,
+        userInfo: userInfo,
+    };
+};
+
+const mapDispatchToProps = dispatch => bindActionCreators(
+    { userInfo },
+    dispatch); //Передаем экшен , который хотим вызвать
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

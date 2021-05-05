@@ -5,9 +5,15 @@ import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import '../styles/style.css';
+import { sendMessage } from '../actions/messageActions';
+import { connect } from 'react-redux';
 
-export default class MessageField extends React.Component {
+class MessageField extends React.Component {
     static propTypes = {
+        chatId: PropTypes.string.isRequired,
+        chats: PropTypes.object.isRequired,
+        // messages: PropTypes.object.isRequired,
+        // sendMessage: PropTypes.func.isRequired,
         messages: PropTypes.arrayOf(PropTypes.shape({
             sender: PropTypes.string.isRequired,
             text: PropTypes.string.isRequired
@@ -20,11 +26,11 @@ export default class MessageField extends React.Component {
 
     constructor(props) {
         super(props);
-        this.MessageFieldRef = React.createRef();
+        this.messageFieldRef = React.createRef();
     }
 
     componentDidUpdate(prevProps, prevState) {
-        this.MessageFieldRef.current.scrollTop = this.MessageFieldRef.current.scrollHeight - this.MessageFieldRef.current.clientHeight;
+        this.messageFieldRef.current.scrollTop = this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
     }
 
     sendMessage = () => {
@@ -40,7 +46,6 @@ export default class MessageField extends React.Component {
     };
 
     handleChangeInput = ({ target: { value } }) => {
-        console.log(value);
         this.setState({
             input: /*event.target.value*/value
         })
@@ -53,14 +58,14 @@ export default class MessageField extends React.Component {
     }
 
     render() {
-        const messageElements = this.props.messages.map(({ text, sender }, index) => (
+        const messageElements = this.props.messages.map(({ sender, text }, index) => (
             <Message key={index} text={text} sender={sender} />)
         );
 
 
         return (
             <div className="message-field-wrapper">
-                <div ref={this.MessageFieldRef} className="message-field">
+                <div ref={this.messageFieldRef} className="message-field">
                     {messageElements}
                 </div>
                 <div className='actions'>
@@ -82,3 +87,17 @@ export default class MessageField extends React.Component {
         )
     }
 }
+
+const mapStateToProps = (store) => { /*Получаем State и передаем его в пропсы*/
+    return {
+        chats: store.chatReducer.chats,
+        // messages: store.messageReducer.messages,
+    };
+};
+
+// const mapDispatchToProps = dispatch => bindActionCreators(
+//     { sendMessage },
+//     dispatch); //Передаем экшен , который хотим вызвать
+
+
+export default connect(mapStateToProps/*, mapDispatchToProps*/)(MessageField);

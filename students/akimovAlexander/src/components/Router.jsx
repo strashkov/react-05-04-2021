@@ -11,11 +11,10 @@ export default class Router extends React.Component {
                 <Route exact path='/chat/:id' render={(props) =>
                     <Layout chatId={props.match.params.id} />
                 } />
-                <Route exact path='/:profile' render={(props) =>
-                    <Profile urlProfile={props.match.params.profile} />
+                <Route exact path='/profile' render={(props) =>
+                    <Profile title='main page' /> /*urlProfile={props.match.params.profile}*/
                 }
                 />
-
             </Switch>
         )
     }

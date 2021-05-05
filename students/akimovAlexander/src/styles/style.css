@@ -65,6 +65,14 @@ html, body, #app {
     justify-content: space-between;
 }
 
+.header-title-flex {
+    display: flex;
+}
+
+.header-title__name {
+    margin-right: 30px;
+}
+
 .layout {
     height: 100%;
 }

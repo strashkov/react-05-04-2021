@@ -5,94 +5,86 @@ import Header from './Header.jsx';
 import MessageField from './MessageField.jsx';
 import ChatList from './ChatList.jsx';
 import { render } from 'react-dom';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { sendMessage } from '../actions/messageActions';
 
-export default class Layout extends React.Component {
+class Layout extends React.Component {
     static propTypes = {
-        chatId: PropTypes.string
+        chatId: PropTypes.string,
+        chats: PropTypes.object.isRequired,
+        sendMessage: PropTypes.func.isRequired,
+        messages: PropTypes.object.isRequired,
     };
 
     state = {
-        chats: {
-            1: {
-                title: 'Чат № 1',
-                messageList: [1, 2]
-            },
-            2: {
-                title: 'Чат № 2',
-                messageList: [2]
-            }
-        },
-        messages: {
-            1: {
-                sender: 'bot',
-                text: 'Привет'
-            },
-            2: {
-                sender: 'bot',
-                text: 'Как дела?'
-            }
-        }
+        // messages: {
+        //     1: {
+        //         sender: 'bot',
+        //         text: 'Привет'
+        //     },
+        //     2: {
+        //         sender: 'bot',
+        //         text: 'Как дела?'
+        //     }
+        // }
+    };
+    static defaultProps = {
+        chatId: '1'
     };
 
-    handleAddChat = (title) => {
-        this.setState((state) => {
-            const chatId = Object.keys(state.chats).length + 1;
+    // handleAddChat = (title) => {
+    //     this.setState((state) => {
+    //         const chatId = Object.keys(state.chats).length + 1;
 
-            return {
-                chats: {
-                    ...state.chats,
-                    [chatId]: {
-                        title: title,
-                        messageList: []
-                    }
-                },
-            };
-        });
-    };
+    //         return {
+    //             chats: {
+    //                 ...state.chats,
+    //                 [chatId]: {
+    //                     title: title,
+    //                     messageList: []
+    //                 }
+    //             },
+    //         };
+    //     });
+    // };
 
     handleSendMessage = (text, sender = 'me', chatId = this.props.chatId) => {
+        const messageId = Object.keys(this.props.messages).length + 1;
 
-        this.setState((state) => {
-            const messageId = Object.keys(state.messages).length + 1;
+        // this.setState((state) => {
 
-            return {
-                messages: {
-                    ...state.messages,
-                    [messageId]: {
-                        text,
-                        sender
-                    }
-                },
-                chats: {
-                    ...state.chats,
-                    [chatId]: {
-                        ...state.chats[chatId],
-                        messageList: [
-                            ...state.chats[chatId].messageList,
-                            messageId
-                        ]
-                    }
-                },
-            };
-        });
+        //     return {
+        //         messages: {
+        //             ...state.messages,
+        //             [messageId]: {
+        //                 text,
+        //                 sender
+        //             }
+        //         },
+        //     };
+        // });
+
+        this.props.sendMessage(messageId, text, sender, chatId);
+
         if (sender !== 'bot') {
             setTimeout(() => {
                 this.handleSendMessage('Я робот', 'bot', chatId)
             }, 1000);
         }
-
     };
 
     render() {
-        const { chatId } = this.props;
-        const { chats, messages } = this.state;
+        const { chatId, chats } = this.props;
+        const { messages } = this.props;
 
-        const activeMessages = (chatId == undefined) ? [{ sender: 'bot', text: 'Чат не выбран' }] : chats[chatId].messageList.map((messageId) => {
-            return messages[messageId];
-        });
-        // const activeMessages = chats[chatId].messageList.map((messageId) => {
+        // const activeMessages = (chatId == undefined) ? [{ sender: 'bot', text: 'Чат не выбран' }] : chats[chatId].messageList.map((messageId) => {
         //     return messages[messageId];
         // });
+
+        const activeMessages = chats[chatId].messageList.map((messageId) => {
+            return messages[messageId];
+        });
 
         return (
             <Container className='layout'>
@@ -100,14 +92,27 @@ export default class Layout extends React.Component {
                 <div className='content'>
                     <ChatList
                         chatId={chatId}
-                        chats={chats}
-                        onAddChat={this.handleAddChat}
                     />
                     <MessageField
-                        onSendMessage={this.handleSendMessage}
-                        messages={activeMessages} />
+                        chatId={chatId}
+                        messages={activeMessages}
+                        onSendMessage={this.handleSendMessage} />
                 </div>
             </Container>
         );
     }
 }
+
+const mapStateToProps = (store) => { /*Получаем State и передаем его в пропсы*/
+    return {
+        chats: store.chatReducer.chats,
+        messages: store.messageReducer.messages,
+    };
+};
+
+const mapDispatchToProps = dispatch => bindActionCreators(
+    { sendMessage },
+    dispatch); //Передаем экшен , который хотим вызвать
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);
