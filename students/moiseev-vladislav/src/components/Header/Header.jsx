@@ -3,14 +3,14 @@ import PropTypes from "prop-types";
 import Fab from "@material-ui/core/Fab";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { Link } from "react-router-dom";
+import "./style.css";
 
 export default class Header extends React.Component {
   static propTypes = {
-    text: PropTypes.string,
+    title: PropTypes.string,
   };
 
   render() {
-    const { text } = this.props;
     return (
       <div className="header">
         <Link to={`/profile`}>
@@ -18,7 +18,7 @@ export default class Header extends React.Component {
             <AccountCircleIcon fontSize="large" />
           </Fab>
         </Link>
-        <div>{text}</div>
+        <div>{this.props.title}</div>
       </div>
     );
   }

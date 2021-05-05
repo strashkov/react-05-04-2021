@@ -1,14 +1,16 @@
 import React from "react";
-import Message from "./Message.jsx";
+import Message from "../Message/Message";
 import TextField from "@material-ui/core/TextField";
 import Fab from "@material-ui/core/Fab";
 import SendIcon from "@material-ui/icons/Send";
 import PropTypes from "prop-types";
+import "./style.css";
 
 export default class MessageField extends React.Component {
   static propTypes = {
     chatId: PropTypes.string,
-    messages: PropTypes.array,
+    chats: PropTypes.object,
+    messages: PropTypes.object,
     sendMessage: PropTypes.func,
   };
 
@@ -42,18 +44,27 @@ export default class MessageField extends React.Component {
     });
   };
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const { scrollHeight, clientHeight } = this.messageFieldRef.current;
     this.messageFieldRef.current.scrollTop = scrollHeight - clientHeight;
   }
 
   render() {
-    const { messages } = this.props;
+    const { chats, messages, chatId } = this.props;
     const { input } = this.state;
 
-    const messageElements = messages.map(({ sender, text }, index) => (
-      <Message key={index} key={index} sender={sender} text={text} />
-    ));
+    const messageElements = chats[chatId].messageList.map(
+      (messageId, index) => {
+        const message = messages[messageId];
+        return (
+          <Message
+            key={index}
+            sender={message["sender"]}
+            text={message["text"]}
+          />
+        );
+      }
+    );
 
     return (
       <div className="field-wrapper">
