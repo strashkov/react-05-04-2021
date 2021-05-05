@@ -35,7 +35,7 @@ export const initialState = {
         msg: 'Hello, I`am bot!',
         autor: 'Bot'
       }]
-  }
+  },
 };
 
 export default function AppReducer(state, action) {
