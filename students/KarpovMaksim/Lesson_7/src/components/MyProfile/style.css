@@ -1,0 +1,11 @@
+.profile {
+    padding: 20px;
+    background-color: #e2e2e2;
+    display: flex;
+    flex-direction: column;
+    font-size: 25px;
+   
+}
+ .profile p {
+    margin: 0;
+ }
