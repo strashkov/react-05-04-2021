@@ -1,0 +1,83 @@
+html,
+body,
+#app {
+    margin: 0;
+    height: 100%;
+    font-family: Tahoma, sans-serif;
+}
+
+.layout {
+    height: 100%;
+}
+
+.layout-content {
+    display: flex;
+    height: 100%;
+    background-color: #fffefe;
+}
+
+.layout-content-left {
+    width: 30%;
+}
+
+.layout-content-right {
+    width: 70%;
+}
+
+.header {
+    background-color: #526af3;
+    font-size: 18px;
+    line-height: 40px;
+    display: flex;
+}
+
+.header-profile-container {
+    display: flex;
+}
+
+.header-profile {
+    width: 30%;
+    border-right: 1px solid #ccc;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+div.header-profile-avatar {
+    background-color: #fff;
+    color: #526af3;
+    margin-right: 12px;
+}
+
+.header-title {
+    padding: 16px;
+}
+
+.message-field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 20px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    height: 70%;
+}
+
+.actions {
+    width: 100%;
+    display: flex;
+    margin-top: 12px;
+}
+
+.message {
+    background-color: #526af3;
+    padding: 8px 16px;
+    border-radius: 16px;
+    font-size: 16px;
+    margin: 5px;
+    color: #fff;
+}
+
+.message-sender {
+    font-size: 14px;
+    color: #4d4d4d;
+}

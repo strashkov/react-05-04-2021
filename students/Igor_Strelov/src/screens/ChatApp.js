@@ -10,12 +10,7 @@ const { Header, Sider } = Layout;
 export const ChatApp = () => {
 
   const { chat_list, addChat } = useContext(AppContext);
-
-  useEffect(() => {
-    console.log(chat_list);
-  }, [chat_list])
   const addChatHandler = () => {
-    console.log('press');
     const newChatId = Object.keys(chat_list).length;
     addChat({title: `Чат ${newChatId + 1}`})
   }

@@ -1,7 +1,3 @@
-* {
-  outline: none !important;
-}
-
 html,
 body,
 #app {
@@ -9,109 +5,78 @@ body,
   height: 100%;
 }
 
-.message-field {
-  display: flex;
-  flex-direction: column;
-  height: 50vh;
-  width: auto;
-  padding: 20px;
-  overflow-y: scroll;
-  box-sizing: border-box;
-}
-
-.message-field::-webkit-scrollbar {
-  width: 0;
-}
-
 .layout {
   height: 100%;
-  width: 100%;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
 }
 
-.message {
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-size: 20px;
-  margin: 5px;
+.layout-content {
   display: flex;
-  flex-direction: column;
-  width: fit-content;
-  max-width: 500px;
-  word-wrap: break-word;
+  height: 100%;
+  background-color: #fffefe;
 }
 
-.message span {
-  font-size: 14px;
-  margin-top: 5px;
+.layout-content-left {
+  width: 30%;
 }
 
-.actions {
-  max-width: 100%;
-  display: flex;
-  padding: 12px;
+.layout-content-right {
+  width: 70%;
 }
 
 .header {
-  width: 100%;
+  background-color: #526af3;
+  font-size: 18px;
+  line-height: 40px;
+  display: flex;
+}
+
+.header-profile-container {
+  display: flex;
 }
 
 .header-profile {
+  width: 30%;
+  border-right: 1px solid #ccc;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+div.header-profile-avatar {
+  background-color: #fff;
+  color: #526af3;
+  margin-right: 12px;
+}
+
+.header-title {
+  padding: 16px;
+}
+
+.message-field {
   display: flex;
+  flex-direction: column;
   width: 100%;
-  justify-content: space-between;
-  margin-top: 60px;
+  padding: 20px;
+  overflow-y: scroll;
+  box-sizing: border-box;
+  height: 70%;
 }
 
-.contant {
-  max-width: 100%;
+.actions {
   width: 100%;
-  height: 100%;
   display: flex;
+  margin-top: 12px;
 }
 
-.chat-bord {
-  width: 80%;
-}
-
-.chat-list {
-  width: 20%;
-}
-
-.chat-link {
-  text-decoration: none;
-  color: #000;
-}
-
-.login {
-  margin: 0 0 0 auto !important;
-  text-decoration: none;
+.message {
+  background-color: #526af3;
+  padding: 8px 16px;
+  border-radius: 16px;
+  font-size: 16px;
+  margin: 5px;
   color: #fff;
 }
 
-.home {
-  text-decoration: none;
-  color: inherit;
-  font-size: 20px;
-}
-
-.profile {
-  height: 100%;
-}
-
-.place {
-  margin: 0 auto;
-  display: block;
-}
-
-.empty-chat {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.message-sender {
+  font-size: 14px;
+  color: #4d4d4d;
 }

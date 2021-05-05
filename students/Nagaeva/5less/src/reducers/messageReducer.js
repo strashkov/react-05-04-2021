@@ -5,17 +5,17 @@ import {
 const initialStore = {
     messages: {
         1: {
-            sender: "robot",
+            sender: "bot",
             text: "Hi!",
         },
         2: {
-            sender: "robot",
+            sender: "bot",
             text: "I don`t understand",
         }
     },
 };
 
-export default function messageReducer(store = initialStore, action) {
+export default function chatReducer(store = initialStore, action) {
     switch (action.type) {
         case SEND_MESSAGE: {
             const {

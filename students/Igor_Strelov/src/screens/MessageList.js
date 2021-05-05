@@ -26,7 +26,7 @@ export const MessList = () => {
   useEffect(() => {
     if (id &&
         id <= Object.keys(chat_list).length - 1 &&
-        messages_list &&
+        messages_list && messages_list[id].length !== 0 &&
         messages_list[id][messages_list[id].length - 1].autor !== 'Bot' &&
         botIsWriting !== true) {
       setBotIsWriting(true);
@@ -51,13 +51,12 @@ export const MessList = () => {
     setInputValue('');
   }
 
-  console.log(+id <= Object.keys(chat_list).length - 1);
   return (
       id && +id <= Object.keys(chat_list).length - 1 ?
       <ChatContainer>
               <MessageList typingIndicator={botIsWriting && <TypingIndicator content="Бот набирает сообщение" />}>
                 {
-                  messages_list[id].map((item, i) => {
+                  messages_list[id].length !== 0 && messages_list[id].map((item, i) => {
                     if (item.autor === 'Bot') {
                       return <Message model={{
                         message: item.msg,
