@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { setCurrentChat } from '../../redux/chats-reducer';
 import Header from './Header';
 
 const mapStateToProps = state => ({
@@ -7,4 +8,4 @@ const mapStateToProps = state => ({
   userName: state.profile.userName,
 });
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, { setCurrentChat })(Header);
