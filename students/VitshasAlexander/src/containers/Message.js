@@ -1,8 +1,7 @@
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-
-import { sendMessage } from "../actions/messageActions";
-import MessageFields from "../components/MessageFields";
+import { deleteMessage } from "../actions/messageActions";
+import Message from "../components/Message";
 
 const mapStateToProps = (store) => {
   return {
@@ -14,9 +13,9 @@ const mapStateToProps = (store) => {
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
-      sendMessage,
+      deleteMessage,
     },
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(MessageFields);
+export default connect(mapStateToProps, mapDispatchToProps)(Message);
