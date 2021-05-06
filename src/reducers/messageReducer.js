@@ -1,43 +1,99 @@
-import { SEND_MESSAGE, DELETE_MESSAGE } from '../actions/messageActions';
-import { LOAD_CHATS_SUCCESS } from "../actions/chatActions";
+import {
+    LOAD_MESSAGES_REQUEST,
+    LOAD_MESSAGES_SUCCESS,
+    LOAD_MESSAGES_ERROR,
+    SEND_MESSAGE_REQUEST,
+    SEND_MESSAGE_SUCCESS,
+    SEND_MESSAGE_ERROR,
+    DELETE_MESSAGE_REQUEST,
+    DELETE_MESSAGE_SUCCESS,
+    DELETE_MESSAGE_ERROR
+} from '../actions/messageActions';
 
 const initialStore = {
     messages: {},
+    isLoading: false,
+    isAdding: false
 };
 
 export default function chatReducer(store = initialStore, action) {
     switch (action.type) {
-        case SEND_MESSAGE: {
-            const { messageId, text, sender } = action;
+        case LOAD_MESSAGES_REQUEST: {
+            return {
+                ...store,
+                isLoading: true
+            };
+        }
+        case LOAD_MESSAGES_SUCCESS: {
+            const { messages = {} } = action.payload.entities;
 
             return {
+                ...store,
+                messages,
+                isLoading: false
+            };
+        }
+        case LOAD_MESSAGES_ERROR: {
+            return {
+                ...store,
+                isLoading: false
+            };
+        }
+        case SEND_MESSAGE_REQUEST: {
+            return {
+                ...store,
+                isLoading: true
+            };
+        }
+        case SEND_MESSAGE_SUCCESS: {
+            const { messageId, text, sender } = action.payload;
+
+            return {
+                ...store,
                 messages: {
                     ...store.messages,
                     [messageId]: {
-                        text,
-                        sender
+                        text: text,
+                        sender: sender
+
                     }
                 }
             };
         }
-        case DELETE_MESSAGE: {
-            const { messageId } = action;
+        case SEND_MESSAGE_ERROR: {
+            return {
+                ...store,
+                isAdding: false
+            };
+        }
+        case DELETE_MESSAGE_REQUEST: {
+            return {
+                ...store,
+                messages: {
+                    ...store.messages,
+                    [action.payload.id]: {
+                        ...store.messages[action.payload.id],
+                        isDeleting: true
+                    }
+                }
+            };
+        }
+        case DELETE_MESSAGE_SUCCESS: {
+            const { messages } = store;
             // делаем копию сообщений, так как нельзя напрямую изменять store
-            const newMessages = { ...store.messages };
-            delete newMessages[messageId]; // удаляем по идентификатору
+            const newMessages = { ...messages };
+            delete newMessages[action.payload.id]; // удаляем по идентификатору
 
             return {
                 ...store,
                 messages: newMessages
             };
         }
-        case LOAD_CHATS_SUCCESS: {
-            const { messages } = action.payload.entities;
-
+        case DELETE_MESSAGE_ERROR: {
             return {
                 ...store,
-                messages,
-            };
+                isDeleting: false
+            }
         }
         default:
             return store;

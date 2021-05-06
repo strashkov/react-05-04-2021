@@ -14,9 +14,9 @@ export default class Message extends React.Component {
     };
 
     handleDeleteMessage = () => {
-        const { chatId, messageId } = this.props;
+        const { chatId, messageId, deleteMessage } = this.props;
 
-        this.props.deleteMessage({
+        deleteMessage({
             messageId,
             chatId
         })
@@ -38,13 +38,15 @@ export default class Message extends React.Component {
                     }}
                 >
                     <div>{text}</div>
-                    <div className="message-sender">{sender}</div>
-                    <IconButton
-                        style={deleteButtonStyle}
-                        className="message-delete"
-                        onClick={this.handleDeleteMessage}>
-                        <CloseIcon style={{ fontSize: 16 }} />
-                    </IconButton>
+                    <div className="message-sender">
+                        {sender}
+                        <IconButton
+                            style={deleteButtonStyle}
+                            className="message-delete"
+                            onClick={this.handleDeleteMessage}>
+                            <CloseIcon style={{ fontSize: 16 }} />
+                        </IconButton>
+                    </div>
                 </div>
             </div>
         )

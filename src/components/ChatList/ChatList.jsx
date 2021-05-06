@@ -8,17 +8,20 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from "@material-ui/icons/Delete";
 import Avatar from '@material-ui/core/Avatar';
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CircularProgress } from "@material-ui/core";
 import './style.css';
 
 export default class ChatList extends React.Component {
     static propTypes = {
         isLoading: PropTypes.bool,
+        isAdding: PropTypes.bool,
         chatId: PropTypes.string,
-        chats: PropTypes.objectOf(PropTypes.shape({
-            title: PropTypes.string.isRequired,
-            unread: PropTypes.bool,
-        })).isRequired,
+        chats: PropTypes.objectOf(
+            PropTypes.shape({
+                title: PropTypes.string.isRequired,
+                unread: PropTypes.bool,
+                isDeleting: PropTypes.bool,
+            })).isRequired,
         addChat: PropTypes.func.isRequired,
         deleteChat: PropTypes.func.isRequired,
         markChatRead: PropTypes.func.isRequired,
@@ -48,15 +51,23 @@ export default class ChatList extends React.Component {
         });
     };
 
-    handleAddChatClick = () => {
-        this.onAddChat();
-    };
-
     onAddChat = () => {
-        this.props.addChat(this.state.chatName);
+        const { chats, addChat } = this.props;
+        const id = Number(Object.keys(chats).pop()) + 1;
+
+        addChat({
+            id: id || 1,
+            title:
+                this.state.chatName
+        });
+
         this.setState({
             chatName: "",
         });
+    };
+
+    handleAddChatClick = () => {
+        this.onAddChat();
     };
 
     handleChatNameKeyUp = (event) => {
@@ -65,12 +76,12 @@ export default class ChatList extends React.Component {
         }
     };
 
-    handleDeleteChat = (chatId) => {
-        const { chats } = this.props;
-        this.props.deleteChat(
-            chatId,
-            chats[chatId]
-        );
+    handleDeleteClick = (event) => {
+        event.stopPropagation();
+        const { deleteChat } = this.props;
+        const id = event.currentTarget.dataset.id;
+
+        deleteChat(id);
     };
 
     handleLinkClick = (link) => {
@@ -79,7 +90,7 @@ export default class ChatList extends React.Component {
 
     render() {
         const { chatName } = this.state;
-        const { chats, chatId, isLoading } = this.props;
+        const { chats, chatId, isLoading, isAdding } = this.props;
 
         if (isLoading) {
             return <CircularProgress />;
@@ -98,16 +109,21 @@ export default class ChatList extends React.Component {
                             <Avatar className='chat-list-avatar'>
                                 {value.title.split(' ').map(w => w.charAt(0))}
                             </Avatar>
-                            <ListItemText className='chat-list-text' primary={value.title} />
-                            { value.unread && <div className='chat-list-unread' />}
-                            <IconButton
-                                className="chat-list-delete"
-                                // aria-label="delete" 
-                                onClick={this.handleDeleteChat.bind(null, chatId)}>
-                                <DeleteIcon fontSize="small" />
-                            </IconButton>
+                            <ListItemText className='chat-list-text'
+                                primary={value.title} />
+                            { value.unread ? <div className='chat-list-unread' /> :
+                                value.isDeleting ? <CircularProgress size={20} /> : (
+                                    <IconButton
+                                        className="chat-list-delete"
+                                        data-id={id}
+                                        onClick={this.handleDeleteClick}>
+                                        <DeleteIcon fontSize="small" />
+                                    </IconButton>
+                                )
+                            }
                         </ListItem>
                     ))}
+                    {isAdding && <CircularProgress />}
                     <ListItem>
                         <TextField className="chat-input"
                             type="text"

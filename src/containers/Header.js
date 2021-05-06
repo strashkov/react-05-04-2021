@@ -6,7 +6,7 @@ import Header from '../components/Header/Header';
 
 const mapStateToProps = (store) => {
     return {
-        profile: store.profileReducer,
+        profile: store.profileReducer.profile,
         isLoading: store.profileReducer.isLoading,
     };
 };

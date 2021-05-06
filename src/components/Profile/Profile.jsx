@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CircularProgress } from "@material-ui/core";
 import './style.css';
 
 export default class Profile extends React.Component {
@@ -14,7 +14,9 @@ export default class Profile extends React.Component {
     };
 
     componentDidMount() {
-        this.props.loadProfile();
+        const { profile, loadProfile } = this.props;
+
+        loadProfile(profile);
     }
 
     render() {

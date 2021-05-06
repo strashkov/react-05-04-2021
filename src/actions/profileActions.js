@@ -8,7 +8,7 @@ export const LOAD_PROFILE_ERROR = "@@chat/LOAD_PROFILE_ERROR";
 
 export const loadProfile = () => {
     return createAction({
-        endpoint: "/api/profile.json",
+        endpoint: "/api/profile",
         method: "GET",
         types: [
             LOAD_PROFILE_REQUEST,
@@ -16,6 +16,7 @@ export const loadProfile = () => {
                 type: LOAD_PROFILE_SUCCESS,
                 payload: async (action, state, res) => {
                     const json = await res.json();
+
                     return normalize(json, [profile]);
                 },
             },

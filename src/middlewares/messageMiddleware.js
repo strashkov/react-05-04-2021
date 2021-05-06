@@ -1,11 +1,14 @@
-import { SEND_MESSAGE, sendMessage } from "../actions/messageActions";
+import {
+    SEND_MESSAGE_SUCCESS,
+    sendMessage
+} from "../actions/messageActions";
 import { markChatUnread, markChatRead } from '../actions/chatActions';
 import { matchPath } from 'react-router-dom';
 import { CHAT_PATTERN } from '../constants';
 
 export default store => next => (action) => {
     switch (action.type) {
-        case SEND_MESSAGE: {
+        case SEND_MESSAGE_SUCCESS: {
             const { chatId, sender } = action;
 
             if (sender === 'me') {

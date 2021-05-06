@@ -22,10 +22,10 @@ export default function profileReducer(store = initialStore, action) {
             };
         }
         case LOAD_PROFILE_SUCCESS: {
-            const { user } = action.payload.entities;
+            const { profile = {} } = action.payload.entities;
             return {
                 ...store,
-                user,
+                profile,
                 isLoading: false,
             };
         }

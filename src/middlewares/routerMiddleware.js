@@ -1,9 +1,9 @@
 import { goForward, goBack, push } from 'connected-react-router';
-import { SEND_MESSAGE } from '../actions/messageActions';
+import { SEND_MESSAGE_REQUEST } from '../actions/messageActions';
 
 export default store => next => (action) => {
     switch (action.type) {
-        case SEND_MESSAGE:
+        case SEND_MESSAGE_REQUEST:
             if (action.sender === 'me') {
                 if (action.text === 'Вперед') {
                     setTimeout(() => {
