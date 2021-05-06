@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { push } from 'connected-react-router';
 import MessageField from '../components/MessageField'
 
+
 const mapStateToProps = (store) => ({
   messages: store.messageReducer.messages,
   isLoading: store.messageReducer.isLoading,

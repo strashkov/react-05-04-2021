@@ -6,9 +6,6 @@ import SendIcon from '@material-ui/icons/Send';
 import PropTypes from 'prop-types';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-
-
-
 export default class MessageField extends React.Component {
   static propTypes = {
     chatId: PropTypes.string,
@@ -29,22 +26,21 @@ export default class MessageField extends React.Component {
   };
   
   static defaultProps = {
-    chatId: '1',
-    userName: '',
-    text: ''
+    chatId: '1'
   }
   
   componentDidMount() {
     this.props.loadMessages();
   }
   componentDidUpdate() {
-  //   this.messageFieldRef.current.scrollTop = 
-  //   this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
+     //this.messageFieldRef.current.scrollTop = 
+     //this.messageFieldRef.current.scrollHeight - this.messageFieldRef.current.clientHeight;
   }
+
   handleInputKeyUp = (event) => {
     if(this.state.input) {
       if(event.keyCode === 13) {
-        this.sendMessage;
+        this.sendMessage();
       }
     }
   }
@@ -70,19 +66,25 @@ export default class MessageField extends React.Component {
   render() {
     
     const { chats, chatId, messages, isLoading } = this.props;
+   
     if (isLoading) {
       return <CircularProgress />
     }
     if (Object.keys(chats).length === 0) {
      return <div ref={this.messageFieldRef} className='message-field'>Чатов не найдено</div>
     }
-    const messageElements = chats[chatId].messageList.map((messageId) => (
-      <Message 
-        key={messageId} 
-        userName = {messages[messageId].userName} 
-        text={messages[messageId].text} 
-      />));
+    const messageElements = chats[chatId]?.messageList.map((messageId) => {
+      const { text, userName } = messages[messageId];
 
+      return (
+          <Message
+              key={messageId}
+              chatId={chatId}
+              messageId={messageId}
+              text={text}
+              userName={userName} />
+      )
+  });
      
     return <div>
       <div ref={this.messageFieldRef} className='message-field'>

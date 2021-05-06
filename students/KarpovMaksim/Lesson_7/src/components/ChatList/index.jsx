@@ -19,7 +19,8 @@ export default class ChatList extends React.Component {
     addChat: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
     deleteChat: PropTypes.func.isRequired,
-    loadChats: PropTypes.func.isRequired
+    loadChats: PropTypes.func.isRequired,
+    loadMessages: PropTypes.func.isRequired,
 
   };
 
@@ -29,6 +30,7 @@ export default class ChatList extends React.Component {
   
   componentDidMount() {
     this.props.loadChats();
+    this.props.loadMessages();
   }
 
   handlerChatNameChange = (event) => {
@@ -39,7 +41,6 @@ export default class ChatList extends React.Component {
 
   handlerAddChatClick = () => {
     this.props.addChat(this.state.chatName, 1);
-    console.log('click')
     this.setState( {
         chatName: ''
       }
@@ -101,7 +102,7 @@ export default class ChatList extends React.Component {
               placeholder='Enter new chat name' 
               onChange={this.handlerChatNameChange}/>
             <IconButton
-              onClick={this.hadlerAddChatClick}
+              onClick={this.handlerAddChatClick}
               disabled={!chatName}>
               <SendIcon />
             </IconButton>

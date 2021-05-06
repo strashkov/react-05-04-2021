@@ -1,5 +1,6 @@
-import { SEND_MESSAGE } from '../actions/messageActions';
+
 import { 
+    SEND_MESSAGE,
     DELETE_MESSAGES,
     LOAD_MESSAGES_REQUEST,
     LOAD_MESSAGES_SUCCESS,
@@ -18,6 +19,7 @@ export default function messageReducer(store = initialStore, action) {
               messages: {
                   ...store.messages,
                   [messageId]: {
+                      id: messageId,
                       text: text,
                       userName: userName
 

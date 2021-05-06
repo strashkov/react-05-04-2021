@@ -1,3 +1,4 @@
+import { SEND_MESSAGE } from '../actions/messageActions';
 import { 
     ADD_CHAT,
     DELETE_CHAT,
@@ -14,6 +15,21 @@ const initialStore = {
 
 export default function chatReducer(store = initialStore, action) {
     switch (action.type) {
+        case SEND_MESSAGE: {
+            const { chatId, messageId } = action;
+            return {
+                chats: {
+                    ...store.chats,
+                    [chatId]: {
+                        ...store.chats[chatId],
+                        messageList: [
+                            ...store.chats[chatId].messageList,
+                            messageId
+                        ]
+                    }
+                },
+            };
+        }
         case ADD_CHAT: {
             const chatId = Object.keys(store.chats).length + 1;
             const {chatMessageListId} = action;

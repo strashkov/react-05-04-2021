@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import './style.css';
 
 export default class Profile extends React.Component {
     static propTypes = {
-        //firstName: PropTypes.string.isRequired,
-        //lastName: PropTypes.string.isRequired,
         profile: PropTypes.object.isRequired,
         loadProfile: PropTypes.func.isRequired,
         isLoading: PropTypes.bool
