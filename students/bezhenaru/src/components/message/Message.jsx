@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './style.css';
+import './message.css';
 
 export default class Message extends React.Component {
     static propTypes = {
@@ -9,13 +9,17 @@ export default class Message extends React.Component {
     };
 
     render() {
-         return (
-         <div className="message"
-                style={ { alignSelf: this.props.author === 'Robocop' ?
-                        'flex-start' : 'flex-end' } }>
-                <div>{ this.props.text }</div>
-                <div className="message-author">{ this.props.author }</div>
+        return (
+            <div
+                className='message'
+                style={{
+                    alignSelf:
+                        this.props.author !== 'me' ? 'flex-start' : 'flex-end',
+                }}
+            >
+                <div>{this.props.text}</div>
+                <div className='message-author'>{this.props.author}</div>
             </div>
-        )
+        );
     }
-}  
+}

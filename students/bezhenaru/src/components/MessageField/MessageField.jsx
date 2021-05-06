@@ -1,44 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Message from './message/Message.jsx';
-import '../styles/style.css';
+import './messagefield.css';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
+import Message from '../../components/Message/Message';
 
 export default class MessageField extends React.Component {
     static propTypes = {
-        messages: PropTypes.arrayOf(PropTypes.shape({
-            author: PropTypes.string.isRequired,
-            text: PropTypes.string.isRequired
-        })),
-        onSendMessage: PropTypes.func.isRequired
+        chatId: PropTypes.string.isRequired,
+        chats: PropTypes.object.isRequired,
+        messages: PropTypes.object.isRequired,
+        sendMessage: PropTypes.func.isRequired,
     };
-    state = {      
-        input: ''
+    state = {
+        input: '',
     };
 
     constructor(props) {
         super(props);
         this.messageFieldRef = React.createRef();
     }
-    componentDidUpdate() {        
+    componentDidUpdate() {
         this.messageFieldRef.current.scrollTop =
             this.messageFieldRef.current.scrollHeight -
             this.messageFieldRef.current.clientHeight;
     }
 
     sendMessage = () => {
-        this.props.onSendMessage(this.state.input);
+        const { input } = this.state;
 
-        this.setState({           
-            input: ''
+        if (!input) {
+            return;
+        }
+
+        const { chatId, messages } = this.props;
+        const messageId = Object.keys(messages).length + 1;
+
+        this.props.sendMessage({
+            messageId,
+            chatId,
+            text: input,
+            author: 'me',
+        });
+
+        this.setState({
+            input: '',
         });
     };
 
     handleChangeInput = ({ target: { value } }) => {
         this.setState({
-            input: value /*event.target.value*/,
+            input: value,
         });
     };
 
@@ -47,19 +60,26 @@ export default class MessageField extends React.Component {
             this.sendMessage();
         }
     };
+
     render() {
-        const messageElements = this.props.messages.map(({ author, text }, index) => (
-            <Message key={index} text={text} author={author} />
-        ));
- 
+        const { chats, messages, chatId } = this.props;
+
+        const messageElements = chats[chatId].messageList.map((messageId) => {
+            console.log(messages[messageId]);
+            const { text, author } = messages[messageId];
+
+            return <Message key={messageId} text={text} author={author} />;
+        });
+
         return (
-            <div className='message-field-wrapper'>
+            <>
                 <div ref={this.messageFieldRef} className='message-field'>
                     {messageElements}
                 </div>
                 <div className='actions'>
                     <TextField
-                        placeholder='Your message'
+                        style={{ marginRight: '12px' }}
+                        placeholder='Введите сообщение'
                         fullWidth
                         value={this.state.input}
                         type='text'
@@ -75,7 +95,7 @@ export default class MessageField extends React.Component {
                         <SendIcon />
                     </Fab>
                 </div>
-            </div>
+            </>
         );
     }
 }

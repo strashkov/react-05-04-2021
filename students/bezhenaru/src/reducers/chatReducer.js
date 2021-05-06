@@ -1,19 +1,19 @@
 import { SEND_MESSAGE } from '../actions/messageActions';
-import { ADD_CHAT } from "../actions/chatActions";
+import { ADD_CHAT } from '../actions/chatActions';
 
 const initialStore = {
     chats: {
-        1: {title: 'Чат 1', messageList: [1]},
-        2: {title: 'Чат 2', messageList: [2]},
-        3: {title: 'Chat 3', messageList: []},
+        1: { title: 'Иван Петров', messageList: [1, 2] },
+        2: { title: 'Сергей Иванов', messageList: [2] },
+        3: { title: 'Андрей Сидоров', messageList: [] },
     },
 };
-
 
 export default function chatReducer(store = initialStore, action) {
     switch (action.type) {
         case SEND_MESSAGE: {
             const { chatId, messageId } = action;
+            
 
             return {
                 chats: {
@@ -22,9 +22,9 @@ export default function chatReducer(store = initialStore, action) {
                         ...store.chats[chatId],
                         messageList: [
                             ...store.chats[chatId].messageList,
-                            messageId
-                        ]
-                    }
+                            messageId,
+                        ],
+                    },
                 },
             };
         }
@@ -36,8 +36,8 @@ export default function chatReducer(store = initialStore, action) {
                     ...store.chats,
                     [chatId]: {
                         title: action.title,
-                        messageList: []
-                    }
+                        messageList: [],
+                    },
                 },
             };
         }
