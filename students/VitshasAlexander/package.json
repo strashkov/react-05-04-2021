@@ -8,7 +8,10 @@
     "build:dev": "webpack --mode development",
     "build": "webpack --mode production",
     "start": "webpack serve --mode development",
-    "server": "node ./api/index.js"
+    "server": "node ./api/index.js",
+    "prettier": "prettier  —-write src/**/*.js",
+    "lint": "eslint --debug src/",
+    "lint:write": "eslint --debug src/ --fix"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +25,7 @@
     "express": "^4.17.1",
     "history": "^4.10.1",
     "normalizr": "^3.6.1",
+    "prettier": "^2.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.3",
@@ -38,6 +42,8 @@
     "@babel/preset-react": "^7.13.13",
     "autoprefixer": "^10.2.5",
     "babel-loader": "^8.2.2",
+    "eslint": "^7.25.0",
+    "eslint-plugin-react": "^7.23.2",
     "html-webpack-plugin": "^5.3.1",
     "postcss": "^8.2.9",
     "resolve-url-loader": "^3.1.2",
