@@ -29,8 +29,10 @@ export default class Layout extends React.Component {
                 <div className={s.container}>
                     <SideBar />
                     <div className={s.messagerContainer} >
-                        <ChatList 
-                            chatId={chatId} />
+                        {/* <div>
+                            <ChatList
+                                chatId={chatId} />
+                        </div> */}
                         { children }
                         {/* <MessageField 
                             // messages={activeMessages}

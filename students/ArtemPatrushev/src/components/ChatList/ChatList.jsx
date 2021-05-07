@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import s from './ChatList.module.css';
 import PropTypes from 'prop-types';
+import { push } from 'connected-react-router';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -13,12 +13,23 @@ import SendIcon from '@material-ui/icons/Send';
 export default class ChatList extends React.Component {
     static propTypes = {
         chatId: PropTypes.string,
-        chats: PropTypes.object.isRequired,      // isRequired значит обязательный пропс, без которого работать не будет
-        addChat: PropTypes.func.isRequired
+        chats: PropTypes.objectOf(PropTypes.shape({
+            title: PropTypes.string.isRequired,
+            unread: PropTypes.bool,
+        })).isRequired,
+        addChat: PropTypes.func.isRequired,
+        push: PropTypes.func.isRequired,
+        markChatRead: PropTypes.func.isRequired
     };
 
     state = {
         newChatName: ''
+    };
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.chatId !== this.props.chatId) {
+            this.props.markChatRead(this.props.chatId);
+        }
     }
 
     handleEnterChatName = (event) => {
@@ -34,7 +45,11 @@ export default class ChatList extends React.Component {
         this.setState({
             newChatName: ''
         });
-    }
+    };
+
+    handleNavigate = (link) => {
+       this.props.push(link);
+    };
 
     render() {
         const { chats } = this.props;
@@ -55,11 +70,20 @@ export default class ChatList extends React.Component {
                     // to={`/chat/${id}`} --- позволяет перейти по указанной ссылке
                     // selected={id === this.props.chatId} --- фиксируется выбранный чат - выделение цветом
                     
-                    <Link key={id} to={`/chat/${id}`} style={{ textDecoration: 'none', color: 'black' }}>
-                        <ListItem button selected={id === this.props.chatId}>
-                            <ListItemText primary={value.title} />
+                   
+                        // <ListItem button selected={id === this.props.chatId} onClick={() => this.handleNavigate(`/chat/${id}`)} key={id}>
+                        //     <ListItemText primary={value.title} />
+                        // </ListItem>
+
+                        <ListItem
+                            key={id}
+                            button
+                            selected={id === this.props.chatId}
+                            onClick={() => { this.handleNavigate(`/chat/${id}`) }}>
+                            <ListItemText primary={value.title}/>
+                            {value.unread && <div className={s.unreadChat}></div>}     
                         </ListItem>
-                    </Link>
+                    // {value.unread && <div className={s.unreadChat}></div>}  --- если value unread, то дорисовывается div
                 ))}
                 <ListItem button>
                     <TextField

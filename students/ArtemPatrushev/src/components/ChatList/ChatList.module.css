@@ -11,3 +11,10 @@
     border-top-right-radius: 20px;
     border-bottom: 1px solid #000;
 }
+
+.unreadChat {
+    width: 5px;
+    height: 5px;
+    background: cornflowerblue;
+    border-radius: 50%;
+}
