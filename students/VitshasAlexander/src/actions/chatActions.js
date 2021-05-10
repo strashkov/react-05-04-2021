@@ -20,7 +20,7 @@ export const DELETE_CHAT_REQUEST = "@@chat/DELETE_CHAT_REQUEST";
 export const DELETE_CHAT_SUCCESS = "@@chat/DELETE_CHAT_SUCCESS";
 export const DELETE_CHAT_ERROR = "@@chat/DELETE_CHAT_ERROR";
 
-export const addChat = (title) => {
+export const addChat = ({ id, title }) => {
   return createAction({
     endpoint: "/api/chats",
     method: "POST",
@@ -39,12 +39,22 @@ export const addChat = (title) => {
   });
 };
 
-export const deleteChat = (chatId, messageList) => {
-  return {
-    type: DELETE_CHAT,
-    chatId,
-    messageList,
-  };
+export const deleteChat = (id) => {
+  return createAction({
+    endpoint: `/api/chats/${id}`,
+    method: "DELETE",
+    types: [
+      {
+        type: DELETE_CHAT_REQUEST,
+        payload: { id },
+      },
+      {
+        type: DELETE_CHAT_SUCCESS,
+        payload: { id },
+      },
+      DELETE_CHAT_ERROR,
+    ],
+  });
 };
 
 export const markChatUnread = (chatId) => {
@@ -62,7 +72,7 @@ export const markChatRead = (chatId) => {
 };
 export const loadChats = () => {
   return createAction({
-    endpoint: "/api/chats.json",
+    endpoint: "/api/chats",
     method: "GET",
     types: [
       LOAD_CHATS_REQUEST,

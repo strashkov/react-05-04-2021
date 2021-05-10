@@ -5,7 +5,7 @@ import {
 } from "../actions/profileActions";
 
 const initialStore = {
-  user: {},
+  users: {},
   isLoading: false,
 };
 
@@ -24,11 +24,11 @@ export default function profileReducer(store = initialStore, action) {
       };
     }
     case LOAD_PROFILE_SUCCESS: {
-      const { user } = action.payload.entities;
+      const { users } = action.payload.entities;
       //debugger;
       return {
         ...store,
-        user,
+        users,
         isLoading: false,
       };
     }

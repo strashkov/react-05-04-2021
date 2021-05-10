@@ -1,58 +1,61 @@
-const path = require('path');
-const { getJson, setJson } = require('./utils');
-const messagesFile = path.resolve(__dirname, 'data', 'messages.json');
+const path = require("path");
+const { getJson, setJson } = require("./utils");
+const messagesFile = path.resolve(__dirname, "data", "messages.json");
 
 module.exports = (app) => {
-    const getMessages = () => {
-        return getJson(messagesFile);
-    };
+  const getMessages = () => {
+    return getJson(messagesFile);
+  };
 
-    const setMessages = (chats) => {
-        return setJson(messagesFile, chats);
-    };
+  const setMessages = (chats) => {
+    return setJson(messagesFile, chats);
+  };
 
-    app.get('/messages', async (req, res) => {
-        const messages = await getMessages();
-        const queryChatId = Number(req.query.chatId);
+  app.get("/messages", async (req, res) => {
+    const messages = await getMessages();
+    const queryChatId = Number(req.query.chatId);
 
-        if (!queryChatId) {
-            return res.json(messages);
-        }
+    if (!queryChatId) {
+      return res.json(messages);
+    }
 
-        res.json(messages.filter(({ chatId }) => chatId === queryChatId));
+    res.json(messages.filter(({ chatId }) => chatId === queryChatId));
+  });
+
+  app.post("/messages", async (req, res) => {
+    const messages = await getMessages();
+    const newMessage = req.body;
+
+    newMessage.id = (messages[messages.length - 1]?.id ?? 0) + 1;
+    newMessage.chatId = Number(newMessage.chatId);
+
+    messages.push(newMessage);
+    await setMessages(messages);
+
+    res.json({
+      messageId: newMessage.id,
     });
+  });
 
-    app.post('/messages', async (req, res) => {
-        const messages = await getMessages();
-        const newMessage = req.body;
+  app.delete("/messages/:id", async (req, res) => {
+    const messages = await getMessages();
+    const messageId = Number(req.params.id);
 
-        if (messages.some(({ id }) => id === newMessage.id)) {
-            res.status(400).send(`Сообщение с идентификатором ${newMessage.id} уже существует`);
-        }
+    await setMessages(messages.filter(({ id }) => id !== messageId));
 
-        messages.push(newMessage);
-        await setMessages(messages);
+    res.status(204).end();
+  });
 
-        res.status(204).end();
-    });
+  app.delete("/messages", async (req, res) => {
+    const messages = await getMessages();
+    const queryChatId = Number(req.query.chatId);
 
-    app.delete('/messages/:id', async (req, res) => {
-        const messages = await getMessages();
-        const messageId = Number(req.params.id);
+    if (queryChatId) {
+      await setMessages(
+        messages.filter(({ chatId }) => chatId !== queryChatId)
+      );
+    }
 
-        setMessages(messages.filter(({ id }) => id !== messageId));
-
-        res.status(204).end();
-    });
-
-    app.delete('/messages', async (req, res) => {
-        const messages = await getMessages();
-        const queryChatId = Number(req.query.chatId);
-
-        if (queryChatId) {
-            setMessages(messages.filter(({ chatId }) => chatId !== queryChatId));
-        }
-
-        res.status(204).end();
-    });
+    res.status(204).end();
+  });
 };
