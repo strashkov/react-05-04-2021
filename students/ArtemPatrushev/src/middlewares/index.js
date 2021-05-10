@@ -1,8 +1,8 @@
 import messageMiddleware from './messageMiddleware.js';
-
-console.log(messageMiddleware);
+import {createMiddleware} from 'redux-api-middleware'; 
 
 export default [
-    messageMiddleware,
+    createMiddleware(),
+    messageMiddleware
 ];
 

@@ -90,8 +90,9 @@ export default class MessageField extends React.Component {
         //     return <div className={s.emptyChat}>Check a chat</div>;  // если данное условие подходит, то рендерится эта разметка
         // }
 
-        const messageElements = chats[chatId].messageList.map((messageId) => {
+        const messageElements = chats[chatId]?.messageList.map((messageId) => {
             const { text, author } = messages[messageId];
+
             return (
                 <Message
                     key={messageId}

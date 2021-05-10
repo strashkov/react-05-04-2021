@@ -8,23 +8,32 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
 
 
 export default class ChatList extends React.Component {
     static propTypes = {
+        isLoading: PropTypes.bool,
         chatId: PropTypes.string,
         chats: PropTypes.objectOf(PropTypes.shape({
             title: PropTypes.string.isRequired,
             unread: PropTypes.bool,
         })).isRequired,
         addChat: PropTypes.func.isRequired,
-        push: PropTypes.func.isRequired,
-        markChatRead: PropTypes.func.isRequired
+        markChatRead: PropTypes.func.isRequired,
+        loadChats: PropTypes.func.isRequired,
+        push: PropTypes.func.isRequired
     };
 
     state = {
         newChatName: ''
     };
+
+    componentDidMount() {
+        this.props.loadChats();
+    }
 
     componentDidUpdate(prevProps) {
         if (prevProps.chatId !== this.props.chatId) {
@@ -45,14 +54,25 @@ export default class ChatList extends React.Component {
         this.setState({
             newChatName: ''
         });
+        console.log(this.state.newChatName);
     };
+
+    deleteChatClick = () => {
+        this.props.deleteChat(this.props.chatId);
+    }
 
     handleNavigate = (link) => {
        this.props.push(link);
     };
 
     render() {
-        const { chats } = this.props;
+
+        const { chatName } = this.state;
+        const { chats, isLoading } = this.props;
+
+        if (isLoading) {
+            return <CircularProgress />;
+        }
 
         return (
             <List
@@ -74,24 +94,30 @@ export default class ChatList extends React.Component {
                         // <ListItem button selected={id === this.props.chatId} onClick={() => this.handleNavigate(`/chat/${id}`)} key={id}>
                         //     <ListItemText primary={value.title} />
                         // </ListItem>
-
-                        <ListItem
-                            key={id}
-                            button
-                            selected={id === this.props.chatId}
-                            onClick={() => { this.handleNavigate(`/chat/${id}`) }}>
-                            <ListItemText primary={value.title}/>
-                            {value.unread && <div className={s.unreadChat}></div>}     
-                        </ListItem>
+                        <div className={s.chatItem}>
+                            <ListItem
+                                key={id}
+                                button
+                                selected={id === this.props.chatId}
+                                onClick={() => { this.handleNavigate(`/chat/${id}`) }}>
+                                <ListItemText primary={value.title} />
+                                {value.unread && <div className={s.unreadChat}></div>}
+                            </ListItem>
+                            <IconButton className={s.iconButton} aria-label="delete"
+                                onClick={this.deleteChatClick}>
+                                <DeleteIcon style={{width: '17px'}} />
+                            </IconButton>
+                        </div>
                     // {value.unread && <div className={s.unreadChat}></div>}  --- если value unread, то дорисовывается div
                 ))}
                 <ListItem button>
                     <TextField
-                        value={this.state.newChatName}
+                        className={s.newChatNameInput}
+                        value={chatName}
                         placeholder='Enter the name of the chat'
                         onChange={this.handleEnterChatName} />
                     <SendIcon 
-                        disabled={!this.state.newChatName}
+                        disabled={!chatName}
                         onClick={this.handleClickAddNewChat}/>
                 </ListItem>
             </List>

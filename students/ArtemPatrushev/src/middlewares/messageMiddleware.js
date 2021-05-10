@@ -7,16 +7,17 @@ export default store => next => (action) => {
     switch (action.type) {
         case SEND_MESSAGE:
             const {chatId, author} = action;
+            
             if (action.author === 'me') {
                 setTimeout(() => {
                     const state = store.getState();
                     const { messages } = state.messageReducer;
                     const { chats } = state.chatReducer;
-                    const { firstName } = state.profileReducer;
+                    const { firstName } = state.profileReducer.profile;
                     const lastMessageId = Number(Object.keys(messages).pop());
                     const messageId = lastMessageId + 1;
                     const author = chats[chatId].title;
-
+                    debugger;
                     const botAction = sendMessage({
                         messageId,
                         chatId,

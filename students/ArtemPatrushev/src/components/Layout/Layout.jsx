@@ -8,14 +8,13 @@ import SideBar from '../sideBar/sideBar.jsx';
 export default class Layout extends React.Component {
     static propTypes = {
         title: PropTypes.string.isRequired,
-        chatId: PropTypes.string,
         children: PropTypes.node.isRequired
     };
 
     render() {
 
-        const { chatId, children, title } = this.props;
-        console.log(title);
+        const { children, title } = this.props;
+        console.log(title)
         // const { chatId, chats } = this.props;
         // const { messages } = this.props;
 

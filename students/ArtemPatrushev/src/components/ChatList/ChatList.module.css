@@ -1,5 +1,5 @@
 .root {
-    width: 150px;
+    width: 200px;
     max-width: 360px;
     background-color: #fff;
     border-radius: 20px;
@@ -17,4 +17,19 @@
     height: 5px;
     background: cornflowerblue;
     border-radius: 50%;
+}
+
+.chatItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.iconButton {
+    width: 25px;
+    height: 25px;
+}
+
+.newChatNameInput ::placeholder {
+    font-size: 10px;
 }
