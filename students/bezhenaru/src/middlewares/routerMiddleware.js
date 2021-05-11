@@ -4,7 +4,7 @@ import { SEND_MESSAGE } from '../actions/messageActions';
 export default store => next => (action) => {
     switch (action.type) {
         case SEND_MESSAGE:
-            if (action.author === 'me') {
+            if (action.author === 'я') {
                 if (action.text === 'Вперед') {
                     setTimeout(() => {
                         store.dispatch(goForward());

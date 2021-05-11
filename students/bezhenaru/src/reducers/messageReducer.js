@@ -1,16 +1,10 @@
-import { SEND_MESSAGE } from '../actions/messageActions';
+import { SEND_MESSAGE ,
+            DELETE_MESSAGE} from '../actions/messageActions';
+
+import { LOAD_CHATS_SUCCESS } from '../actions/chatActions';
 
 const initialStore = {
-    messages: {
-        1: {
-            author: 'Robot',
-            text: 'Привет',
-        },
-        2: {
-            author: 'Robot',
-            text: 'dsadasd',
-        },
-    },
+    messages: {}
 };
 
 export default function chatReducer(store = initialStore, action) {
@@ -26,6 +20,26 @@ export default function chatReducer(store = initialStore, action) {
                         author,
                     },
                 },
+            };
+        } 
+        case DELETE_MESSAGE: {
+            console.log(1);
+            const { messageId } = action;
+            // делаем копию сообщений, так как нельзя напрямую изменять store
+            const newMessages = { ...store.messages };
+            delete newMessages[messageId]; // удаляем по идентификатору
+
+            return {
+                ...store,
+                messages: newMessages
+            };
+        }
+        case LOAD_CHATS_SUCCESS: {
+            const { messages } = action.payload.entities;
+
+            return { 
+                ...store,
+                messages
             };
         }
         default:

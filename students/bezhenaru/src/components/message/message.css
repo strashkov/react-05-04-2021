@@ -12,3 +12,18 @@
     color: #aaaaaa;
 }
 
+
+button.message-delete {
+    position: absolute;
+    display: none;
+    top: 0;
+}
+
+.message-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.message-wrapper:hover .message-delete {
+    display: block;
+}

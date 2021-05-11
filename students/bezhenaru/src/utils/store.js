@@ -23,7 +23,7 @@ function initStore() {
         persistReducer(persistConfig, initReducers(history)),
         initialStore,
         compose (
-            applyMiddleware(routerMiddleware(history), ...middlewares)
+            applyMiddleware(routerMiddleware(history), ...middlewares),
         ),
     );
 

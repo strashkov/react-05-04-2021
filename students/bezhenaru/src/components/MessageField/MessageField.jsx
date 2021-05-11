@@ -4,14 +4,14 @@ import './messagefield.css';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
-import Message from '../../components/Message/Message';
+import Message from '../../containers/Message';
 
 export default class MessageField extends React.Component {
     static propTypes = {
         chatId: PropTypes.string.isRequired,
         chats: PropTypes.object.isRequired,
         messages: PropTypes.object.isRequired,
-        sendMessage: PropTypes.func.isRequired,
+        sendMessage: PropTypes.func.isRequired
     };
     state = {
         input: '',
@@ -35,20 +35,22 @@ export default class MessageField extends React.Component {
         }
 
         const { chatId, messages } = this.props;
-        const messageId = Object.keys(messages).length + 1;
+        const lastMessageId = Number(Object.keys(messages).pop());
+        const messageId = lastMessageId + 1;
 
         this.props.sendMessage({
             messageId,
             chatId,
             text: input,
-            author: 'me',
+            author: 'я',
         });
 
         this.setState({
             input: '',
         });
     };
-
+    
+    
     handleChangeInput = ({ target: { value } }) => {
         this.setState({
             input: value,
@@ -63,12 +65,17 @@ export default class MessageField extends React.Component {
 
     render() {
         const { chats, messages, chatId } = this.props;
-
-        const messageElements = chats[chatId].messageList.map((messageId) => {
-            console.log(messages[messageId]);
+        const messageElements = chats[chatId]?.messageList.map((messageId) => {
             const { text, author } = messages[messageId];
 
-            return <Message key={messageId} text={text} author={author} />;
+            return (
+                <Message
+                    key={messageId}
+                    chatId={chatId}
+                    messageId={messageId}
+                    text={text}
+                    author={author} />
+            )
         });
 
         return (
