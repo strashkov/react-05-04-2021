@@ -9,6 +9,8 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 
 export default class ChatList extends React.Component {
     static propTypes = {
@@ -16,12 +18,15 @@ export default class ChatList extends React.Component {
         chats: PropTypes.objectOf(PropTypes.shape({
             title: PropTypes.string.isRequired,
             unread: PropTypes.bool,
+            isDeleting: PropTypes.bool
         })).isRequired,
         addChat: PropTypes.func.isRequired,
         push: PropTypes.func.isRequired,
         loadChats: PropTypes.func.isRequired,
         isLoading: PropTypes.bool,
-        markChatRead: PropTypes.func.isRequired        
+        isAdding: PropTypes.bool,
+        markChatRead: PropTypes.func.isRequired,
+        deleteChat: PropTypes.func.isRequired
     };
 
     state = {
@@ -46,8 +51,14 @@ export default class ChatList extends React.Component {
     };
 
     handleAddChatClick = () => {
-        this.props.addChat(this.state.chatName);
+        const { chats, addChat } = this.props;
 
+        const id = Number(Object.keys(chats).pop()) + 1;
+
+        addChat({
+            id: id || 1,
+            title: this.state.chatName
+        });
         this.setState({
             chatName: ''
         });
@@ -57,40 +68,60 @@ export default class ChatList extends React.Component {
         this.props.push(link);
     };
 
+    handleDeleteClick = (event) => {
+        event.stopPropagation();
+        const { deleteChat } = this.props;
+        const id = event.currentTarget.dataset.id;
+
+        deleteChat(id);
+    };
+
     render() {
         const { chatName } = this.state;
-        const { chats, isLoading } = this.props;
+        const { chats, isLoading, isAdding } = this.props;
         
         if (isLoading) {
             return <CircularProgress />;
         }
         return (
             <div className="chat-list">
-            <List>
-                {Object.entries(chats).map(([id, value]) => (
-                    <ListItem
-                        key={id}
-                        button
-                        selected={id === this.props.chatId}
-                        onClick={() => { this.handleLinkClick(`/chat/${id}`) }}>
-                        <Avatar className='chat-list-avatar'>
-                            {value.title.split(' ').map(w => w.charAt(0))}
-                        </Avatar>
-                        <ListItemText primary={value.title}/>
+                <List>
+                    {Object.entries(chats).map(([id, value]) => (
+                        <ListItem
+                            key={id}
+                            button
+                            selected={id === this.props.chatId}
+                            className='chat-list-item'
+                            onClick={() => { this.handleLinkClick(`/chat/${id}`) }}>
+                            <Avatar className='chat-list-avatar'>
+                                {value.title.split(' ').map(w => w.charAt(0))}
+                            </Avatar>
+                            <ListItemText primary={value.title}/>
+                            { value.unread ? <div className='chat-list-unread' /> :
+                                value.isDeleting ? <CircularProgress size={20} /> : (
+                                    <IconButton
+                                        data-id={id}
+                                        className='chat-list-delete'
+                                        onClick={this.handleDeleteClick}>
+                                        <DeleteIcon/>
+                                    </IconButton>
+                                )
+                            }
+                        </ListItem>
+                    ))}
+                    { isAdding && <CircularProgress /> }
+                    <ListItem>
+                        <TextField
+                            value={chatName}
+                            onChange={this.handleChatNameChange} />
+                        <IconButton
+                            disabled={!chatName}
+                            onClick={this.handleAddChatClick}>
+                            <AddIcon />
+                        </IconButton>
                     </ListItem>
-                ))}
-                <ListItem>
-                    <TextField
-                        value={chatName}
-                        onChange={this.handleChatNameChange} />
-                    <IconButton
-                        disabled={!chatName}
-                        onClick={this.handleAddChatClick}>
-                        <AddIcon />
-                    </IconButton>
-                </ListItem>
-            </List>
-        </div>
+                </List>
+            </div>
         );
     }
 }

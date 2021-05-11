@@ -1,26 +1,26 @@
-import { SEND_MESSAGE, 
-            DELETE_MESSAGE } from '../actions/messageActions';
-import { ADD_CHAT,
-            MARK_CHAT_UNREAD,
-            MARK_CHAT_READ,
-            LOAD_CHATS_REQUEST,
-            LOAD_CHATS_SUCCESS,
-            LOAD_CHATS_ERROR } from '../actions/chatActions';
+import { DELETE_MESSAGE, SEND_MESSAGE } from '../actions/messageActions';
+import {
+    DELETE_CHAT_REQUEST,
+    DELETE_CHAT_SUCCESS,
+    ADD_CHAT_REQUEST,
+    ADD_CHAT_SUCCESS,
+    MARK_CHAT_UNREAD,
+    MARK_CHAT_READ,
+    LOAD_CHATS_REQUEST,
+    LOAD_CHATS_SUCCESS,
+    LOAD_CHATS_ERROR
+} from '../actions/chatActions';
 
 const initialStore = {
-    chats: {
-        // 1: { title: 'Иван Петров', messageList: [1, 2] },
-        // 2: { title: 'Сергей Иванов', messageList: [2] },
-        // 3: { title: 'Андрей Сидоров', messageList: [] },
-    },
-    isLoading: false
+    chats: {},
+    isLoading: false,
+    isAdding: false
 };
 
 export default function chatReducer(store = initialStore, action) {
     switch (action.type) {
         case SEND_MESSAGE: {
             const { chatId, messageId } = action;
-            
 
             return {
                 chats: {
@@ -29,22 +29,53 @@ export default function chatReducer(store = initialStore, action) {
                         ...store.chats[chatId],
                         messageList: [
                             ...store.chats[chatId].messageList,
-                            messageId,
-                        ],
-                    },
+                            messageId
+                        ]
+                    }
                 },
             };
         }
-        case ADD_CHAT: {
-            const chatId = Object.keys(store.chats).length + 1;
-
+        case DELETE_CHAT_REQUEST: {
             return {
+                ...store,
                 chats: {
                     ...store.chats,
-                    [chatId]: {
-                        title: action.title,
-                        messageList: [],
-                    },
+                    [action.payload.id]: {
+                        ...store.chats[action.payload.id],
+                        isDeleting: true
+                    }
+                }
+            };
+        }
+        case DELETE_CHAT_SUCCESS: {
+            const { chats } = store;
+            const newChats = { ...chats };
+
+            delete newChats[action.payload.id];
+
+            return {
+                ...store,
+                chats: newChats
+            };
+        }
+        case ADD_CHAT_REQUEST: {
+            return {
+                ...store,
+                isAdding: true
+            };
+        }
+        case ADD_CHAT_SUCCESS: {
+            const { id, title } = action.payload;
+
+            return {
+                ...store,
+                isAdding: false,
+                chats: {
+                    ...store.chats,
+                    [id]: {
+                        title: title,
+                        messageList: []
+                    }
                 },
             };
         }
@@ -77,7 +108,6 @@ export default function chatReducer(store = initialStore, action) {
             }
         }
         case DELETE_MESSAGE: {
-            console.log("delete message from reducer")
             const { messageId, chatId } = action;
             const messageList = store.chats[chatId].messageList;
             const newMessageList = messageList.filter((mId) => mId !== messageId);
@@ -92,7 +122,7 @@ export default function chatReducer(store = initialStore, action) {
                     }
                 }
             }
-        } 
+        }
         case LOAD_CHATS_REQUEST: {
             return {
                 ...store,
@@ -106,7 +136,11 @@ export default function chatReducer(store = initialStore, action) {
             };
         }
         case LOAD_CHATS_SUCCESS: {
-            const { chats } = action.payload.entities;
+            const { chats = {} } = action.payload.entities;
+
+            Object.keys(chats).forEach((id) => {
+                chats[id].messageList = [];
+            });
 
             return {
                 ...store,
