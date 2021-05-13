@@ -1,25 +1,46 @@
-import { SEND_MESSAGE, sendMessage } from '../actions/messageActions';
-import { markChatUnread, markChatRead } from '../actions/chatActions';
+import { deleteMessagesByChat, SEND_MESSAGE_SUCCESS, sendMessage } from '../actions/messageActions';
+import { markChatUnread, markChatRead, DELETE_CHAT_SUCCESS } from '../actions/chatActions';
 import { matchPath } from 'react-router-dom';
 import { CHAT_PATTERN } from '../constants';
+import { push } from 'connected-react-router';
+
 
 export default (store) => (next) => (action) => {
     switch (action.type) {
-        case SEND_MESSAGE:{
-            console.log(action)
-          const { chatId, author } = action;
+        case DELETE_CHAT_SUCCESS: {
+            const { id } = action.payload;
+            const { pathname } = store.getState().router.location;
+            const { params } = matchPath(pathname, {
+                path: CHAT_PATTERN,
+                exact: true,
+            });
+            const currentChatId = params.id;
+
+            if (id === currentChatId) {
+                store.dispatch(push('/profile'));
+            }
+
+            store.dispatch(deleteMessagesByChat(id));
+            break;
+        }
+        case SEND_MESSAGE_SUCCESS:{
+          const { chatId, author } = action.payload;
             if (author === 'я') {
                 setTimeout(() => {                   
                     const state = store.getState();
-                    const { messages } = state.messageReducer;
                     const { chats } = state.chatReducer;
                     const { firstName } = state.profileReducer;
-                    const lastMessageId = Number(Object.keys(messages).pop());
-                    const messageId = lastMessageId + 1;
+                    const { pathname } = store.getState().router.location;
+                    const { params } = matchPath(pathname, {
+                        path: CHAT_PATTERN,
+                        exact: true,
+                    });
+                    const currentChatId = params.id;
                     const author = chats[chatId].title;
 
                     const botAction = sendMessage({
-                        messageId,
+                         isRobot: true,
+                        currentChatId,
                         chatId,
                         text: `Привет, ${firstName}! Я ${author}.`,
                         author: author,
@@ -43,7 +64,7 @@ export default (store) => (next) => (action) => {
                      }
                 }, 1000);
             }
+        }    
     }
-}
     return next(action);
 }

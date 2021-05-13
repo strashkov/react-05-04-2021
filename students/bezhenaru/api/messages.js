@@ -26,21 +26,22 @@ module.exports = (app) => {
         const messages = await getMessages();
         const newMessage = req.body;
 
-        if (messages.some(({ id }) => id === newMessage.id)) {
-            res.status(400).send(`Сообщение с идентификатором ${newMessage.id} уже существует`);
-        }
+        newMessage.id = (messages[messages.length - 1]?.id ?? 0) + 1;
+        newMessage.chatId = Number(newMessage.chatId);
 
         messages.push(newMessage);
         await setMessages(messages);
 
-        res.status(204).end();
+        res.json({
+            messageId: newMessage.id
+        });
     });
 
     app.delete('/messages/:id', async (req, res) => {
         const messages = await getMessages();
         const messageId = Number(req.params.id);
 
-        setMessages(messages.filter(({ id }) => id !== messageId));
+        await setMessages(messages.filter(({ id }) => id !== messageId));
 
         res.status(204).end();
     });
@@ -50,7 +51,7 @@ module.exports = (app) => {
         const queryChatId = Number(req.query.chatId);
 
         if (queryChatId) {
-            setMessages(messages.filter(({ chatId }) => chatId !== queryChatId));
+            await setMessages(messages.filter(({ chatId }) => chatId !== queryChatId));
         }
 
         res.status(204).end();

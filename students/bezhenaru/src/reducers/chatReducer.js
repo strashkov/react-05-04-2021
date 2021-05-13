@@ -1,4 +1,3 @@
-import { DELETE_MESSAGE, SEND_MESSAGE } from '../actions/messageActions';
 import {
     DELETE_CHAT_REQUEST,
     DELETE_CHAT_SUCCESS,
@@ -13,28 +12,13 @@ import {
 
 const initialStore = {
     chats: {},
+    isLoaded: false,
     isLoading: false,
     isAdding: false
 };
 
 export default function chatReducer(store = initialStore, action) {
     switch (action.type) {
-        case SEND_MESSAGE: {
-            const { chatId, messageId } = action;
-
-            return {
-                chats: {
-                    ...store.chats,
-                    [chatId]: {
-                        ...store.chats[chatId],
-                        messageList: [
-                            ...store.chats[chatId].messageList,
-                            messageId
-                        ]
-                    }
-                },
-            };
-        }
         case DELETE_CHAT_REQUEST: {
             return {
                 ...store,
@@ -73,8 +57,7 @@ export default function chatReducer(store = initialStore, action) {
                 chats: {
                     ...store.chats,
                     [id]: {
-                        title: title,
-                        messageList: []
+                        title: title
                     }
                 },
             };
@@ -106,45 +89,26 @@ export default function chatReducer(store = initialStore, action) {
                     }
                 }
             }
-        }
-        case DELETE_MESSAGE: {
-            const { messageId, chatId } = action;
-            const messageList = store.chats[chatId].messageList;
-            const newMessageList = messageList.filter((mId) => mId !== messageId);
-
-            return {
-                ...store,
-                chats: {
-                    ...store.chats,
-                    [chatId]: {
-                        ...store.chats[chatId],
-                        messageList: newMessageList
-                    }
-                }
-            }
-        }
+        }      
         case LOAD_CHATS_REQUEST: {
             return {
                 ...store,
                 isLoading: true
             };
-        }
-        case LOAD_CHATS_ERROR: {
-            return {
-                ...store,
-                isLoading: false
-            };
-        }
+        }       
         case LOAD_CHATS_SUCCESS: {
             const { chats = {} } = action.payload.entities;
-
-            Object.keys(chats).forEach((id) => {
-                chats[id].messageList = [];
-            });
-
+          
             return {
                 ...store,
                 chats,
+                isLoading: false,
+                isLoaded: true
+            };
+        } 
+        case LOAD_CHATS_ERROR: {
+            return {
+                ...store,
                 isLoading: false
             };
         }

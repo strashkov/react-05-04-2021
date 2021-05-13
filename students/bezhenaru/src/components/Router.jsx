@@ -13,7 +13,9 @@ import { CHAT_PATTERN } from '../constants';
 
 export default class Router extends React.Component {
     static propTypes = {
-        chats: PropTypes.object.isRequired
+        chats: PropTypes.object.isRequired,
+        isLoaded: PropTypes.bool
+
     };
     render() {
         return (
@@ -24,6 +26,11 @@ export default class Router extends React.Component {
                 <Route path={CHAT_PATTERN} render={(props) =>{
                     const chatId = props.match.params.id;
 
+                    const { chats, isLoaded } = this.props;
+
+                    if (isLoaded && !chats[chatId]) {
+                        return <Redirect to='/profile' />;
+                    }
                     return (
                         <Layout
                             title={`Чат: ${this.props.chats[chatId].title}`}

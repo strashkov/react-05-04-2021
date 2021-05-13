@@ -12,7 +12,6 @@
     color: #aaaaaa;
 }
 
-
 button.message-delete {
     position: absolute;
     display: none;
@@ -26,4 +25,9 @@ button.message-delete {
 
 .message-wrapper:hover .message-delete {
     display: block;
+}
+
+.message-deleting {
+    position: absolute;
+    top: 12px;
 }

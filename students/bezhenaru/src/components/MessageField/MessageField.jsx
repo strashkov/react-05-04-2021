@@ -13,7 +13,8 @@ export default class MessageField extends React.Component {
         messages: PropTypes.object.isRequired,
         isLoading: PropTypes.bool,
         sendMessage: PropTypes.func.isRequired,
-        loadMessages: PropTypes.func.isRequired
+        loadMessages: PropTypes.func.isRequired,
+        isSending: PropTypes.bool,
 
     };
     state = {
@@ -48,12 +49,9 @@ export default class MessageField extends React.Component {
             return;
         }
 
-        const { chatId, messages } = this.props;
-        const lastMessageId = Number(Object.keys(messages).pop());
-        const messageId = lastMessageId + 1;
-
+        const { chatId } = this.props;
+        
         this.props.sendMessage({
-            messageId,
             chatId,
             text: input,
             author: 'я',
@@ -78,16 +76,16 @@ export default class MessageField extends React.Component {
     };
 
     render() {
-        const { messages, chatId, isLoading } = this.props;
-        const messageElements = Object.entries(messages).map(([messageId, message]) => {
-            const { text, author } = message;
+        const { messages, isLoading, isSending } = this.props;
+
+         const messageElements = Object.values(messages).map(({ id, text, author, isDeleting }) => {
 
             return (
                 <Message
-                    key={messageId}
-                    chatId={chatId}
-                    messageId={messageId}
+                    key={id}
+                    messageId={id}
                     text={text}
+                    isDeleting={isDeleting}
                     author={author} />
             )
         });
@@ -95,7 +93,9 @@ export default class MessageField extends React.Component {
         return (
             <>
                 <div ref={this.messageFieldRef} className='message-field'>
-                { isLoading ? <CircularProgress /> : messageElements }
+                { isLoading ? <CircularProgress /> :   (messageElements.length ? messageElements :
+                            <div style={{color: 'black'}}>Список сообщений пуст</div>)
+                    }
                 </div>
                 <div className='actions'>
                     <TextField
@@ -111,9 +111,8 @@ export default class MessageField extends React.Component {
                     <Fab
                         color='primary'
                         disabled={this.state.input === ''}
-                        onClick={this.sendMessage}
-                    >
-                        <SendIcon />
+                        onClick={this.sendMessage}>
+                        {isSending ? <CircularProgress size={20}/> : <SendIcon /> }
                     </Fab>
                 </div>
             </>

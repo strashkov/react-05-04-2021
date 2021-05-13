@@ -4,10 +4,7 @@ import { sendMessage, loadMessages } from '../actions/messageActions';
 import MessageField from '../components/MessageField/MessageField';
 
 const mapStateToProps = (store) => {
-    return {
-        messages: store.messageReducer.messages,
-        isLoading: store.messageReducer.isLoading
-    };
+    return store.messageReducer;
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({

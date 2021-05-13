@@ -11,7 +11,6 @@ import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-
 export default class ChatList extends React.Component {
     static propTypes = {
         chatId: PropTypes.string,
@@ -93,13 +92,14 @@ export default class ChatList extends React.Component {
                             selected={id === this.props.chatId}
                             className='chat-list-item'
                             onClick={() => { this.handleLinkClick(`/chat/${id}`) }}>
-                            <Avatar className='chat-list-avatar'>
-                                {value.title.split(' ').map(w => w.charAt(0))}
-                            </Avatar>
+                           <Avatar className='chat-list-avatar'>
+                                    {value.title.split(' ').map(w => w.charAt(0))}
+                                </Avatar>
                             <ListItemText primary={value.title}/>
                             { value.unread ? <div className='chat-list-unread' /> :
                                 value.isDeleting ? <CircularProgress size={20} /> : (
                                     <IconButton
+                                        size='small'
                                         data-id={id}
                                         className='chat-list-delete'
                                         onClick={this.handleDeleteClick}>
@@ -125,3 +125,4 @@ export default class ChatList extends React.Component {
         );
     }
 }
+

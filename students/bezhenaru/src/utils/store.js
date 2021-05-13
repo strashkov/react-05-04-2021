@@ -22,7 +22,10 @@ function initStore() {
     const store = createStore(
         persistReducer(persistConfig, initReducers(history)),
         initialStore,
-        compose(applyMiddleware(routerMiddleware(history), ...middlewares)),
+        compose(
+            applyMiddleware(routerMiddleware(history), ...middlewares),
+            // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+            )
     );
 
     const persistor = persistStore(store);

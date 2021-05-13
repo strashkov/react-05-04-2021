@@ -1,17 +1,18 @@
 import { goForward, goBack, push } from 'connected-react-router';
-import { SEND_MESSAGE } from '../actions/messageActions';
+import { SEND_MESSAGE_SUCCESS } from '../actions/messageActions';
 
 export default store => next => (action) => {
     switch (action.type) {
-        case SEND_MESSAGE:
-            if (action.author === 'я') {
-                if (action.text === 'Вперед') {
+        case SEND_MESSAGE_SUCCESS:{
+            const { author, text } = action.payload;    
+            if (author === 'я') {
+                if (text === 'Вперед') {
                     setTimeout(() => {
                         store.dispatch(goForward());
                     }, 500);
                 }
 
-                if (action.text === 'Назад') {
+                if (text === 'Назад') {
                     setTimeout(() => {
                         store.dispatch(goBack());
                     }, 500);
@@ -23,6 +24,7 @@ export default store => next => (action) => {
                     store.dispatch(push(`/chat/${chatId}`));
                 }
             }
+        }
     }
     return next(action);
 }
