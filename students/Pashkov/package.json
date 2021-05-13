@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "build:dev": "webpack --mode development",
-    "start": "webpack serve --mode development --open",
+    "start": "webpack serve --mode development",
+    "server": "node ./api/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -39,10 +40,17 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
+    "body-parser": "^1.19.0",
+    "connected-react-router": "^6.9.1",
+    "express": "^4.17.1",
+    "history": "^4.0.0",
+    "normalizr": "^3.6.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-api-middleware": "^3.2.1",
+    "redux-persist": "^6.0.0"
   }
 }
